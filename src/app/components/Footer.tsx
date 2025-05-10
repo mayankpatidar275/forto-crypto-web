@@ -14,10 +14,8 @@ export default function Footer() {
             />
           </Link>
           <p className="text-link text-lg w-full max-w-2/3 md:text-left text-center">
-            <p className="">
-              We develop cutting-edge AI training models to accelerate your
-              innovation.
-            </p>
+            We develop cutting-edge AI training models to accelerate your
+            innovation.
             <br />
             <br />
             <a
