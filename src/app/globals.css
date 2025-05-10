@@ -4,6 +4,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --background-a: #05070b;
+  --brand-br1: #ff793f;
 }
 
 /* @theme inline {
@@ -16,7 +18,7 @@
 @theme {
   /* --font-roboto: "Roboto", sans-serif; */
   --color-link: #d9d9d9;
-  --color-santra: #ff793f;
+  --color-brand-br1: #ff793f;
   --color-background-b1: #38261d;
   --color-heading: white;
   --color-background: #05070b;
@@ -41,4 +43,56 @@ body {
 
 .cp-x {
   @apply px-4 sm:px-6 lg:px-8;
+}
+
+@layer components {
+  .glow-top {
+    z-index: -1;
+    position: absolute;
+    top: -32%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 31.25rem;
+    background-image: radial-gradient(
+        circle farthest-corner at 50% -170%,
+        transparent 52%,
+        var(--background-a)
+      ),
+      linear-gradient(180deg, var(--brand-br1), transparent);
+  }
+
+  .glow-bottom {
+    z-index: -1;
+    position: absolute;
+    bottom: -10%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 12rem;
+    overflow: hidden;
+    opacity: 0.2;
+    background-image: radial-gradient(
+        circle farthest-corner at 50% 170%,
+        transparent 52%,
+        var(--background-a)
+      ),
+      linear-gradient(0deg, var(--brand-br1), transparent);
+  }
+
+  .shadow-navbar {
+    pointer-events: none;
+    position: absolute;
+    inset: 0% 0% auto 0%; /* top: 0; left: 0; right: 0; no bottom */
+    height: 140px;
+    z-index: 10;
+    will-change: opacity;
+    opacity: 0;
+    background-image: linear-gradient(
+      180deg,
+      var(--background-a) 20%,
+      #05070bcc 60%,
+      #fff0
+    );
+  }
 }

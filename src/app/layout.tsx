@@ -21,8 +21,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${roboto.className} antialiased`}>
+        <div className="glow-top"></div>
         <Header />
         {children}
+        <div className="glow-bottom"></div>
       </body>
     </html>
   );
