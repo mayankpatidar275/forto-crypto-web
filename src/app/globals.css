@@ -65,7 +65,7 @@ body {
   .glow-bottom {
     z-index: -1;
     position: absolute;
-    bottom: -10%;
+    bottom: 0;
     left: 0;
     right: 0;
     width: 100%;
