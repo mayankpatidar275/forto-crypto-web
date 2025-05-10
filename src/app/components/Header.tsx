@@ -71,24 +71,26 @@ export default function Header() {
       </div>
 
       {/* Mobile Menu Dropdown */}
-      {isOpen && (
+      <div className="lg:hidden overflow-hidden transition-all duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)]">
         <nav
           role="navigation"
-          className="lg:hidden translate-y-0 bg-background rounded-[15px] mt-[15px] mx-[30px] px-[5px] py-[15px] space-y-2 transition-all duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)] transform"
+          className={`transform transition-transform duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)] ${
+            isOpen ? "translate-y-0 opacity-100" : "-translate-y-100"
+          } bg-background rounded-[15px] mt-[15px] mx-[30px] px-[5px] py-[15px] space-y-2`}
           data-nav-menu-open=""
         >
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="block text-link text-lg px-6 py-2 hover:text-santra transition-all duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)]"
+              className="block text-link text-lg px-6 py-2 hover:text-santra transition-colors duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)]"
               onClick={() => setIsOpen(false)}
             >
               {link.label}
             </Link>
           ))}
         </nav>
-      )}
+      </div>
     </header>
   );
 }
