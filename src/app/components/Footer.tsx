@@ -3,9 +3,9 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <footer className="relative mt-auto w-full z-50 py-20 pb-10 cp-x">
-      <div className="max-w-screen-xl mx-auto w-full flex flex-col md:flex-row gap-10 justify-between">
+      <div className="max-w-screen-xl mx-auto w-full flex flex-col md:flex-row gap-20 md:gap-10 justify-between">
         {/* Logo and Description */}
-        <div className="flex-2">
+        <div className="flex-2 flex flex-col md:block justify-center items-center md:text-left mb-8">
           <Link href="/" aria-label="Homepage" className="flex-shrink-0">
             <img
               src="https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e4609e7b123fb0460c97c_Logo_trainai.avif"
@@ -13,9 +13,11 @@ export default function Footer() {
               className="h-8 w-auto mb-6"
             />
           </Link>
-          <p className="text-link text-lg">
-            We develop cutting-edge AI training models to accelerate your
-            innovation.
+          <p className="text-link text-lg w-full max-w-2/3 md:text-left text-center">
+            <p className="">
+              We develop cutting-edge AI training models to accelerate your
+              innovation.
+            </p>
             <br />
             <br />
             <a
@@ -28,8 +30,8 @@ export default function Footer() {
         </div>
 
         {/* Sitemap */}
-        <div className="flex-1">
-          <h4 className="text-lg font-semibold mb-6">Sitemap</h4>
+        <div className="flex-1 text-center md:text-left">
+          <h4 className="text-lg font-semibold mb-8">Sitemap</h4>
           <ul className="space-y-2 text-link text-md">
             <li>
               <Link href="/" className="hover:text-white">
@@ -65,8 +67,8 @@ export default function Footer() {
         </div>
 
         {/* Social Links */}
-        <div className="flex-1">
-          <h4 className="text-lg font-semibold mb-6">Social</h4>
+        <div className="flex-1 text-center md:text-left">
+          <h4 className="text-lg font-semibold mb-8">Social</h4>
           <ul className="space-y-2 text-link text-md">
             <li>
               <a
@@ -122,8 +124,8 @@ export default function Footer() {
         </div>
 
         {/* Utility Links */}
-        <div className="flex-1">
-          <h4 className="text-lg font-semibold mb-6">Links</h4>
+        <div className="flex-1 text-center md:text-left">
+          <h4 className="text-lg font-semibold mb-8">Links</h4>
           <ul className="space-y-2 text-link text-md">
             <li>
               <Link href="/template/styleguide" className="hover:text-white">
@@ -145,7 +147,7 @@ export default function Footer() {
       </div>
 
       {/* Bottom credit */}
-      <div className="mt-16 text-center text-lg text-link">
+      <div className="my-20 text-center text-lg text-link">
         <p>
           Design by{" "}
           <a
