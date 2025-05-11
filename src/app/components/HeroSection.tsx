@@ -4,7 +4,7 @@ function HeroSection() {
   return (
     <section className="section-hero cp-x">
       <div className="mt-6">
-        <div className="px-6 py-14 text-center flex flex-col items-center">
+        <div className="block-heading px-6 py-14 text-center flex flex-col items-center">
           <div className="border-2 block w-fit tracking-widest border-background-b1 text-brand-br1 uppercase rounded-xl mt-0 mb-4 p-2.5 px-4 text-sm leading-snug">
             AI TRAINER MODELS SOLUTION
           </div>
@@ -24,7 +24,21 @@ function HeroSection() {
           </a>
         </div>
 
-        <div></div>
+        <figure className="flex flex-col justify-center items-center w-full mb-10 relative overflow-hidden">
+          <img
+            src="https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min.avif"
+            alt=""
+            className="h-full max-w-full w-auto inline-block transform-gpu transform-3d transition-transform duration-1000 will-change-transform"
+            loading="lazy"
+            sizes="(max-width: 767px) 83vw, 500px"
+            srcSet="
+    https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min-p-500.avif 500w,
+    https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min-p-800.avif 800w,
+    https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min-p-1080.avif 1080w,
+    https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min-p-1600.avif 1600w,
+    https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min.avif 4000w"
+          />
+        </figure>
       </div>
     </section>
   );
