@@ -1,6 +1,23 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useRef } from "react";
+import gsap from "gsap";
 
 function HeroSection() {
+  const rotatingImageRef = useRef(null);
+
+  useEffect(() => {
+    if (rotatingImageRef.current) {
+      gsap.to(rotatingImageRef.current, {
+        rotate: 180, // rotate clockwise
+        duration: 10,
+        ease: "power1.inOut",
+        yoyo: true,
+        repeat: -1, // infinite loop
+      });
+    }
+  }, []);
+
   return (
     <section className="section-hero cp-x">
       <div className="mt-6">
@@ -26,17 +43,18 @@ function HeroSection() {
 
         <figure className="flex flex-col justify-center items-center w-full mb-10 relative overflow-hidden">
           <img
+            ref={rotatingImageRef}
             src="https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min.avif"
             alt=""
-            className="h-full max-w-full w-auto inline-block transform-gpu transform-3d transition-transform duration-1000 will-change-transform"
+            className="h-full max-w-full w-auto inline-block"
             loading="lazy"
             sizes="(max-width: 767px) 83vw, 500px"
             srcSet="
-    https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min-p-500.avif 500w,
-    https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min-p-800.avif 800w,
-    https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min-p-1080.avif 1080w,
-    https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min-p-1600.avif 1600w,
-    https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min.avif 4000w"
+              https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min-p-500.avif 500w,
+              https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min-p-800.avif 800w,
+              https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min-p-1080.avif 1080w,
+              https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min-p-1600.avif 1600w,
+              https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min.avif 4000w"
           />
         </figure>
       </div>
