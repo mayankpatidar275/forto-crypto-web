@@ -6,6 +6,7 @@
   --foreground: #171717;
   --background-a: #05070b;
   --brand-br1: #ff793f;
+  --brand-br2: #cc6133;
 }
 
 /* @theme inline {
@@ -19,6 +20,7 @@
   /* --font-roboto: "Roboto", sans-serif; */
   --color-link: #d9d9d9;
   --color-brand-br1: #ff793f;
+  --color-brand-br2: #cc6133;
   --color-background-b1: #38261d;
   --color-heading: white;
   --color-background: #05070b;
