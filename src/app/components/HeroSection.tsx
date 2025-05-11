@@ -2,6 +2,8 @@
 
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
+import Label from "./ui/Label";
+import Para1 from "./ui/Para1";
 
 function HeroSection() {
   const rotatingImageRef = useRef(null);
@@ -22,17 +24,15 @@ function HeroSection() {
     <section className="section-hero cp-x">
       <div className="mt-6">
         <div className="block-heading px-6 py-14 text-center flex flex-col items-center">
-          <div className="border-2 block w-fit tracking-widest border-background-b1 text-brand-br1 uppercase rounded-xl mt-0 mb-4 p-2.5 px-4 text-sm leading-snug">
-            AI TRAINER MODELS SOLUTION
-          </div>
+          <Label text="AI TRAINER MODELS SOLUTION" />
+
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-heading to-brand-br1 leading-tight mb-6 max-w-5xl">
             Unlock the Full Potential of Your AI Models
           </h1>
-
-          <p className="text-lg md:text-xl text-link font-semibold max-w-3xl mx-auto mb-8">
+          <Para1>
             We develop cutting-edge AI training models to accelerate your
             innovation. Smarter, faster, and more efficient AI starts here.
-          </p>
+          </Para1>
           <a
             href="/contact"
             className="inline-block border-2 border-brand-br2 text-white px-6 py-3 rounded-xl text-lg md:text-xl font-semibold hover:bg-brand-br2 hover:text-link transition-colors duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)]"
