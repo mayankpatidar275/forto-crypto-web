@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -15,11 +17,27 @@ const navLinks = [
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.to(".shadow-navbar", {
+      opacity: 1,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: "body",
+        start: "top+=60", // starts after 60px scroll
+        toggleActions: "play none none reverse", // fade in on scroll down, fade out on scroll up
+      },
+      duration: "1ms",
+    });
+  }, []);
+
   return (
-    <header className="sticky top-0">
-      {/* Gradient shadow behind header */}
+    <header className="sticky top-0 z-30">
+      {/* Shadow that appears on scroll */}
       <div className="shadow-navbar" aria-hidden="true"></div>
-      <div className="max-w-7xl mx-auto cp-x py-4 z-50">
+
+      <div className="max-w-7xl mx-auto cp-x py-4 z-50 relative">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" aria-label="Homepage" className="flex-shrink-0">
@@ -73,7 +91,6 @@ export default function Header() {
       </div>
 
       {/* Mobile Menu Dropdown */}
-
       <div className={`lg:hidden overflow-hidden ${!isOpen && "h-0"}`}>
         <nav
           role="navigation"

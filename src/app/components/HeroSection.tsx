@@ -43,7 +43,7 @@ function HeroSection() {
           </a>
         </div>
 
-        <figure className="flex flex-col justify-center items-center w-full mb-10 relative overflow-hidden">
+        <figure className="flex flex-col justify-center items-center -z-1 w-full mb-10 relative overflow-hidden">
           <img
             ref={rotatingImageRef}
             src="https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min.avif"
