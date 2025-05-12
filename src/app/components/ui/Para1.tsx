@@ -1,12 +1,19 @@
 import React from "react";
+import clsx from "clsx";
 
 type Para1Props = {
   children: React.ReactNode;
+  className?: string;
 };
 
-const Para1: React.FC<Para1Props> = ({ children }) => {
+const Para1: React.FC<Para1Props> = ({ children, className }) => {
   return (
-    <div className="text-lg text-center md:text-xl text-link font-semibold max-w-xl mx-auto">
+    <div
+      className={clsx(
+        "text-lg text-center md:text-xl font-semibold text-link max-w-xl mx-auto leading-9",
+        className
+      )}
+    >
       {children}
     </div>
   );
