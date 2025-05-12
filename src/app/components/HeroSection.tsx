@@ -29,10 +29,12 @@ function HeroSection() {
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-heading to-brand-br1 leading-tight mb-6 max-w-5xl">
             Unlock the Full Potential of Your AI Models
           </h1>
-          <Para1>
-            We develop cutting-edge AI training models to accelerate your
-            innovation. Smarter, faster, and more efficient AI starts here.
-          </Para1>
+          <div className="mb-8">
+            <Para1>
+              We develop cutting-edge AI training models to accelerate your
+              innovation. Smarter, faster, and more efficient AI starts here.
+            </Para1>
+          </div>
           <a
             href="/contact"
             className="inline-block border-2 border-brand-br2 text-white px-6 py-3 rounded-xl text-lg md:text-xl font-semibold hover:bg-brand-br2 hover:text-link transition-colors duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)]"

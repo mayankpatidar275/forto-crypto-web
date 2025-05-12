@@ -6,9 +6,9 @@ type Para1Props = {
 
 const Para1: React.FC<Para1Props> = ({ children }) => {
   return (
-    <p className="text-lg text-center md:text-xl text-link font-semibold max-w-xl mx-auto mb-8">
+    <div className="text-lg text-center md:text-xl text-link font-semibold max-w-xl mx-auto">
       {children}
-    </p>
+    </div>
   );
 };
 
