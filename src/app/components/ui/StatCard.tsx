@@ -14,7 +14,7 @@ const StatCard: React.FC<StatCardProps> = ({ value, label, className }) => {
   return (
     <div
       className={clsx(
-        "gradient-card-bg bg-background-b3 p-12 rounded-2xl shadow-md w-1/2",
+        "gradient-card-bg bg-background-b3 p-10 rounded-2xl shadow-md w-1/2",
         className
       )}
     >

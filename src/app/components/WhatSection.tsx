@@ -51,7 +51,7 @@ const solutions = [
 
 function WhatSection() {
   return (
-    <section className="cp-x py-6">
+    <section className="cp-x py-20">
       <div className="flex flex-col justify-center items-center">
         <Label text="WHAT WE DO" />
         <Heading2>

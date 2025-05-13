@@ -13,8 +13,8 @@ const stats = [
 
 const WhySection = () => {
   return (
-    <section className="cp-x py-12">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+    <section className="cp-x py-20 flex justify-center">
+      <div className="max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
         {/* Left Content */}
         <div className="flex flex-col items-center lg:items-start gap-4">
           <Label text="TRAIN LIKE A BEAST" />
@@ -39,7 +39,7 @@ const WhySection = () => {
         </div>
 
         {/* Right Stats: Desktop View */}
-        <div className="flex flex-col items-center gap-6 lg:flex overflow-hidden">
+        <div className="hidden flex-col items-center gap-6 lg:flex overflow-hidden">
           <div className="flex w-full">
             <StatCard
               value={stats[0].value}
