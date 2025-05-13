@@ -10,6 +10,7 @@
   --background-b3: #38261d40;
   --brand-br1: #ff793f;
   --brand-br2: #cc6133;
+  --border: #404040;
 }
 
 /* @theme inline {
@@ -28,6 +29,7 @@
   --color-background-b3: #38261d40;
   --color-heading: white;
   --color-background: #05070b;
+  --color-border: #404040;
 }
 
 @media (prefers-color-scheme: dark) {

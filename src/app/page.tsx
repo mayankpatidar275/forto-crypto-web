@@ -1,4 +1,5 @@
 import GetNowSection from "./components/GetNowSection";
+import GetReadySection from "./components/GetReadySection";
 import HeroSection from "./components/HeroSection";
 import WhatSection from "./components/WhatSection";
 import WhySection from "./components/WhySection";
@@ -10,6 +11,7 @@ export default function Home() {
       <WhatSection />
       <WhySection />
       <GetNowSection />
+      <GetReadySection />
     </div>
   );
 }
