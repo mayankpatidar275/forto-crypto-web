@@ -1,5 +1,4 @@
 import React from "react";
-import Para1 from "./Para1";
 import Para2 from "./Para2";
 
 type SolutionCardProps = {

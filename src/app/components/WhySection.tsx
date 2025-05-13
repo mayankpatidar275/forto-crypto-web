@@ -2,7 +2,6 @@ import React from "react";
 import Label from "./ui/Label";
 import Heading2 from "./ui/Heading2";
 import Para1 from "./ui/Para1";
-import clsx from "clsx";
 import StatCard from "./ui/StatCard";
 
 const stats = [

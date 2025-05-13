@@ -55,7 +55,7 @@ function WhatSection() {
       <div className="flex flex-col justify-center items-center">
         <Label text="WHAT WE DO" />
         <Heading2>
-          Your AI&nbsp;models <br /> deserve better
+          Your AI models <br /> deserve better
         </Heading2>
         <div className="mb-8">
           <Para1>
