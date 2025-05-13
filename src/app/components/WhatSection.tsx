@@ -51,8 +51,8 @@ const solutions = [
 
 function WhatSection() {
   return (
-    <section className="cp-x py-20">
-      <div className="flex flex-col justify-center items-center">
+    <section className="cp-x py-20 flex justify-center">
+      <div className="max-w-6xl flex flex-col justify-center items-center">
         <Label text="WHAT WE DO" />
         <Heading2>
           Your AI models <br /> deserve better
