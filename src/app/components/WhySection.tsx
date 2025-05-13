@@ -22,10 +22,10 @@ const WhySection = () => {
             Why Our AI Trainers Make a Difference
           </Heading2>
           <Para1 className="lg:text-left">
-            AI training shouldn’t be a bottleneck—it should be an accelerator.
+            AI training should not be a bottleneck—it should be an accelerator.
             Our models are built for efficiency, precision, and scalability,
             helping you achieve faster training times, reduced costs, and higher
-            accuracy. Whether you're optimizing large-scale machine learning
+            accuracy. Whether you are optimizing large-scale machine learning
             pipelines or fine-tuning models for specific applications, our
             technology ensures maximum performance with minimal resources.
           </Para1>

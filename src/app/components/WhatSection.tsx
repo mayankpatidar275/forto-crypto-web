@@ -59,7 +59,7 @@ function WhatSection() {
         </Heading2>
         <div className="mb-8">
           <Para1>
-            Building AI is challenging, but it shouldn't be a roadblock. We
+            Building AI is challenging, but it should not be a roadblock. We
             solve the biggest hurdles in AI training—so you can focus on
             innovation, not limitations.
           </Para1>
