@@ -1,3 +1,4 @@
+import ContactSection from "./components/ContactSection";
 import GetNowSection from "./components/GetNowSection";
 import GetReadySection from "./components/GetReadySection";
 import HeroSection from "./components/HeroSection";
@@ -14,6 +15,7 @@ export default function Home() {
       <GetNowSection />
       <GetReadySection />
       <ReadSection />
+      <ContactSection />
     </div>
   );
 }
