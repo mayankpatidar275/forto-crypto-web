@@ -4,8 +4,6 @@ import Para from "./Para";
 interface ValueCardProps {
   title: string;
   description: string;
-  icon: string;
-  alt: string;
 }
 
 const ValueCard = ({ title, description }: ValueCardProps) => {
