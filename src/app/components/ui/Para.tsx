@@ -8,7 +8,7 @@ type ParaProps = {
 
 const Para: React.FC<ParaProps> = ({ children, className }) => {
   return (
-    <p className={clsx("md:text-lg text-link max-w-xl", className)}>
+    <p className={clsx("md:text-lg text-link leading-relaxed", className)}>
       {children}
     </p>
   );

@@ -5,6 +5,7 @@ import GetReadySection from "./components/GetReadySection";
 import HeroSection from "./components/HeroSection";
 import ManifesteSection from "./components/ManifesteSection";
 import PeopleSection from "./components/PeopleSection";
+import ProblemSection from "./components/ProblemSection";
 import ReadSection from "./components/ReadSection";
 import ValuesSection from "./components/ValuesSection";
 import WhatSection from "./components/WhatSection";
@@ -24,6 +25,7 @@ export default function Home() {
       <ManifesteSection />
       <ValuesSection />
       <PeopleSection />
+      <ProblemSection />
     </div>
   );
 }
