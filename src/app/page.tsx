@@ -1,3 +1,4 @@
+import AboutSection from "./components/AboutSection";
 import ContactSection from "./components/ContactSection";
 import GetNowSection from "./components/GetNowSection";
 import GetReadySection from "./components/GetReadySection";
@@ -16,6 +17,7 @@ export default function Home() {
       <GetReadySection />
       <ReadSection />
       <ContactSection />
+      <AboutSection />
     </div>
   );
 }
