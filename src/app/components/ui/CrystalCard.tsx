@@ -7,7 +7,7 @@ interface CrystalCardProps {
 
 const CrystalCard: React.FC<CrystalCardProps> = ({ image, alt }) => {
   return (
-    <div className="nft-card-item flex justify-center items-center w-full sm:w-[45%] md:w-[30%]">
+    <div className="nft-card-item flex justify-center items-center w-[80%] sm:w-[40%] md:w-[20%]">
       <img
         src={image}
         alt={alt}

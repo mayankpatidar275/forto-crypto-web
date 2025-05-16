@@ -7,10 +7,17 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const navLinks = [
+  // { href: "/", label: "Home" },
+  // { href: "/about", label: "About" },
+  // { href: "/solution", label: "Solution" },
+  // { href: "/blog", label: "Blog" },
+  // { href: "/contact", label: "Contact" },
   { href: "/", label: "Home" },
+  { href: "/how", label: "How It Works" },
+  { href: "/vision", label: "Vision" },
+  { href: "/tokenomics", label: "Tokenomics" },
   { href: "/about", label: "About" },
-  { href: "/solution", label: "Solution" },
-  { href: "/blog", label: "Blog" },
+  { href: "/faq", label: "FAQ" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -37,7 +44,7 @@ export default function Header() {
       {/* Shadow that appears on scroll */}
       <div className="shadow-navbar" aria-hidden="true"></div>
 
-      <div className="max-w-7xl mx-auto cp-x py-4 z-50 relative">
+      <div className="mx-auto px-4 sm:px-4 lg:px-8 py-4 z-50 relative">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" aria-label="Homepage" className="flex-shrink-0">

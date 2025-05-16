@@ -24,15 +24,18 @@ function HeroSection() {
     <section className="section-hero cp-x">
       <div className="mt-6">
         <div className="block-heading px-6 py-14 text-center flex flex-col items-center">
-          <Label text="AI TRAINER MODELS SOLUTION" />
+          <Label text="Forto token" />
 
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-heading to-brand-br1 leading-tight mb-6 max-w-5xl">
-            Unlock the Full Potential of Your AI Models
+            Fair. Smart. Rewarding. The Next-Gen Lifetime Lottery with
+            Progressive Rewards Starts Here
           </h1>
           <div className="mb-8">
             <Para1>
-              We develop cutting-edge AI training models to accelerate your
-              innovation. Smarter, faster, and more efficient AI starts here.
+              One Ticket. Endless Possibilities. Hold, trade, and win in our
+              long-term sweepstakes— where jackpots grow bigger, rewards go
+              deeper, and every ticket brings you closer to massive payouts.
+              🚀💰
             </Para1>
           </div>
           <a
