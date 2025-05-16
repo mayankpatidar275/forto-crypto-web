@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { OrangeLogo, WhiteLogo } from "@/app/assets/index";
+import Image from "next/image";
 
 const navLinks = [
   // { href: "/", label: "Home" },
@@ -48,10 +50,15 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" aria-label="Homepage" className="flex-shrink-0">
-            <img
-              src="https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e4609e7b123fb0460c97c_Logo_trainai.avif"
+            <Image
+              // src="https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e4609e7b123fb0460c97c_Logo_trainai.avif"
+              // src={OrangeLogo}
+              src={WhiteLogo}
               alt="Logo"
-              className="h-8 w-auto"
+              // className="h-8 w-auto"
+              width={150}
+              height={50}
+              priority
             />
           </Link>
 
