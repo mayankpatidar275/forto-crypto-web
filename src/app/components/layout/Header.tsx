@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, User, X } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { OrangeLogo, WhiteLogo } from "@/app/assets/index";
+import { WhiteLogo } from "@/app/assets/index";
 import Image from "next/image";
+import { usePrivy } from "@privy-io/react-auth";
 
 const navLinks = [
   // { href: "/", label: "Home" },
@@ -25,6 +26,8 @@ const navLinks = [
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const { ready, authenticated, login } = usePrivy();
+  const disableLogin = !ready || (ready && authenticated);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -77,13 +80,27 @@ export default function Header() {
 
           <div className="flex gap-2">
             {/* Right buttons */}
-            <div className="hidden sm:flex items-center space-x-4">
-              <Link
-                href="/contact"
-                className="bg-background-b1 font-semibold text-lg cursor-pointer text-heading hover:bg-brand-br1 text-center rounded-[15px] px-7 py-2.5 leading-[1.4] transition-[background-color,transform, scale] duration-400 ease-[cubic-bezier(.25,.46,.45,.94)] hover:scale-[0.93]"
-              >
-                Login
-              </Link>
+            <div className="flex items-center space-x-4">
+              {authenticated ? (
+                <Link
+                  href="/my-profile"
+                  className="bg-background-b1 font-semibold text-lg cursor-pointer text-heading hover:bg-brand-br1 text-center rounded-[15px] px-7 py-2.5 leading-[1.4] transition-[background-color,transform, scale] duration-400 ease-[cubic-bezier(.25,.46,.45,.94)] hover:scale-[0.93]"
+                >
+                  <div className="flex items-center">
+                    <User />
+                  </div>
+                </Link>
+              ) : (
+                <div className="flex items-center">
+                  <button
+                    disabled={disableLogin}
+                    onClick={login}
+                    className="bg-background-b1 font-semibold text-lg cursor-pointer text-heading hover:bg-brand-br1 text-center rounded-[15px] px-7 py-2.5 leading-[1.4] transition-[background-color,transform, scale] duration-400 ease-[cubic-bezier(.25,.46,.45,.94)] hover:scale-[0.93]"
+                  >
+                    Login
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Mobile Menu Button */}
