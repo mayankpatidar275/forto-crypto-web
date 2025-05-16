@@ -18,6 +18,7 @@ export default function Home() {
       <HeroSection />
       <VisionSection />
       <ContactSection />
+      <ProblemSection />
       <WhatSection />
       <WhySection />
       <GetNowSection />
@@ -27,7 +28,6 @@ export default function Home() {
       <ManifesteSection />
       <ValuesSection />
       <PeopleSection />
-      <ProblemSection />
     </div>
   );
 }

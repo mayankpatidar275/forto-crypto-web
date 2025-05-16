@@ -1,4 +1,3 @@
-import { LucideProps } from "lucide-react";
 import React, { ReactNode } from "react";
 import Para2 from "./Para2";
 
