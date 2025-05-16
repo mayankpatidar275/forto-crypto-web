@@ -75,7 +75,7 @@ export default function Header() {
                 href="/contact"
                 className="bg-background-b1 font-semibold text-lg cursor-pointer text-heading hover:bg-brand-br1 text-center rounded-[15px] px-7 py-2.5 leading-[1.4] transition-[background-color,transform, scale] duration-400 ease-[cubic-bezier(.25,.46,.45,.94)] hover:scale-[0.93]"
               >
-                Get Started
+                Login
               </Link>
             </div>
 

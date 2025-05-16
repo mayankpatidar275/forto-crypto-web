@@ -9,13 +9,11 @@ const solutions = [
     icon: "https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e64e0ef91d7de0cb76f9a_clock.svg",
     alt: "Clock Icon",
     title: "Founded In 2025",
-    description: "",
   },
   {
     icon: "https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e64e0169b26a93f279d87_bar-chart.svg",
     alt: "Chart Icon",
     title: "Users",
-    description: "",
   },
 ];
 
@@ -38,7 +36,6 @@ function VisionSection() {
               icon={solution.icon}
               alt={solution.alt}
               title={solution.title}
-              description={solution.description}
             />
           ))}
         </div>

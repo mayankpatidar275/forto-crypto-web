@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
-import Header from "./components/layout/Header";
-import Footer from "./components/layout/Footer";
+import Providers from "./components/providers/Providers";
+import AppWrapper from "./components/layout/AppWrapper";
 
 const roboto = Roboto({
   weight: "400",
@@ -24,10 +24,9 @@ export default function RootLayout({
       <body
         className={`${roboto.className} antialiased min-h-screen flex flex-col`}
       >
-        <div className="glow-top"></div>
-        <Header />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+        <Providers>
+          <AppWrapper>{children}</AppWrapper>
+        </Providers>
       </body>
     </html>
   );

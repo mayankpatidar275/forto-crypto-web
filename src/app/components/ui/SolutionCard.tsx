@@ -5,7 +5,7 @@ type SolutionCardProps = {
   icon: string;
   alt: string;
   title: string;
-  description: string;
+  description?: string;
 };
 
 const SolutionCard: React.FC<SolutionCardProps> = ({
