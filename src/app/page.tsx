@@ -8,6 +8,7 @@ import PeopleSection from "./components/PeopleSection";
 import ProblemSection from "./components/ProblemSection";
 import ReadSection from "./components/ReadSection";
 import ValuesSection from "./components/ValuesSection";
+import VisionSection from "./components/VisionSection";
 import WhatSection from "./components/WhatSection";
 import WhySection from "./components/WhySection";
 
@@ -15,12 +16,13 @@ export default function Home() {
   return (
     <div className="">
       <HeroSection />
+      <VisionSection />
+      <ContactSection />
       <WhatSection />
       <WhySection />
       <GetNowSection />
       <GetReadySection />
       <ReadSection />
-      <ContactSection />
       <AboutSection />
       <ManifesteSection />
       <ValuesSection />
