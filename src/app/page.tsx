@@ -4,6 +4,7 @@ import GetNowSection from "./components/GetNowSection";
 import GetReadySection from "./components/GetReadySection";
 import HeroSection from "./components/HeroSection";
 import ManifesteSection from "./components/ManifesteSection";
+import NextDrawCounterSection from "./components/NextDrawCounterSection";
 import PeopleSection from "./components/PeopleSection";
 import ProblemSection from "./components/ProblemSection";
 import ReadSection from "./components/ReadSection";
@@ -16,6 +17,7 @@ export default function Home() {
   return (
     <div className="">
       <HeroSection />
+      <NextDrawCounterSection />
       <VisionSection />
       <ContactSection />
       <ProblemSection />
