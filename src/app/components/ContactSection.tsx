@@ -30,8 +30,8 @@ const ContactSection = () => {
   return (
     <section className="cp-x py-20 flex justify-center">
       <div className="max-w-6xl flex flex-col justify-center items-center">
-        <Label text="Contact" />
-        <Heading2>Get In Touch</Heading2>
+        <Label text="Contact Us" />
+        <Heading2>You can contact us on</Heading2>
         <div className="mb-8">
           <Para1>
             Whether you need custom AI training solutions, scalable models, or

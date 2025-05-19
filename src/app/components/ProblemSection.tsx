@@ -1,5 +1,6 @@
 import Heading2 from "./ui/Heading2";
 import Label from "./ui/Label";
+import Para1 from "./ui/Para1";
 import ProblemCard, { Problem } from "./ui/ProblemCard";
 
 const problems: Problem[] = [
@@ -66,14 +67,14 @@ const ProblemSection = () => {
   return (
     <section className="cp-x py-20 flex justify-center">
       <div className="max-w-6xl flex flex-col justify-center items-center">
-        <Label text="FAQs" />
-        <Heading2>Frequently Asked Questions</Heading2>
-        {/* <div className="mb-8">
+        {/* <Label text="FAQs" /> */}
+        <Heading2>FAQs</Heading2>
+        <div className="mb-8">
           <Para1>
-            Our Vision for a Smarter, Fairer, and More Responsible AI Future We
-            believe AI should be :
+            Looking for more information? Check out our FAQ section for detailed
+            answers.
           </Para1>
-        </div> */}
+        </div>
         <div className="grid grid-cols-1 gap-6 w-full">
           {problems.map((problem, index) => (
             <ProblemCard key={index} {...problem} />

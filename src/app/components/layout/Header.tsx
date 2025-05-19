@@ -17,7 +17,6 @@ const navLinks = [
   // { href: "/contact", label: "Contact" },
   { href: "/", label: "Home" },
   { href: "/how", label: "How It Works" },
-  { href: "/vision", label: "Vision" },
   { href: "/tokenomics", label: "Tokenomics" },
   { href: "/about", label: "About" },
   { href: "/faq", label: "FAQ" },
