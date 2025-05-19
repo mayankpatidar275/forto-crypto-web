@@ -32,13 +32,13 @@ const ContactSection = () => {
       <div className="max-w-6xl flex flex-col justify-center items-center">
         <Label text="Contact Us" />
         <Heading2>You can contact us on</Heading2>
-        <div className="mb-8">
+        {/* <div className="mb-8">
           <Para1>
             Whether you need custom AI training solutions, scalable models, or
             expert guidance, we are here to help. Get in touch and let us unlock
             the next stage of AI innovation—together.
           </Para1>
-        </div>
+        </div> */}
         <div className="flex flex-wrap justify-center gap-6 py-10">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {contacts.map((contact, index) => (

@@ -21,11 +21,11 @@ export default function Home() {
       <NextDrawCounterSection />
       <HowSection />
       <VisionSection />
-      <ContactSection />
+      <GetNowSection />
       <ProblemSection />
+      <ContactSection />
       <WhatSection />
       <WhySection />
-      <GetNowSection />
       <GetReadySection />
       <ReadSection />
       <AboutSection />
