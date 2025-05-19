@@ -3,6 +3,7 @@ import ContactSection from "./components/ContactSection";
 import GetNowSection from "./components/GetNowSection";
 import GetReadySection from "./components/GetReadySection";
 import HeroSection from "./components/HeroSection";
+import HowSection from "./components/HowSection";
 import ManifesteSection from "./components/ManifesteSection";
 import NextDrawCounterSection from "./components/NextDrawCounterSection";
 import PeopleSection from "./components/PeopleSection";
@@ -18,6 +19,7 @@ export default function Home() {
     <div className="">
       <HeroSection />
       <NextDrawCounterSection />
+      <HowSection />
       <VisionSection />
       <ContactSection />
       <ProblemSection />
