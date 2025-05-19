@@ -1,3 +1,5 @@
+import { WhiteLogo } from "@/app/assets";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Footer() {
@@ -6,16 +8,23 @@ export default function Footer() {
       <div className="max-w-screen-xl mx-auto w-full flex flex-col md:flex-row gap-20 md:gap-10 justify-between">
         {/* Logo and Description */}
         <div className="flex-2 flex flex-col md:block justify-center items-center md:text-left mb-8">
+          {/* Logo */}
           <Link href="/" aria-label="Homepage" className="flex-shrink-0">
-            <img
-              src="https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e4609e7b123fb0460c97c_Logo_trainai.avif"
+            <Image
+              // src="https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e4609e7b123fb0460c97c_Logo_trainai.avif"
+              // src={OrangeLogo}
+              src={WhiteLogo}
               alt="Logo"
-              className="h-8 w-auto mb-6"
+              // className="h-8 w-auto"
+              width={150}
+              height={50}
+              priority
             />
           </Link>
-          <p className="text-link text-lg w-full max-w-2/3 md:text-left text-center">
-            We develop cutting-edge AI training models to accelerate your
-            innovation.
+          <p className="text-link text-lg w-full max-w-2/3 md:text-left text-center mt-4">
+            Forto token
+            <br />
+            Fair. Smart. Rewarding
             <br />
             <br />
             <a
@@ -37,28 +46,28 @@ export default function Footer() {
               </Link>
             </li>
             <li>
+              <Link href="/how" className="hover:text-white">
+                How it works
+              </Link>
+            </li>
+            <li>
+              <Link href="/tokenomics" className="hover:text-white">
+                Tokenomics
+              </Link>
+            </li>
+            <li>
               <Link href="/about" className="hover:text-white">
                 About
               </Link>
             </li>
             <li>
-              <Link href="/solution" className="hover:text-white">
-                Solution
-              </Link>
-            </li>
-            <li>
-              <Link href="/blog" className="hover:text-white">
-                Blog
+              <Link href="/faq" className="hover:text-white">
+                FAQs
               </Link>
             </li>
             <li>
               <Link href="/contact" className="hover:text-white">
                 Contact
-              </Link>
-            </li>
-            <li>
-              <Link href="/contact" className="hover:text-white">
-                Get started
               </Link>
             </li>
           </ul>
@@ -122,7 +131,7 @@ export default function Footer() {
         </div>
 
         {/* Utility Links */}
-        <div className="flex-1 text-center md:text-left">
+        {/* <div className="flex-1 text-center md:text-left">
           <h4 className="text-lg font-semibold mb-8">Links</h4>
           <ul className="space-y-2 text-link text-md">
             <li>
@@ -141,13 +150,14 @@ export default function Footer() {
               </Link>
             </li>
           </ul>
-        </div>
+        </div> */}
       </div>
 
       {/* Bottom credit */}
       <div className="my-20 text-center text-lg text-link">
         <p>
-          Design by{" "}
+          © 2025 Forto
+          {/* Design by{" "}
           <a
             href="https://www.monsieursel.com/"
             target="_blank"
@@ -164,7 +174,7 @@ export default function Footer() {
             className="hover:text-white"
           >
             Webflow
-          </a>
+          </a> */}
         </p>
       </div>
       <div className="glow-bottom"></div>

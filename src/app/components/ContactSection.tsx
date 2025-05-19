@@ -1,9 +1,7 @@
-import React from "react";
-import Para1 from "./ui/Para1";
+import { Mail, MessageCircle, Send } from "lucide-react";
+import ContactCard from "./ui/ContactCard";
 import Heading2 from "./ui/Heading2";
 import Label from "./ui/Label";
-import ContactCard from "./ui/ContactCard";
-import { Mail, MessageCircle, Send } from "lucide-react";
 
 const contacts = [
   {

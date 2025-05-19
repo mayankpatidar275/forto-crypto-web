@@ -1,5 +1,3 @@
-import React from "react";
-import Label from "./ui/Label";
 import Heading2 from "./ui/Heading2";
 import Para1 from "./ui/Para1";
 import SolutionCard from "./ui/SolutionCard";

@@ -1,5 +1,4 @@
 import Heading2 from "./ui/Heading2";
-import Label from "./ui/Label";
 import Para1 from "./ui/Para1";
 import ProblemCard, { Problem } from "./ui/ProblemCard";
 

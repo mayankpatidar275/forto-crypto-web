@@ -1,28 +1,6 @@
-import { Mail, MessageCircle, Send } from "lucide-react";
 import Heading2 from "./ui/Heading2";
 import Label from "./ui/Label";
 import Para1 from "./ui/Para1";
-
-const contacts = [
-  {
-    icon: <Send size={32} className="text-brand-br1" />,
-    title: "Telegram",
-    description: "@TelegramHandle",
-    href: "https://t.me/TelegramHandle",
-  },
-  {
-    icon: <Mail size={32} className="text-brand-br1" />,
-    title: "Email Us",
-    description: "support@forto.com",
-    href: "mailto:support@forto.com",
-  },
-  {
-    icon: <MessageCircle size={32} className="text-brand-br1" />,
-    title: "Join Discord",
-    description: "Hop into our community",
-    href: "https://discord.gg/yourserver",
-  },
-];
 
 const HowSection = () => {
   return (
@@ -32,9 +10,10 @@ const HowSection = () => {
         <Heading2>How it works?</Heading2>
         <div className="mb-8">
           <Para1>
-            Every month, you'll have the chance to win a share of the prize pool
-            that's been set aside just for our community. The more tickets you
-            hold, the greater your chances of winning — it's that simple!
+            Every month, you&#39;ll have the chance to win a share of the prize
+            pool that&#39;s been set aside just for our community. The more
+            tickets you hold, the greater your chances of winning — it&#39;s
+            that simple!
           </Para1>
           <Para1>
             Curious about how the prize pool works, your odds, or how everything
