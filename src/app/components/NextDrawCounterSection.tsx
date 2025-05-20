@@ -1,3 +1,4 @@
+import CountDown from "./ui/CountDown";
 import Heading2 from "./ui/Heading2";
 import Label2 from "./ui/Label2";
 import SolutionCard from "./ui/SolutionCard";
@@ -35,6 +36,9 @@ function NextDrawCounterSection() {
             where luck meets opportunity, and every ticket counts
           </Para1>
         </div> */}
+        <div className="mb-8">
+          <CountDown targetDate={getLastDayOfCurrentMonth()} />
+        </div>
         <div className="flex flex-wrap justify-center gap-6 py-10">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {solutions.map((solution, index) => (
@@ -55,5 +59,11 @@ function NextDrawCounterSection() {
     </section>
   );
 }
+
+export const getLastDayOfCurrentMonth = () => {
+  const now = new Date();
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0); // Day 0 of next month = last day of current
+  return lastDay.toISOString();
+};
 
 export default NextDrawCounterSection;
