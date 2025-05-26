@@ -1,12 +1,11 @@
 import Heading2 from "./ui/Heading2";
-import Label from "./ui/Label";
 import Para1 from "./ui/Para1";
 
 const HowSection = () => {
   return (
     <section className="cp-x py-20 flex justify-center">
       <div className="max-w-6xl flex flex-col justify-center items-center">
-        <Label text="How" />
+        {/* <Label text="How" /> */}
         <Heading2>How it works?</Heading2>
         <div className="mb-8">
           <Para1>

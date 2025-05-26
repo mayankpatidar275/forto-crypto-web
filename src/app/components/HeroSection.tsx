@@ -24,25 +24,24 @@ function HeroSection() {
     <section className="section-hero cp-x">
       <div className="mt-6">
         <div className="block-heading px-6 py-14 text-center flex flex-col items-center">
-          <Label text="Forto Token: Fair. Smart. Rewarding" />
+          <Label text="Forto Sweepstakes: Blockchain. Transparent. Fun." />
 
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-heading to-brand-br1 leading-tight mb-6 max-w-5xl">
-            The Next-Gen Lifetime Sweepstake with Progressive Rewards Starts
-            Here
+            Multiple Sweepstakes Draws with 1 NFT Ticket
           </h1>
           <div className="mb-8">
             <Para1>
-              One Ticket. Endless Possibilities. Hold, trade, and win in our
+              One Ticket. Higher probability to win. Hold, trade, and win in our
               long-term sweepstakes— where jackpots grow bigger, rewards go
               deeper, and every ticket brings you closer to massive payouts.
-              🚀💰 🚀💰
+              🚀💰
             </Para1>
           </div>
           <a
             href="/contact"
             className="inline-block border-2 border-brand-br2 text-white px-6 py-3 rounded-xl text-lg md:text-xl font-semibold hover:bg-brand-br2 hover:text-link transition-colors duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)]"
           >
-            Get Started
+            Buy Now
           </a>
         </div>
 

@@ -1,23 +1,24 @@
+import { Calendar, DollarSign, Users } from "lucide-react";
 import Heading2 from "./ui/Heading2";
 import Para1 from "./ui/Para1";
-import SolutionCard from "./ui/SolutionCard";
+import VisionCard from "./ui/VisionCard";
 
 const solutions = [
   {
-    icon: "https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e64e0ef91d7de0cb76f9a_clock.svg",
-    alt: "Clock Icon",
+    icon: <Calendar size={64} className="text-brand-br1" />,
+    alt: "Founded In",
     title: "Founded In",
     description: "2025",
   },
   {
-    icon: "https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e64e0169b26a93f279d87_bar-chart.svg",
-    alt: "Chart Icon",
+    icon: <DollarSign size={64} className="text-brand-br1" />,
+    alt: "Prices distributed",
     title: "Prices distributed",
     description: "USD 10k +",
   },
   {
-    icon: "https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e64e0169b26a93f279d87_bar-chart.svg",
-    alt: "Chart Icon",
+    icon: <Users size={64} className="text-brand-br1" />,
+    alt: "Users",
     title: "Users",
     description: "105 +",
   },
@@ -38,7 +39,7 @@ function VisionSection() {
         <div className="flex flex-wrap justify-center gap-6 py-10">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {solutions.map((solution, index) => (
-              <SolutionCard
+              <VisionCard
                 key={index}
                 icon={solution.icon}
                 alt={solution.alt}

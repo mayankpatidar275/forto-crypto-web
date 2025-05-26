@@ -1,14 +1,14 @@
 import React, { ReactNode } from "react";
 import Para2 from "./Para2";
 
-type SolutionCardProps = {
+type VisionCardProps = {
   icon: ReactNode;
   alt: string;
   title: string;
   description?: string;
 };
 
-const SolutionCard: React.FC<SolutionCardProps> = ({
+const VisionCard: React.FC<VisionCardProps> = ({
   icon,
   title,
   description,
@@ -26,4 +26,4 @@ const SolutionCard: React.FC<SolutionCardProps> = ({
   );
 };
 
-export default SolutionCard;
+export default VisionCard;

@@ -1,3 +1,4 @@
+import { Coins, PartyPopper, Users } from "lucide-react";
 import CountDown from "./ui/CountDown";
 import Heading2 from "./ui/Heading2";
 import Label2 from "./ui/Label2";
@@ -5,21 +6,24 @@ import SolutionCard from "./ui/SolutionCard";
 
 const solutions = [
   {
-    icon: "https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e64e0ef91d7de0cb76f9a_clock.svg",
-    alt: "Clock Icon",
-    title: "Counter",
-    description: "remaining",
-  },
-  {
-    icon: "https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e64e0169b26a93f279d87_bar-chart.svg",
-    alt: "Chart Icon",
-    title: "Prices",
+    // icon: "https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e64e0ef91d7de0cb76f9a_clock.svg",
+    icon: <Coins size={64} className="text-brand-br1" />,
+    alt: "Prize Pool",
+    title: "Prize Pool",
     description: "USD 100k",
   },
   {
-    icon: "https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e64e0169b26a93f279d87_bar-chart.svg",
+    // icon: "https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e64e0169b26a93f279d87_bar-chart.svg",
+    icon: <Users size={64} className="text-brand-br1" />,
     alt: "Chart Icon",
     title: "Users",
+    description: "USD 1k",
+  },
+  {
+    // icon: "https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e64e0169b26a93f279d87_bar-chart.svg",
+    icon: <PartyPopper size={64} className="text-brand-br1" />,
+    alt: "PartyPopper",
+    title: "Jackpot",
     description: "1000",
   },
 ];

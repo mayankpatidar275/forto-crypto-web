@@ -1,10 +1,13 @@
 import Heading2 from "./ui/Heading2";
-import Label from "./ui/Label";
-import Label2 from "./ui/Label2";
-import WinnerTile from "./ui/WinnerTile";
 import WinnerTileHorizontal from "./ui/WinnerTileHorizontal";
 
 const dummyWinners = [
+  {
+    name: "Alice Johnson",
+    location: "New York, USA",
+    amount: "$5,000",
+    image: "https://randomuser.me/api/portraits/women/44.jpg",
+  },
   {
     name: "Alice Johnson",
     location: "New York, USA",
@@ -35,21 +38,21 @@ const WinnersSection = () => {
   return (
     <section className="cp-x py-20 flex justify-center">
       <div className="max-w-6xl flex flex-col justify-center items-center">
-        <Label text="Check" />
-        <Heading2>Recent Winners</Heading2>
-        <div className="flex flex-wrap justify-center gap-6 py-10">
+        {/* <Label text="Check" /> */}
+        <Heading2>Our Recent Winners</Heading2>
+        {/* <div className="flex flex-wrap justify-center gap-6 py-10">
           {dummyWinners.map((winner, index) => (
             <WinnerTile key={index} {...winner} />
           ))}
-        </div>
-        <div className="flex flex-col gap-4 w-full items-center pb-10">
+        </div> */}
+        <div className="flex flex-col gap-4 w-full items-center py-10">
           {dummyWinners.map((winner, index) => (
             <WinnerTileHorizontal key={index} {...winner} />
           ))}
         </div>
-        <div>
+        {/* <div>
           <Label2 text="Get Started" />
-        </div>
+        </div> */}
       </div>
     </section>
   );

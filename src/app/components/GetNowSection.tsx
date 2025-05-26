@@ -1,7 +1,5 @@
-import React from "react";
-import Label from "./ui/Label";
-import Heading2 from "./ui/Heading2";
 import CrystalCard from "./ui/CrystalCard";
+import Heading2 from "./ui/Heading2";
 
 const imageData = [
   {
@@ -41,8 +39,8 @@ const GetNowSection = () => {
     <section className="cp-x py-20 flex justify-center">
       <div className="max-w-6xl w-full">
         <div className="block-heading px-6 py-14 text-center flex flex-col items-center">
-          <Label text="Get Now" />
-          <Heading2>Get Your Unique Crystal Now</Heading2>
+          {/* <Label text="Get Now" /> */}
+          <Heading2>Get your unique NFT ticket now</Heading2>
         </div>
         <div className="flex flex-wrap justify-center gap-8 px-6">
           {imageData.map((card, index) => (
