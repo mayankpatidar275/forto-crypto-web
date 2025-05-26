@@ -13,6 +13,7 @@ import ValuesSection from "./components/ValuesSection";
 import VisionSection from "./components/VisionSection";
 import WhatSection from "./components/WhatSection";
 import WhySection from "./components/WhySection";
+// import WinnersSection from "./components/WinnersSection";
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
       <HeroSection />
       <NextDrawCounterSection />
       <HowSection />
+      {/* <WinnersSection /> */}
       <VisionSection />
       <GetNowSection />
       <ProblemSection />
