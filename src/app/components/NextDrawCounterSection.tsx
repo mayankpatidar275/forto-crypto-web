@@ -17,14 +17,14 @@ const solutions = [
     icon: <Users size={64} className="text-brand-br1" />,
     alt: "Chart Icon",
     title: "Users",
-    description: "USD 1k",
+    description: "1k",
   },
   {
     // icon: "https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e64e0169b26a93f279d87_bar-chart.svg",
     icon: <PartyPopper size={64} className="text-brand-br1" />,
     alt: "PartyPopper",
     title: "Jackpot",
-    description: "1000",
+    description: "USD 1000",
   },
 ];
 
