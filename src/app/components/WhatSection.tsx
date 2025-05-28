@@ -64,7 +64,7 @@ function WhatSection() {
             innovation, not limitations.
           </Para1>
         </div>
-        <div className="flex flex-wrap justify-center gap-6 py-10">
+        <div className="flex flex-wrap justify-center gap-6 pt-10">
           {solutions.map((solution, index) => (
             <SolutionCard
               key={index}

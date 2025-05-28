@@ -49,7 +49,7 @@ const ContactSection = () => {
             the next stage of AI innovation—together.
           </Para1>
         </div> */}
-        <div className="flex flex-wrap justify-center gap-6 py-10">
+        <div className="flex flex-wrap justify-center gap-6 pt-10">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {contacts.map((contact, index) => (
               <ContactCard

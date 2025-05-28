@@ -36,7 +36,7 @@ function VisionSection() {
             where luck meets opportunity, and every ticket counts
           </Para1>
         </div>
-        <div className="flex flex-wrap justify-center gap-6 py-10">
+        <div className="flex flex-wrap justify-center gap-6 pt-10">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {solutions.map((solution, index) => (
               <VisionCard
