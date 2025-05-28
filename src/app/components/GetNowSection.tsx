@@ -38,7 +38,7 @@ const GetNowSection = () => {
   return (
     <section className="cp-x py-20 flex justify-center">
       <div className="max-w-6xl w-full">
-        <div className="block-heading px-6 py-14 text-center flex flex-col items-center">
+        <div className="block-heading px-6 pb-14 text-center flex flex-col items-center">
           {/* <Label text="Get Now" /> */}
           <Heading2>Get your unique NFT ticket now</Heading2>
         </div>

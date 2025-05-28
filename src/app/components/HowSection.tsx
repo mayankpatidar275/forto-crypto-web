@@ -7,7 +7,7 @@ const HowSection = () => {
       <div className="max-w-6xl flex flex-col justify-center items-center">
         {/* <Label text="How" /> */}
         <Heading2>How it works?</Heading2>
-        <div className="mb-8">
+        <div className="">
           <Para1>
             Every month, you&#39;ll have the chance to win a share of the prize
             pool that&#39;s been set aside just for our community. The more

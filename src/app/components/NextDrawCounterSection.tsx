@@ -56,7 +56,7 @@ function NextDrawCounterSection() {
             ))}
           </div>
         </div>
-        <div>
+        <div className="mt-8">
           <Label2 text="Get Your Ticket" />
         </div>
       </div>
