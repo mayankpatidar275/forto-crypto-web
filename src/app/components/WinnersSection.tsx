@@ -36,16 +36,16 @@ const dummyWinners = [
 
 const WinnersSection = () => {
   return (
-    <section className="cp-x py-20 flex justify-center">
+    <section className="cp-x cp-y flex justify-center">
       <div className="max-w-6xl flex flex-col justify-center items-center">
         {/* <Label text="Check" /> */}
         <Heading2>Our Recent Winners</Heading2>
-        {/* <div className="flex flex-wrap justify-center gap-6 pt-10">
+        {/* <div className="flex flex-wrap justify-center gap-6">
           {dummyWinners.map((winner, index) => (
             <WinnerTile key={index} {...winner} />
           ))}
         </div> */}
-        <div className="flex flex-col gap-4 w-full items-center pt-10">
+        <div className="flex flex-col gap-4 w-full items-center">
           {dummyWinners.map((winner, index) => (
             <WinnerTileHorizontal key={index} {...winner} />
           ))}

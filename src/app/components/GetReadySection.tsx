@@ -22,7 +22,7 @@ const GetReadySection = () => {
   }, []);
 
   return (
-    <section className="cp-x py-20 flex justify-center">
+    <section className="cp-x cp-y flex justify-center">
       <div className="max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
         {/* Right Content */}
         <div className="flex flex-col items-center lg:items-start gap-4 h-full justify-center lg:order-2">

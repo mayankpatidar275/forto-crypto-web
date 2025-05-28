@@ -3,7 +3,7 @@ import Para1 from "./ui/Para1";
 
 const HowSection = () => {
   return (
-    <section className="cp-x py-20 flex justify-center">
+    <section className="cp-x cp-y flex justify-center">
       <div className="max-w-6xl flex flex-col justify-center items-center">
         {/* <Label text="How" /> */}
         <Heading2>How it works?</Heading2>
@@ -20,7 +20,7 @@ const HowSection = () => {
             details.
           </Para1>
         </div>
-        {/* <div className="flex flex-wrap justify-center gap-6 pt-10">
+        {/* <div className="flex flex-wrap justify-center gap-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {contacts.map((contact, index) => (
               <ContactCard

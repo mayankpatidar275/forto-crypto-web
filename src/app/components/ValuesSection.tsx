@@ -25,7 +25,7 @@ const values = [
 
 const ValuesSection = () => {
   return (
-    <section className="cp-x py-20 flex justify-center">
+    <section className="cp-x cp-y flex justify-center">
       <div className="max-w-6xl flex flex-col justify-center items-center">
         <Label text="Core Values" />
         <Heading2>
