@@ -1,10 +1,10 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import Para from "./Para";
 
 export interface Problem {
   title: string;
   description: string;
-  icon: string;
+  icon: ReactNode;
   alt: string;
 }
 
@@ -12,12 +12,13 @@ const ProblemCard: React.FC<Problem> = ({ title, description, icon, alt }) => {
   return (
     <div className="bg-background-b3 text-left rounded-[15px] flex flex-col items-start justify-start min-h-[12.5rem] p-10">
       <div className="flex items-center gap-2 mb-6">
-        <img
+        {/* <img
           src={icon}
           alt={alt}
           className="w-10 h-10 object-contain mr-2"
           loading="lazy"
-        />
+        /> */}
+        <div className="w-10 h-10 object-contain mr-2">{icon}</div>
         <h6 className="text-white text-lg lg:text-3xl text-center md:text-xl font-bold mx-auto">
           {title}
         </h6>

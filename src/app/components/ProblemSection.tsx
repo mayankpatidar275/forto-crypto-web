@@ -1,64 +1,98 @@
+import {
+  Ticket,
+  Trophy,
+  Wallet,
+  Coins,
+  Gift,
+  ShieldCheck,
+  HelpCircle,
+  Banknote,
+  CheckCircle2,
+  Building2,
+  Info,
+} from "lucide-react";
+
 import Heading2 from "./ui/Heading2";
 import Para1 from "./ui/Para1";
 import ProblemCard, { Problem } from "./ui/ProblemCard";
 
 const problems: Problem[] = [
   {
-    title: "What is crypto currency?",
+    title: "What is Forto Token?",
     description:
-      "Deploying AI across multiple environments—whether on-premise or in the cloud—often comes with significant technical hurdles. Our models are built for seamless scalability, effortlessly adapting to both cloud-based and hybrid infrastructures. With streamlined deployment and minimal configuration, you can integrate AI solutions across your ecosystem without the usual complexity or operational overhead.",
-    icon: "https://cdn.prod.website-files.com/679e441b90452288c5c37443/679f1730229d85dbd33f287c_monitor.svg",
-    alt: "Monitor Icon",
+      "FortoToken is a next-generation sweepstakes platform powered by blockchain, rewarding patience and participation. Each ticket enters you into multiple long-term draws with growing jackpots — a system built for believers in the long game.",
+    icon: <Ticket size={32} className="text-brand-br1" />,
+    alt: "Ticket Icon",
   },
   {
-    title: "Where to buy cryptocurrency?",
+    title: "How much can I win?",
     description:
-      "Training AI models can be expensive and time-consuming, often requiring extensive computational resources. Our models are designed to train 3x faster while reducing compute costs by up to 50%, allowing you to achieve high-performance AI without breaking the bank. Whether you’re working with massive datasets or fine-tuning complex models, we optimize training efficiency to deliver faster results with lower infrastructure expenses.",
-    icon: "https://cdn.prod.website-files.com/679e441b90452288c5c37443/679f173079653f84026a145c_dollar-sign.svg",
-    alt: "Dollar Icon",
+      "Your winnings depend on the prize pool size, number of participants, and how many tickets you hold. For full reward breakdowns, check the Tokenomics page.",
+    icon: <Trophy size={32} className="text-brand-br1" />,
+    alt: "Trophy Icon",
   },
   {
-    title: "Is this a lottery?",
+    title: "How can I buy a ticket?",
     description:
-      "Poor-quality datasets can lead to inaccurate and biased AI models, impacting performance and fairness. We leverage high-quality, curated datasets that enhance model accuracy, reduce bias, and improve generalization. By ensuring data integrity and diversity, we help businesses build reliable AI solutions that drive better decision-making while maintaining ethical and unbiased outputs.",
-    icon: "https://cdn.prod.website-files.com/679e441b90452288c5c37443/679f1730c06be5ba91ca6b54_hard-drive.svg",
-    alt: "Hardrive Icon",
+      "Ask the tech team for a walkthrough. Ticket purchasing will soon be fully streamlined through supported wallets like MetaMask and Coinbase.",
+    icon: <Wallet size={32} className="text-brand-br1" />,
+    alt: "Wallet Icon",
   },
   {
-    title: "How to buy a ticket?",
+    title: "Can I buy more than one ticket?",
     description:
-      "Bringing AI into production shouldn't be a bottleneck. We simplify deployment with plug-and-play integrations for major cloud providers. Whether you're running inference in real-time or deploying models at scale, our solutions ensure a frictionless, reliable, and optimized deployment process, accelerating time-to-market for your AI innovations.",
-    icon: "https://cdn.prod.website-files.com/679e441b90452288c5c37443/679f1730770cf162dccf7d19_cpu.svg",
-    alt: "CPU Icon",
-  },
-
-  {
-    title: "What are the chances of winning?",
-    description:
-      "Deploying AI across multiple environments—whether on-premise or in the cloud—often comes with significant technical hurdles. Our models are built for seamless scalability, effortlessly adapting to both cloud-based and hybrid infrastructures. With streamlined deployment and minimal configuration, you can integrate AI solutions across your ecosystem without the usual complexity or operational overhead.",
-    icon: "https://cdn.prod.website-files.com/679e441b90452288c5c37443/679f1730229d85dbd33f287c_monitor.svg",
-    alt: "Monitor Icon",
+      "Absolutely! There’s no limit — the more tickets you hold, the higher your chances of winning at each milestone draw.",
+    icon: <Coins size={32} className="text-brand-br1" />,
+    alt: "Coins Icon",
   },
   {
-    title: "What can I do with my ticket?",
+    title: "How many times can I win?",
     description:
-      "Training AI models can be expensive and time-consuming, often requiring extensive computational resources. Our models are designed to train 3x faster while reducing compute costs by up to 50%, allowing you to achieve high-performance AI without breaking the bank. Whether you’re working with massive datasets or fine-tuning complex models, we optimize training efficiency to deliver faster results with lower infrastructure expenses.",
-    icon: "https://cdn.prod.website-files.com/679e441b90452288c5c37443/679f173079653f84026a145c_dollar-sign.svg",
-    alt: "Dollar Icon",
+      "Thanks to the Lifetime Ticket Model, each ticket grants entry into multiple scheduled draws over 2 years — 1st month, 6th month, and 2nd year. One ticket, multiple chances to win.",
+    icon: <Gift size={32} className="text-brand-br1" />,
+    alt: "Gift Icon",
   },
   {
-    title: "How many tickets can I buy?",
+    title: "What is the prize pool?",
     description:
-      "Poor-quality datasets can lead to inaccurate and biased AI models, impacting performance and fairness. We leverage high-quality, curated datasets that enhance model accuracy, reduce bias, and improve generalization. By ensuring data integrity and diversity, we help businesses build reliable AI solutions that drive better decision-making while maintaining ethical and unbiased outputs.",
-    icon: "https://cdn.prod.website-files.com/679e441b90452288c5c37443/679f1730c06be5ba91ca6b54_hard-drive.svg",
-    alt: "Hardrive Icon",
+      "60% of the total FortoToken supply is reserved for participant rewards. For complete details, visit the Tokenomics page.",
+    icon: <Banknote size={32} className="text-brand-br1" />,
+    alt: "Banknote Icon",
   },
   {
-    title: "How I can retrive my winnings?",
+    title: "How can I retrieve my winnings?",
     description:
-      "Bringing AI into production shouldn't be a bottleneck. We simplify deployment with plug-and-play integrations for major cloud providers. Whether you're running inference in real-time or deploying models at scale, our solutions ensure a frictionless, reliable, and optimized deployment process, accelerating time-to-market for your AI innovations.",
-    icon: "https://cdn.prod.website-files.com/679e441b90452288c5c37443/679f1730770cf162dccf7d19_cpu.svg",
-    alt: "CPU Icon",
+      "Winnings are automatically sent to your wallet — no action needed. You'll also get a confirmation email with transaction details and a blockchain link for verification.",
+    icon: <CheckCircle2 size={32} className="text-brand-br1" />,
+    alt: "Check Icon",
+  },
+  {
+    title: "What crypto platforms are supported?",
+    description:
+      "Currently supported: MetaMask and Coinbase. We're expanding soon. If you have a request, contact us via email or social media!",
+    icon: <Building2 size={32} className="text-brand-br1" />,
+    alt: "Platform Icon",
+  },
+  {
+    title: "Is FortoToken safe?",
+    description:
+      "Yes. FortoToken uses audited smart contracts, Chainlink VRF for fair draws, multi-sig cold wallets, and a bug bounty program. Full transparency available on the Tokenomics page.",
+    icon: <ShieldCheck size={32} className="text-brand-br1" />,
+    alt: "Security Icon",
+  },
+  {
+    title: "Do I need to pay taxes on my winnings?",
+    description:
+      "Possibly — depending on your country's laws and if you convert to fiat. Please consult a licensed tax advisor to know your exact obligations.",
+    icon: <Info size={32} className="text-brand-br1" />,
+    alt: "Info Icon",
+  },
+  {
+    title: "My question isn’t here. Where can I contact you?",
+    description:
+      "Reach us via email or social media — we’re happy to help. Full contact details are available in the Contact Us section on our website.",
+    icon: <HelpCircle size={32} className="text-brand-br1" />,
+    alt: "Help Icon",
   },
 ];
 
@@ -69,10 +103,7 @@ const ProblemSection = () => {
         {/* <Label text="FAQs" /> */}
         <Heading2>FAQs</Heading2>
         <div className="mb-8">
-          <Para1>
-            Looking for more information? Check out our FAQ section for detailed
-            answers.
-          </Para1>
+          <Para1>Got questions? We have got answers</Para1>
         </div>
         <div className="grid grid-cols-1 gap-6 w-full">
           {problems.map((problem, index) => (
