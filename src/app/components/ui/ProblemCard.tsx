@@ -8,7 +8,7 @@ export interface Problem {
   alt: string;
 }
 
-const ProblemCard: React.FC<Problem> = ({ title, description, icon, alt }) => {
+const ProblemCard: React.FC<Problem> = ({ title, description, icon }) => {
   return (
     <div className="bg-background-b3 text-left rounded-[15px] flex flex-col items-start justify-start min-h-[12.5rem] p-10">
       <div className="flex items-center gap-2 mb-6">
