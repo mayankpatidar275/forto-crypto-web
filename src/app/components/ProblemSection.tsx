@@ -99,7 +99,7 @@ const problems: Problem[] = [
 const ProblemSection = () => {
   return (
     <section className="cp-x cp-y flex justify-center">
-      <div className="max-w-6xl flex flex-col justify-center items-center">
+      <div className="max-w-6xl flex flex-col w-full justify-center items-center">
         {/* <Label text="FAQs" /> */}
         <Heading2>FAQs</Heading2>
         <div className="mb-8">
