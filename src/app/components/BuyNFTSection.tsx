@@ -19,6 +19,10 @@ export default function BuyNFTSection() {
   //   const [loading, setLoading] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
 
+  const [selectedImage, setSelectedImage] = useState(
+    "https://cdn.prod.website-files.com/620c78af8cae7c4d2f039f61/62101d16f4d9716e605177b4_Frame%2011.png"
+  );
+
   const { ready } = usePrivy();
   // const { ready, authenticated, user, login, linkEmail } = usePrivy();
 
@@ -88,30 +92,38 @@ export default function BuyNFTSection() {
   return (
     <section className="cp-x cp-y flex justify-center">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
-        <div className="w-full rounded-2xl overflow-hidden shadow-lg relative flex flex-col gap-4">
+        <div className="w-full overflow-hidden shadow-lg relative flex flex-col gap-4">
           {/* {!imageLoaded && (
             <Loader className="text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
           )} */}
           <img
-            src="https://cdn.prod.website-files.com/620c78af8cae7c4d2f039f61/62101d16f4d9716e605177b4_Frame%2011.png"
+            src={selectedImage}
             alt="Forto NFT Ticket"
-            className={`w-full h-72 object-cover transition-opacity duration-500 ${
+            className={`w-full h-72 rounded-md object-cover transition-opacity duration-500 ${
               imageLoaded ? "opacity-100" : "opacity-0"
             }`}
             onLoad={() => setImageLoaded(true)}
           />
           <div className="flex justify-around gap-4">
             {nftImageData.map((item, index) => (
-              <div key={index}>
+              <div
+                key={index}
+                className={`cursor-pointer border-2 rounded-md ${
+                  selectedImage === item.image
+                    ? "border-brand-br2"
+                    : "border-transparent"
+                }`}
+              >
                 <Image
-                  // src="https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e4609e7b123fb0460c97c_Logo_trainai.avif"
-                  // src={OrangeLogo}
                   src={item.image}
-                  alt="Logo"
-                  // className="h-8 w-auto"
+                  alt={`Thumbnail ${index}`}
                   width={150}
                   height={50}
                   priority
+                  onClick={() => {
+                    setImageLoaded(false);
+                    setSelectedImage(item.image);
+                  }}
                 />
               </div>
             ))}
