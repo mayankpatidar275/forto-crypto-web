@@ -19,6 +19,7 @@ const Providers = ({
         appearance: {
           theme: "light",
           accentColor: "#facc15",
+          // walletChainType: "ethereum-only",
           // logo: "",
         },
         // Create embedded wallets for users who don't have a wallet
