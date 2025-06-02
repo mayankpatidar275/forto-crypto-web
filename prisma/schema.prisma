@@ -23,6 +23,7 @@ model User {
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
 
+  cart            Cart?  
   purchases       Purchase[]
   surveyResponses SurveyResponse[]
 }
@@ -38,7 +39,6 @@ model NFT {
   type            NFTType       @relation(fields: [typeId], references: [id])
   typeId          String
 
-  // cartItems       CartItem[]
   purchaseItems   PurchaseItem[]
 }
 
@@ -50,7 +50,8 @@ model NFTType {
 
 model Cart {
   id              String    @id @default(cuid())
-  userId          String
+  user            User      @relation(fields: [userId], references: [id])
+  userId          String @unique
   items           CartItem[]
   updatedAt       DateTime  @updatedAt
   createdAt       DateTime  @default(now())
@@ -74,7 +75,7 @@ model Purchase {
   items           PurchaseItem[]
   purchasedAt     DateTime       @default(now())
   txHash          String?        @unique // Ensure transaction hash is unique
-  totalAmount     Float          // Added for easier querying
+  totalAmount     String          // Added for easier querying
 }
 
 model PurchaseItem {
@@ -90,21 +91,44 @@ model PurchaseItem {
 model SurveyQuestion {
   id              String     @id @default(cuid())
   question        String
-  type            String     // 'mcq' or 'text'
-  options         String[]   // only for mcq
-  active          Boolean    @default(true) // Allow soft deletion
+  type            QuestionType  // Enforced enum type
+  options         String[]      // For MCQ questions
+  minSelections   Int           @default(1)
+  maxSelections   Int           @default(1)
+  maxLength       Int?          @default(500) // For text answers
+  required        Boolean       @default(true)
+  active          Boolean       @default(true)
+  order           Int           // For question ordering
+  createdAt       DateTime      @default(now())
 
-  SurveyResponse SurveyResponse[]
+  responses       SurveyResponse[]
+
+  @@index([order]) // For efficient sorting
 }
 
 model SurveyResponse {
-  id              String   @id @default(cuid())
-  user            User     @relation(fields: [userId], references: [id])
+  id              String        @id @default(cuid())
+  user            User          @relation(fields: [userId], references: [id])
   userId          String
   question        SurveyQuestion @relation(fields: [questionId], references: [id])
   questionId      String
-  answer          Json     // Simplified structure
-  submittedAt     DateTime @default(now())
+  // Text response (for 'text' type questions)
+  textAnswer      String?       @db.VarChar(2000) // Explicit length limit
+  // MCQ response (for 'mcq' type questions)
+  selectedOptions Int[]         @default([])      // Stores option indices
+  metadata        Json?         // For any additional data (timing, etc)
+  submittedAt     DateTime      @default(now())
 
-  @@unique([userId, questionId]) // One response per user per question
+  // Composite unique constraint - one response per user per question
+  @@unique([userId, questionId])
+
+  // Index for faster lookups
+  @@index([userId])
+  @@index([questionId])
+}
+
+enum QuestionType {
+  MCQ
+  TEXT
+  RATING // Added for future extensibility
 }
