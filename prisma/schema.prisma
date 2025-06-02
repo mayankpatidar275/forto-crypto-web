@@ -4,6 +4,7 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+
 generator client {
   provider = "prisma-client-js"
   output   = "../app/generated/prisma"
@@ -14,3 +15,96 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id              String         @id @default(cuid())
+  email           String         @unique
+  privyId         String         @unique
+  walletAddress   String         @unique
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  purchases       Purchase[]
+  surveyResponses SurveyResponse[]
+}
+
+model NFT {
+  id              String        @id @default(cuid())
+  title           String
+  description     String?
+  imageUrl        String
+  price           String
+  available       Boolean       @default(true)
+  createdAt       DateTime      @default(now())
+  type            NFTType       @relation(fields: [typeId], references: [id])
+  typeId          String
+
+  // cartItems       CartItem[]
+  purchaseItems   PurchaseItem[]
+}
+
+model NFTType {
+  id              String   @id @default(cuid())
+  name            String   @unique
+  nfts            NFT[]
+}
+
+model Cart {
+  id              String    @id @default(cuid())
+  userId          String
+  items           CartItem[]
+  updatedAt       DateTime  @updatedAt
+  createdAt       DateTime  @default(now())
+}
+
+model CartItem {
+  id              String   @id @default(cuid())
+  cart            Cart     @relation(fields: [cartId], references: [id])
+  cartId          String
+  nftId           String
+  quantity        Int      @default(1)
+  addedAt         DateTime @default(now())
+
+  @@unique([cartId, nftId]) // Prevent duplicate items in cart
+}
+
+model Purchase {
+  id              String         @id @default(cuid())
+  user            User           @relation(fields: [userId], references: [id])
+  userId          String
+  items           PurchaseItem[]
+  purchasedAt     DateTime       @default(now())
+  txHash          String?        @unique // Ensure transaction hash is unique
+  totalAmount     Float          // Added for easier querying
+}
+
+model PurchaseItem {
+  id              String     @id @default(cuid())
+  purchase        Purchase   @relation(fields: [purchaseId], references: [id])
+  purchaseId      String
+  nft             NFT        @relation(fields: [nftId], references: [id])
+  nftId           String
+  quantity        Int        @default(1)
+  priceAtPurchase Float
+}
+
+model SurveyQuestion {
+  id              String     @id @default(cuid())
+  question        String
+  type            String     // 'mcq' or 'text'
+  options         String[]   // only for mcq
+  active          Boolean    @default(true) // Allow soft deletion
+
+  SurveyResponse SurveyResponse[]
+}
+
+model SurveyResponse {
+  id              String   @id @default(cuid())
+  user            User     @relation(fields: [userId], references: [id])
+  userId          String
+  question        SurveyQuestion @relation(fields: [questionId], references: [id])
+  questionId      String
+  answer          Json     // Simplified structure
+  submittedAt     DateTime @default(now())
+
+  @@unique([userId, questionId]) // One response per user per question
+}
