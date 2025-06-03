@@ -1,13 +1,14 @@
 "use client";
 
 // import { ethers } from "ethers";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // import { connectToContract } from "../../utils/helper";
 import { usePrivy } from "@privy-io/react-auth";
 // import NFTImage from "../../../src/assets/NFTImage.png";
 import Loader from "@/app/components/ui/Loader";
 import { nftImageData } from "../data/data";
 import Image from "next/image";
+import { NFTWithType } from "@/types/nft";
 
 function getCurrentMonth(): string {
   const date = new Date();
@@ -18,6 +19,11 @@ export default function BuyNFTSection() {
   const [ticketCount, setTicketCount] = useState(1);
   //   const [loading, setLoading] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const [nfts, setNfts] = useState<NFTWithType[]>([]);
 
   const [selectedImage, setSelectedImage] = useState(
     "https://cdn.prod.website-files.com/620c78af8cae7c4d2f039f61/62101d16f4d9716e605177b4_Frame%2011.png"
@@ -87,6 +93,31 @@ export default function BuyNFTSection() {
   //     }
   //   };
 
+  useEffect(() => {
+    const fetchNFTs = async () => {
+      try {
+        setLoading(true);
+        // const response = await fetch(`/api/nfts?currency=${currency}&limit=6`);
+        const response = await fetch(`/api/nfts`);
+        console.log("res: ", response);
+        const data = await response.json();
+
+        if (data.success) {
+          setNfts(data.data);
+        } else {
+          throw new Error(data.message || "Failed to fetch NFTs");
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Unknown error");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNFTs();
+    // }, [currency]);
+  }, []);
+
   const totalCost = ticketCount * FORTO_PER_TICKET;
 
   return (
@@ -105,24 +136,24 @@ export default function BuyNFTSection() {
             onLoad={() => setImageLoaded(true)}
           />
           <div className="flex justify-around gap-4">
-            {nftImageData.map((item, index) => (
+            {nfts.map((item, index) => (
               <div
                 key={index}
                 className={`cursor-pointer border-2 rounded-md ${
-                  selectedImage === item.image
+                  selectedImage === item.imageUrl
                     ? "border-brand-br2"
                     : "border-transparent"
                 }`}
               >
                 <Image
-                  src={item.image}
+                  src={item.imageUrl}
                   alt={`Thumbnail ${index}`}
                   width={150}
                   height={50}
                   priority
                   onClick={() => {
                     setImageLoaded(false);
-                    setSelectedImage(item.image);
+                    setSelectedImage(item.imageUrl);
                   }}
                 />
               </div>

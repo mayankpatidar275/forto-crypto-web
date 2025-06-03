@@ -1,50 +1,90 @@
+"use client";
+
 import CrystalCard from "./ui/CrystalCard";
 import Heading2 from "./ui/Heading2";
-
-const imageData = [
-  {
-    image:
-      "https://cdn.prod.website-files.com/620c78af8cae7c4d2f039f61/62101d16f4d9716e605177b4_Frame%2011.png",
-    alt: "No. 88",
-  },
-  {
-    image:
-      "https://cdn.prod.website-files.com/620c78af8cae7c4d2f039f61/62101cf5dfb5094a8c6634a9_Frame%2010.png",
-    alt: "No. 3",
-  },
-  {
-    image:
-      "https://cdn.prod.website-files.com/620c78af8cae7c4d2f039f61/62101cd1f35873083286be7f_Frame%209.png",
-    alt: "No. 55",
-  },
-  {
-    image:
-      "https://cdn.prod.website-files.com/620c78af8cae7c4d2f039f61/62101cb6ed5bbaf1b5240553_Frame%208.png",
-    alt: "No. 97",
-  },
-  {
-    image:
-      "https://cdn.prod.website-files.com/620c78af8cae7c4d2f039f61/62101c8e3fb647d46557bb9e_Frame%207.png",
-    alt: "No. 12",
-  },
-  {
-    image:
-      "https://cdn.prod.website-files.com/620c78af8cae7c4d2f039f61/62101a567b026d639ec83061_Frame%206.png",
-    alt: "No. 34",
-  },
-];
+import { useState, useEffect } from "react";
+import { NFTWithType } from "@/types/nft";
+// import { CrystalCardSkeleton } from "./ui/CrystalCardSkeleton";
 
 const GetNowSection = () => {
+  const [nfts, setNfts] = useState<NFTWithType[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  // const [currency, setCurrency] = useState<"USD" | "FORTO">("USD");
+
+  useEffect(() => {
+    const fetchNFTs = async () => {
+      try {
+        setLoading(true);
+        // const response = await fetch(`/api/nfts?currency=${currency}&limit=6`);
+        const response = await fetch(`/api/nfts`);
+        console.log("res: ", response);
+        const data = await response.json();
+
+        if (data.success) {
+          setNfts(data.data);
+        } else {
+          throw new Error(data.message || "Failed to fetch NFTs");
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Unknown error");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNFTs();
+    // }, [currency]);
+  }, []);
+
+  // Then use in GetNowSection while loading:
+  // {
+  //   loading &&
+  //     Array(6)
+  //       .fill(0)
+  //       .map((_, i) => <CrystalCardSkeleton key={i} />);
+  // }
+  // In GetNowSection.tsx
+  if (error)
+    return (
+      <div className="cp-x cp-y text-center">
+        <p className="text-red-500">Error: {error}</p>
+        <button
+          onClick={() => {
+            setError(null);
+            setLoading(true);
+          }}
+          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+        >
+          Retry
+        </button>
+      </div>
+    );
+
   return (
     <section className="cp-x cp-y flex justify-center">
       <div className="max-w-6xl w-full">
         <div className="block-heading px-6 text-center flex flex-col items-center">
-          {/* <Label text="Get Now" /> */}
           <Heading2>Get your unique NFT ticket now</Heading2>
+          {/* <div className="mt-4">
+            <label htmlFor="currency" className="mr-2">
+              Currency:
+            </label>
+            <select
+              id="currency"
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value as "USD" | "FORTO")}
+              className="px-3 py-1 border rounded"
+            >
+              <option value="USD">USD</option>
+              <option value="FORTO">FORTO</option>
+            </select>
+          </div> */}
         </div>
-        <div className="flex flex-wrap justify-center gap-8 px-6">
-          {imageData.map((card, index) => (
-            <CrystalCard key={index} image={card.image} alt={card.alt} />
+        <div className="flex flex-wrap justify-center gap-8 px-6 mt-8">
+          {nfts.map((nft) => (
+            <CrystalCard key={nft.id} nft={nft} />
+            // <CrystalCard key={nft.id} nft={nft} currency={currency} />
           ))}
         </div>
       </div>

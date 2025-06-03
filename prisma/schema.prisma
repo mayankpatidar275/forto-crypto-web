@@ -29,17 +29,26 @@ model User {
 }
 
 model NFT {
-  id              String        @id @default(cuid())
-  title           String
-  description     String?
-  imageUrl        String
-  price           String
-  available       Boolean       @default(true)
-  createdAt       DateTime      @default(now())
-  type            NFTType       @relation(fields: [typeId], references: [id])
-  typeId          String
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  imageUrl    String
+  price       Decimal  @db.Decimal(10, 2) // Using Decimal for precise currency math
+  currency    Currency @default(USD)
+  available   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  
+  type        NFTType  @relation(fields: [typeId], references: [id])
+  typeId      String
 
-  purchaseItems   PurchaseItem[]
+  PurchaseItem PurchaseItem[]
+}
+
+enum Currency {
+  USD
+  FORTO
+  ETH
+  SOL
 }
 
 model NFTType {
