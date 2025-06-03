@@ -13,7 +13,7 @@ const Providers = ({
       appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ""}
       config={{
         // Display email and wallet as login methods
-        loginMethods: ["wallet"],
+        loginMethods: ["email"],
 
         // Customize Privy's appearance in your app
         appearance: {

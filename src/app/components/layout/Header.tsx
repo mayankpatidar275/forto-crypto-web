@@ -7,7 +7,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { WhiteLogo } from "@/app/assets/index";
 import Image from "next/image";
-import { usePrivy } from "@privy-io/react-auth";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
 
 const navLinks = [
   // { href: "/", label: "Home" },
@@ -25,8 +25,11 @@ const navLinks = [
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const { ready, authenticated, login } = usePrivy();
+  const { ready, authenticated, login, linkEmail } = usePrivy();
   const disableLogin = !ready || (ready && authenticated);
+
+  const { connectWallet } = usePrivy();
+  const { wallets } = useWallets();
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -63,7 +66,6 @@ export default function Header() {
               priority
             />
           </Link>
-
           {/* Desktop Menu */}
           <nav className="hidden lg:flex space-x-12">
             {navLinks.map((link) => (
@@ -76,7 +78,23 @@ export default function Header() {
               </Link>
             ))}
           </nav>
-
+          <button onClick={() => connectWallet()}>Connect</button>
+          <button
+            disabled={!wallets[0]}
+            onClick={() => {
+              wallets[0].loginOrLink();
+            }}
+          >
+            Link wallet
+          </button>
+          <button
+            disabled={!wallets[0]}
+            onClick={() => {
+              login();
+            }}
+          >
+            Login
+          </button>
           <div className="flex gap-2">
             {/* Right buttons */}
             <div className="flex items-center space-x-4">
