@@ -3,12 +3,13 @@
 // import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 // import { connectToContract } from "../../utils/helper";
-import { usePrivy } from "@privy-io/react-auth";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
 // import NFTImage from "../../../src/assets/NFTImage.png";
 import Loader from "@/app/components/ui/Loader";
 import { nftImageData } from "../data/data";
 import Image from "next/image";
 import { NFTWithType } from "@/types/nft";
+import { useMintFreeNft } from "@/custom-hooks/mutations";
 
 function getCurrentMonth(): string {
   const date = new Date();
@@ -21,6 +22,7 @@ export default function BuyNFTSection() {
   const [imageLoaded, setImageLoaded] = useState(false);
 
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const [nfts, setNfts] = useState<NFTWithType[]>([]);
@@ -28,8 +30,10 @@ export default function BuyNFTSection() {
   const [selectedImage, setSelectedImage] = useState(
     "https://cdn.prod.website-files.com/620c78af8cae7c4d2f039f61/62101d16f4d9716e605177b4_Frame%2011.png"
   );
-
-  const { ready } = usePrivy();
+  const { wallets } = useWallets();
+  const { connectWallet } = usePrivy();
+  const { ready, authenticated, login } = usePrivy();
+  const mintFreeNftMutation = useMintFreeNft();
   // const { ready, authenticated, user, login, linkEmail } = usePrivy();
 
   // Number of FORTO tokens required per ticket
@@ -39,6 +43,62 @@ export default function BuyNFTSection() {
     const val = parseInt(e.target.value, 10);
     setTicketCount(isNaN(val) ? 1 : Math.max(1, val));
   };
+
+  async function handleBuyClick() {
+    setSubmitting(true);
+
+    try {
+      if (!authenticated) {
+        login();
+        return;
+      }
+
+      if (!wallets[0]) {
+        connectWallet({
+          walletChainType: "ethereum-only",
+          walletList: ["metamask"],
+        });
+        return;
+      }
+
+      if (authenticated && wallets[0]) {
+        // Todo: Submit the response
+        // Todo: Handle the case if the user's wallet is different than the connected wallet.
+        // const adrr = await getWalletAddress();
+        const adrr = wallets[0].address;
+        if (!adrr) {
+          alert("Please connect your wallet!");
+          return;
+        }
+
+        // const answers = questions.map((q) => {
+        //   const value = data[q.id];
+        //   const answer = Array.isArray(value)
+        //     ? value
+        //     : typeof value === "string"
+        //       ? [value]
+        //       : [];
+        //   return { questionId: q.id, answer };
+        // });
+        console.log("Bypassing survey submission for testing purposes");
+        console.log("Minting NFT for address:", adrr);
+
+        await mintFreeNftMutation.mutateAsync({ address: adrr });
+
+        // await submitSurveyMutation.mutateAsync({
+        //   privyUserId: user.id,
+        //   answers,
+        // });
+
+        alert("Survey submitted! You will receive the Ticket!");
+      }
+    } catch (err) {
+      console.error("Submission error:", err);
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   //   const handleBuy = async () => {
   //     try {
@@ -192,18 +252,33 @@ export default function BuyNFTSection() {
             <span className="text-white">Total Cost:</span> {totalCost} FORTO
           </div>
 
-          <div className="h-12 w-62">
-            {ready ? (
-              <button
-                // onClick={handleBuy}
-                // disabled={loading}
-                className="cursor-pointer inline-block border-2 border-brand-br2 text-white px-6 py-3 rounded-xl text-lg md:text-xl font-semibold hover:bg-brand-br2 hover:text-link transition-colors duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)]"
-              >
-                {/* {loading ? <Loader /> : "Buy Now"} */} Buy Now
-              </button>
-            ) : (
-              <Loader className="text-white" />
-            )}
+          <div className="flex justify-between">
+            <div className="h-12 w-62">
+              {ready ? (
+                <button
+                  onClick={handleBuyClick}
+                  disabled={loading}
+                  className="cursor-pointer inline-block border-2 border-brand-br2 text-white px-6 py-3 rounded-xl text-lg md:text-xl font-semibold hover:bg-brand-br2 hover:text-link transition-colors duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)]"
+                >
+                  {loading ? <Loader /> : "Buy Now"}
+                </button>
+              ) : (
+                <Loader className="text-white" />
+              )}
+            </div>
+            <div className="h-12 w-62">
+              {ready ? (
+                <button
+                  // onClick={handleBuy}
+                  // disabled={loading}
+                  className="cursor-pointer inline-block border-2 border-brand-br2 text-white px-6 py-3 rounded-xl text-lg md:text-xl font-semibold hover:bg-brand-br2 hover:text-link transition-colors duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)]"
+                >
+                  {/* {loading ? <Loader /> : "Buy Now"} */} Add to Cart
+                </button>
+              ) : (
+                <Loader className="text-white" />
+              )}
+            </div>
           </div>
         </div>
       </div>
