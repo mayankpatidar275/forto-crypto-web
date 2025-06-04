@@ -29,7 +29,7 @@ const CrystalCard: React.FC<CrystalCardProps> = ({ nft }) => {
   // };
 
   return (
-    <div className="nft-card-item flex flex-col justify-center items-center w-[80%] sm:w-[40%] md:w-[20%] gap-2">
+    <div className="nft-card-item flex flex-col justify-center items-center gap-2">
       <img
         src={nft.imageUrl}
         alt={nft.title}

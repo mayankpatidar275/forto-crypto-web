@@ -30,6 +30,12 @@ export default function Header() {
 
   const { connectWallet } = usePrivy();
   const { wallets } = useWallets();
+  console.log("wallets: ", wallets);
+
+  function handleDisconnectWallet() {
+    console.log("disconnecting");
+    wallets[0].disconnect;
+  }
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -78,25 +84,34 @@ export default function Header() {
               </Link>
             ))}
           </nav>
-          <button onClick={() => connectWallet()}>Connect</button>
-          <button
-            disabled={!wallets[0]}
-            onClick={() => {
-              wallets[0].loginOrLink();
-            }}
-          >
-            Link wallet
-          </button>
-          <button
-            disabled={!wallets[0]}
-            onClick={() => {
-              login();
-            }}
-          >
-            Login
-          </button>
+
           <div className="flex gap-2">
             {/* Right buttons */}
+            <div className="flex items-center space-x-4">
+              {wallets[0] ? (
+                <Link
+                  href="/my-profile"
+                  className="bg-background-b1 font-semibold text-lg cursor-pointer text-heading hover:bg-brand-br1 text-center rounded-[15px] px-7 py-2.5 leading-[1.4] transition-[background-color,transform, scale] duration-400 ease-[cubic-bezier(.25,.46,.45,.94)] hover:scale-[0.93]"
+                  onClick={handleDisconnectWallet}
+                >
+                  <div className="flex items-center">
+                    {wallets[0].address.slice(0, 5) +
+                      "...." +
+                      wallets[0].address.slice(wallets[0].address.length - 2)}
+                  </div>
+                </Link>
+              ) : (
+                <div className="flex items-center">
+                  <button
+                    disabled={wallets[0]}
+                    onClick={connectWallet}
+                    className="bg-background-b1 font-semibold text-lg cursor-pointer text-heading hover:bg-brand-br1 text-center rounded-[15px] px-7 py-2.5 leading-[1.4] transition-[background-color,transform, scale] duration-400 ease-[cubic-bezier(.25,.46,.45,.94)] hover:scale-[0.93]"
+                  >
+                    Connect
+                  </button>
+                </div>
+              )}
+            </div>
             <div className="flex items-center space-x-4">
               {authenticated ? (
                 <Link

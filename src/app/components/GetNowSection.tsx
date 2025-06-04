@@ -4,6 +4,7 @@ import CrystalCard from "./ui/CrystalCard";
 import Heading2 from "./ui/Heading2";
 import { useState, useEffect } from "react";
 import { NFTWithType } from "@/types/nft";
+import Link from "next/link";
 // import { CrystalCardSkeleton } from "./ui/CrystalCardSkeleton";
 
 const GetNowSection = () => {
@@ -83,7 +84,11 @@ const GetNowSection = () => {
         </div>
         <div className="flex flex-wrap justify-center gap-8 px-6 mt-8">
           {nfts.map((nft) => (
-            <CrystalCard key={nft.id} nft={nft} />
+            <div key={nft.id} className="w-32">
+              <Link href={`/nfts/${nft.id}`} className="block">
+                <CrystalCard nft={nft} />
+              </Link>
+            </div>
             // <CrystalCard key={nft.id} nft={nft} currency={currency} />
           ))}
         </div>
