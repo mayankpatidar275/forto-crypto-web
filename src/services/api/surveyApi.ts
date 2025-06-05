@@ -1,4 +1,4 @@
-import { SurveyResponseType } from "../../types/types";
+import { SurveyResponseType } from "@/types/survey";
 import { get, post } from "../apiMethods";
 
 export async function fetchSurveyQuestions() {

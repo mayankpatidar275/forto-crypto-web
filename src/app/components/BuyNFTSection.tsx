@@ -6,10 +6,10 @@ import { useEffect, useState } from "react";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
 // import NFTImage from "../../../src/assets/NFTImage.png";
 import Loader from "@/app/components/ui/Loader";
-import { nftImageData } from "../data/data";
-import Image from "next/image";
+import { useMintFreeNft, useStoreUser } from "@/custom-hooks/mutations";
 import { NFTWithType } from "@/types/nft";
-import { useMintFreeNft } from "@/custom-hooks/mutations";
+import { useLogin } from "@privy-io/react-auth";
+import Image from "next/image";
 
 function getCurrentMonth(): string {
   const date = new Date();
@@ -32,8 +32,35 @@ export default function BuyNFTSection() {
   );
   const { wallets } = useWallets();
   const { connectWallet } = usePrivy();
-  const { ready, authenticated, login } = usePrivy();
+  const { ready, authenticated } = usePrivy();
   const mintFreeNftMutation = useMintFreeNft();
+  const storeUserMutation = useStoreUser();
+  const { login } = useLogin({
+    onComplete: async (user) => {
+      try {
+        console.log("User logged in successfully!", user);
+        await storeUserMutation.mutateAsync({
+          user: {
+            privyId: user.user.id,
+            walletAddress: user.user.wallet?.address || "",
+            email: user.user.email?.address || "",
+          },
+        });
+      } catch (error) {
+        console.error("Failed to store user:", error);
+      }
+    },
+    onError: (error) => {
+      // Handle login errors
+      console.log("Login failed:", error);
+    },
+  });
+
+  // const { state, loginWithCode, sendCode } = useLoginWithEmail({
+  //   onComplete: ({ user }) => {
+  //     console.log("user: ", user);
+  //   },
+  // });
   // const { ready, authenticated, user, login, linkEmail } = usePrivy();
 
   // Number of FORTO tokens required per ticket
@@ -266,19 +293,19 @@ export default function BuyNFTSection() {
                 <Loader className="text-white" />
               )}
             </div>
-            <div className="h-12 w-62">
+            {/* <div className="h-12 w-62">
               {ready ? (
                 <button
-                  // onClick={handleBuy}
-                  // disabled={loading}
+                  onClick={handleAddToCartClick}
+                  disabled={loading}
                   className="cursor-pointer inline-block border-2 border-brand-br2 text-white px-6 py-3 rounded-xl text-lg md:text-xl font-semibold hover:bg-brand-br2 hover:text-link transition-colors duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)]"
                 >
-                  {/* {loading ? <Loader /> : "Buy Now"} */} Add to Cart
+                  {loading ? <Loader /> : "Add to Cart"}
                 </button>
               ) : (
                 <Loader className="text-white" />
               )}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
