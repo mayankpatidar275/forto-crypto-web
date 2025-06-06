@@ -43,7 +43,7 @@ export async function GET() {
 
     const nfts = await prisma.nFT.findMany();
 
-    console.log("nfts; ", nfts);
+    // console.log("nfts; ", nfts);
 
     return NextResponse.json({
       success: true,

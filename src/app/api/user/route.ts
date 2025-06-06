@@ -2,10 +2,10 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { UserType } from "@/types/user";
 
+// TODO: update the user if tried login again
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    console.log("body: ", body);
     const userData = transformPrivyUser(body.user);
 
     // Check if user already exists

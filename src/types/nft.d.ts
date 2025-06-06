@@ -12,6 +12,11 @@ export interface NFTWithType {
   type: NFTType;
 }
 
+export interface NFTWithIdAndImage {
+  nftId: string | null;
+  nftImageUrl: string | null;
+}
+
 export interface NFTResponse {
   success: boolean;
   data: NFTWithType[];

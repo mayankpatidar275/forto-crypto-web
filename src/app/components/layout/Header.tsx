@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Menu, User, X } from "lucide-react";
+import { Menu, ShoppingCart, User, X } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { WhiteLogo } from "@/app/assets/index";
@@ -30,7 +30,6 @@ export default function Header() {
 
   const { connectWallet } = usePrivy();
   const { wallets } = useWallets();
-  console.log("wallets: ", wallets);
 
   function handleDisconnectWallet() {
     console.log("disconnecting");
@@ -107,7 +106,7 @@ export default function Header() {
                     onClick={() =>
                       connectWallet({
                         walletChainType: "ethereum-only",
-                        walletList: ["metamask"],
+                        walletList: ["detected_ethereum_wallets"],
                       })
                     }
                     className="bg-background-b1 font-semibold text-lg cursor-pointer text-heading hover:bg-brand-br1 text-center rounded-[15px] px-7 py-2.5 leading-[1.4] transition-[background-color,transform, scale] duration-400 ease-[cubic-bezier(.25,.46,.45,.94)] hover:scale-[0.93]"
@@ -138,6 +137,16 @@ export default function Header() {
                   </button>
                 </div>
               )}
+            </div>
+            <div className="flex items-center space-x-4">
+              <Link
+                href="/cart"
+                className="bg-background-b1 font-semibold text-lg cursor-pointer text-heading hover:bg-brand-br1 text-center rounded-[15px] px-7 py-2.5 leading-[1.4] transition-[background-color,transform, scale] duration-400 ease-[cubic-bezier(.25,.46,.45,.94)] hover:scale-[0.93]"
+              >
+                <div className="flex items-center">
+                  <ShoppingCart />
+                </div>
+              </Link>
             </div>
 
             {/* Mobile Menu Button */}
