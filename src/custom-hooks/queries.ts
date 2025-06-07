@@ -22,7 +22,7 @@ export function useSurveyQuestions() {
 }
 
 export function useCart(userPrivyId: string) {
-  return useCustomQuery(["cart", userPrivyId], fetchCart, userPrivyId);
+  return useCustomQuery(["cart"], fetchCart, userPrivyId);
 }
 
 export function useNftById(nftId: string) {

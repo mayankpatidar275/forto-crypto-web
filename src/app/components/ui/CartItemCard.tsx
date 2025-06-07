@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
-import { Minus, Plus, Trash2 } from "lucide-react";
-import Para1 from "./Para1";
+import { useRemoveFromCart } from "@/custom-hooks/mutations";
 import { useNftById } from "@/custom-hooks/queries";
+import React from "react";
 
 export interface CartItemCardProps {
   addedAt: string;
@@ -23,8 +22,11 @@ const CartItemCard: React.FC<CartItemCardProps> = ({
   const { data: response, isLoading, error } = useNftById(nftId);
   const nft = response?.data;
 
+  const removeFromCartMutation = useRemoveFromCart();
+
   const handleRemove = () => {
     // Implement cart item removal logic here
+    removeFromCartMutation.mutate(id);
     console.log("Removing item with id:", id);
   };
 
@@ -36,6 +38,10 @@ const CartItemCard: React.FC<CartItemCardProps> = ({
   if (isLoading) return <div className="text-white">Loading...</div>;
   if (error || !nft)
     return <div className="text-red-500">Failed to load item.</div>;
+
+  if (removeFromCartMutation.isPending) {
+    return <div>Removing...</div>;
+  }
 
   return (
     <section className="cp-x cp-y flex justify-center">
@@ -71,8 +77,9 @@ const CartItemCard: React.FC<CartItemCardProps> = ({
           </div>
 
           <div className="text-lg font-semibold text-brand-br1">
-            <span className="text-white">Cost:</span> {nft.price * quantity}
-            {nft.currency}
+            <span className="text-white">Cost: </span>
+            {nft.price * quantity + " "}
+            <span>{nft.currency}</span>
           </div>
 
           <div className="flex justify-between">

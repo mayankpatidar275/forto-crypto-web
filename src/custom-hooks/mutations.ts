@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 // import { useNavigate } from "react-router-dom";
 import { mintFreeNft, submitSurvey } from "../services/api/surveyApi";
 import { storeUser } from "@/services/api/usersApi";
-import { addToCart } from "@/services/api/cartApi";
+import { addToCart, removeFromCart } from "@/services/api/cartApi";
 
 // Generalized mutation function
 function useMutationWithSuccessMessage<TVariables>(
@@ -50,3 +50,11 @@ export const useAddToCart = () =>
   useMutationWithSuccessMessage(addToCart, "Added to cart successfully", [
     "cart",
   ]);
+
+// Cart mutations
+export const useRemoveFromCart = () =>
+  useMutationWithSuccessMessage(
+    removeFromCart,
+    "Removed from cart successfully",
+    ["cart"]
+  );
