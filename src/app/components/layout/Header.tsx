@@ -15,12 +15,12 @@ const navLinks = [
   // { href: "/solution", label: "Solution" },
   // { href: "/blog", label: "Blog" },
   // { href: "/contact", label: "Contact" },
-  { href: "/", label: "Home" },
-  { href: "/how", label: "How It Works" },
+  // { href: "/", label: "Home" },
+  { href: "/how", label: "Docs" },
   { href: "/tokenomics", label: "Tokenomics" },
   { href: "/about", label: "About" },
-  { href: "/faq", label: "FAQ" },
-  { href: "/contact", label: "Contact" },
+  // { href: "/faq", label: "FAQ" },
+  // { href: "/contact", label: "Contact" },
 ];
 
 export default function Header() {
