@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchSurveyQuestions } from "../services/api/surveyApi";
+import { fetchCart } from "@/services/api/cartApi";
+import { fetchNftById } from "@/services/api/nftApi";
 
 // Reusable query function
 function useCustomQuery<TQueryFnData, TQueryParams = void>(
@@ -17,4 +19,12 @@ function useCustomQuery<TQueryFnData, TQueryParams = void>(
 
 export function useSurveyQuestions() {
   return useCustomQuery(["surveyQuestions"], fetchSurveyQuestions);
+}
+
+export function useCart(userPrivyId: string) {
+  return useCustomQuery(["cart", userPrivyId], fetchCart, userPrivyId);
+}
+
+export function useNftById(nftId: string) {
+  return useCustomQuery(["nftById", nftId], fetchNftById, nftId);
 }

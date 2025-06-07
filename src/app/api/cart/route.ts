@@ -4,17 +4,31 @@ import prisma from "@/lib/prisma";
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
+    const userPrivyId = searchParams.get("userPrivyId");
 
-    if (!userId) {
+    console.log("user privy Id is: ", userPrivyId);
+    if (!userPrivyId) {
       return NextResponse.json(
-        { success: false, message: "User ID is required" },
+        { success: false, message: "User Privy ID is required" },
         { status: 400 }
       );
     }
 
+    const user = await prisma.user.findFirst({
+      where: {
+        privyId: userPrivyId,
+      },
+    });
+
+    if (!user) {
+      return NextResponse.json(
+        { success: false, message: "User with given privy Id not found." },
+        { status: 404 }
+      );
+    }
+
     const cart = await prisma.cart.findFirst({
-      where: { userId },
+      where: { userId: user.id },
       include: {
         items: true,
       },
