@@ -13,6 +13,7 @@ import { useLogin } from "@privy-io/react-auth";
 import Image from "next/image";
 import { ethers } from "ethers";
 import { connectToContract } from "@/utils/helper";
+import { useCart } from "@/custom-hooks/queries";
 
 function getCurrentMonth(): string {
   const date = new Date();
@@ -44,6 +45,11 @@ export default function BuyNFTSection(nft: {
   const addToCartMutation = useAddToCart();
   const storeUserMutation = useStoreUser();
 
+  const userId = user?.id;
+
+  // Only call useCart if userId exists
+  const { data: myCart, isLoading } = useCart(userId || "");
+
   const { login } = useLogin({
     onComplete: async (user) => {
       try {
@@ -72,6 +78,18 @@ export default function BuyNFTSection(nft: {
     const val = parseInt(e.target.value, 10);
     setTicketCount(isNaN(val) ? 1 : Math.max(1, val));
   };
+
+  function isCartItemAlreadyExist() {
+    console.log("my cart: ", myCart);
+    const items = myCart?.data?.items;
+    for (let i = 0; i < items?.length; i++) {
+      const nftId = items[i].nftId;
+      if (nftId === selectedNft.nftId) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   const handleAddToCartClick = async () => {
     if (!authenticated) {
@@ -279,19 +297,21 @@ export default function BuyNFTSection(nft: {
                 <Loader className="text-white" />
               )}
             </div>
-            <div className="h-12 w-62">
-              {ready ? (
-                <button
-                  onClick={handleAddToCartClick}
-                  disabled={loading}
-                  className="cursor-pointer inline-block border-2 border-brand-br2 text-white px-6 py-3 rounded-xl text-lg md:text-xl font-semibold hover:bg-brand-br2 hover:text-link transition-colors duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)]"
-                >
-                  {loading ? <Loader /> : "Add to Cart"}
-                </button>
-              ) : (
-                <Loader className="text-white" />
-              )}
-            </div>
+            {!isCartItemAlreadyExist() && (
+              <div className="h-12 w-62">
+                {ready ? (
+                  <button
+                    onClick={handleAddToCartClick}
+                    disabled={loading || isCartItemAlreadyExist()}
+                    className="cursor-pointer inline-block border-2 border-brand-br2 text-white px-6 py-3 rounded-xl text-lg md:text-xl font-semibold hover:bg-brand-br2 hover:text-link transition-colors duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)]"
+                  >
+                    {loading ? <Loader /> : "Add to Cart"}
+                  </button>
+                ) : (
+                  <Loader className="text-white" />
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
