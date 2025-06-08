@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
+// Correctly typed context param
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
 
@@ -19,9 +20,14 @@ export async function DELETE(
       );
     }
 
+    // Optional: actually delete the NFT
+    await prisma.nFT.delete({
+      where: { id },
+    });
+
     return NextResponse.json({
       success: true,
-      data: nft,
+      message: "NFT deleted successfully",
     });
   } catch (error) {
     console.error("[NFT_BY_ID_DELETE]", error);
