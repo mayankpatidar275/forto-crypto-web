@@ -7,7 +7,10 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { WhiteLogo } from "@/app/assets/index";
 import Image from "next/image";
-import { usePrivy, useWallets } from "@privy-io/react-auth";
+import { usePrivy } from "@privy-io/react-auth";
+import ConnectBtn from "../ui/ConnectBtn";
+import LoginUser from "../ui/LoginUser";
+import CartBtn from "../ui/CartBtn";
 
 const navLinks = [
   // { href: "/", label: "Home" },
@@ -25,16 +28,7 @@ const navLinks = [
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const { ready, authenticated, login, linkEmail } = usePrivy();
-  const disableLogin = !ready || (ready && authenticated);
-
-  const { connectWallet } = usePrivy();
-  const { wallets } = useWallets();
-
-  function handleDisconnectWallet() {
-    console.log("disconnecting");
-    wallets[0].disconnect;
-  }
+  const { authenticated } = usePrivy();
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -58,19 +52,33 @@ export default function Header() {
 
       <div className="mx-auto px-4 sm:px-4 lg:px-8 py-4 z-50 relative">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link href="/" aria-label="Homepage" className="flex-shrink-0">
-            <Image
-              // src="https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e4609e7b123fb0460c97c_Logo_trainai.avif"
-              // src={OrangeLogo}
-              src={WhiteLogo}
-              alt="Logo"
-              // className="h-8 w-auto"
-              width={150}
-              height={50}
-              priority
-            />
-          </Link>
+          <div className="flex justify-center items-center gap-3">
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className={`lg:hidden flex sm:btn-primary ${
+                isOpen && "bg-brand-br1"
+              }`}
+              aria-label="Toggle menu"
+            >
+              {isOpen ? (
+                <X className="h-5 w-5 sm:h-6 sm:w-6" />
+              ) : (
+                <Menu className="h-5 w-5 sm:h-6 sm:w-6" />
+              )}
+            </button>
+            {/* Logo */}
+            <Link href="/" aria-label="Homepage" className="flex-shrink-0">
+              <Image
+                src={WhiteLogo}
+                alt="Logo"
+                className="h-5 sm:h-8 w-auto"
+                width={150}
+                height={50}
+                priority
+              />
+            </Link>
+          </div>
           {/* Desktop Menu */}
           <nav className="hidden lg:flex space-x-12">
             {navLinks.map((link) => (
@@ -84,87 +92,11 @@ export default function Header() {
             ))}
           </nav>
 
-          <div className="flex gap-2">
+          <div className="flex gap-3 sm:gap-6">
             {/* Right buttons */}
-            <div className="flex items-center space-x-4">
-              {wallets[0] ? (
-                <Link
-                  href="/my-profile"
-                  className="bg-background-b1 font-semibold text-lg cursor-pointer text-heading hover:bg-brand-br1 text-center rounded-[15px] px-7 py-2.5 leading-[1.4] transition-[background-color,transform, scale] duration-400 ease-[cubic-bezier(.25,.46,.45,.94)] hover:scale-[0.93]"
-                  onClick={handleDisconnectWallet}
-                >
-                  <div className="flex items-center">
-                    {wallets[0].address.slice(0, 5) +
-                      "...." +
-                      wallets[0].address.slice(wallets[0].address.length - 2)}
-                  </div>
-                </Link>
-              ) : (
-                <div className="flex items-center">
-                  <button
-                    disabled={wallets[0]}
-                    onClick={() =>
-                      connectWallet({
-                        walletChainType: "ethereum-only",
-                        walletList: ["metamask"],
-                      })
-                    }
-                    className="bg-background-b1 font-semibold text-lg cursor-pointer text-heading hover:bg-brand-br1 text-center rounded-[15px] px-7 py-2.5 leading-[1.4] transition-[background-color,transform, scale] duration-400 ease-[cubic-bezier(.25,.46,.45,.94)] hover:scale-[0.93]"
-                  >
-                    Connect
-                  </button>
-                </div>
-              )}
-            </div>
-            <div className="flex items-center space-x-4">
-              {authenticated ? (
-                <Link
-                  href="/my-profile"
-                  className="bg-background-b1 font-semibold text-lg cursor-pointer text-heading hover:bg-brand-br1 text-center rounded-[15px] px-7 py-2.5 leading-[1.4] transition-[background-color,transform, scale] duration-400 ease-[cubic-bezier(.25,.46,.45,.94)] hover:scale-[0.93]"
-                >
-                  <div className="flex items-center">
-                    <User />
-                  </div>
-                </Link>
-              ) : (
-                <div className="flex items-center">
-                  <button
-                    disabled={disableLogin}
-                    onClick={login}
-                    className="bg-background-b1 font-semibold text-lg cursor-pointer text-heading hover:bg-brand-br1 text-center rounded-[15px] px-7 py-2.5 leading-[1.4] transition-[background-color,transform, scale] duration-400 ease-[cubic-bezier(.25,.46,.45,.94)] hover:scale-[0.93]"
-                  >
-                    Login
-                  </button>
-                </div>
-              )}
-            </div>
-            {authenticated && (
-              <div className="flex items-center space-x-4">
-                <Link
-                  href="/cart"
-                  className="bg-background-b1 font-semibold text-lg cursor-pointer text-heading hover:bg-brand-br1 text-center rounded-[15px] px-7 py-2.5 leading-[1.4] transition-[background-color,transform, scale] duration-400 ease-[cubic-bezier(.25,.46,.45,.94)] hover:scale-[0.93]"
-                >
-                  <div className="flex items-center">
-                    <ShoppingCart />
-                  </div>
-                </Link>
-              </div>
-            )}
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className={`lg:hidden flex font-semibold items-center cursor-pointer justify-center p-3 text-lg leading-none rounded-[15px] text-heading bg-background-b1 transition-[background-color,transform, scale] duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)] hover:scale-[0.96] ${
-                isOpen && "bg-brand-br1"
-              }`}
-              aria-label="Toggle menu"
-            >
-              {isOpen ? (
-                <X className="h-5 w-5" />
-              ) : (
-                <Menu className="h-5 w-5" />
-              )}
-            </button>
+            <ConnectBtn />
+            <LoginUser />
+            {authenticated && <CartBtn />}
           </div>
         </div>
       </div>
