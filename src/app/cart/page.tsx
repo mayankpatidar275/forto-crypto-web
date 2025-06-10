@@ -123,17 +123,19 @@ const CartPage = () => {
   const totalCost = findTotalCost();
 
   return (
-    <div className="relative pb-32">
-      {myCart.data.items.length === 0 ? (
-        <div className="text-white">Your cart is empty.</div>
-      ) : (
-        myCart.data.items.map((item: CartItemType) => (
-          <CartItemCard key={item.id} {...item} />
-        ))
-      )}
+    <section className="relative cp-x cp-y justify-center">
+      <div className="flex flex-col gap-8">
+        {myCart.data.items.length === 0 ? (
+          <div className="text-white">Your cart is empty.</div>
+        ) : (
+          myCart.data.items.map((item: CartItemType) => (
+            <CartItemCard key={item.id} {...item} />
+          ))
+        )}
+      </div>
 
       {/* Fixed total cost card */}
-      <div className="fixed bottom-6 flex gap-4 right-6 w-full sm:w-auto sm:min-w-[260px] border bg-background border-brand-br2 rounded-lg p-4 shadow-xl text-white z-100">
+      <div className="fixed bottom-0 right-0 left-0 sm:bottom-6 flex justify-between gap-4 sm:right-6 sm:left-1/2 md:left-2/3 sm:border-2 border-brand-br2 sm:w-auto sm:min-w-[260px] bg-background rounded-lg p-4 shadow-xl text-white z-100">
         <div>
           <div className="text-sm font-medium text-link">Total Cost</div>
           <div className="text-2xl font-bold text-link">
@@ -149,7 +151,7 @@ const CartPage = () => {
           Buy
         </button>
       </div>
-    </div>
+    </section>
   );
 };
 

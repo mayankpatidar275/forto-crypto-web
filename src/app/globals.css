@@ -44,6 +44,10 @@ body {
   @apply bg-background-b1 sm:font-semibold text-sm sm:text-lg cursor-pointer text-heading hover:bg-brand-br1 text-center rounded-[15px] px-3.5 py-1.5 sm:px-7 sm:py-2.5 leading-[1.4] hover:scale-[0.93] transition-all duration-400 ease-[cubic-bezier(.25,.46,.45,.94)];
 }
 
+.btn-secondary {
+  @apply cursor-pointer inline-block border-1 border-brand-br2 text-white px-3 py-1 rounded-xl text-sm hover:bg-brand-br2 hover:text-link transition-colors duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)];
+}
+
 @layer components {
   .glow-top {
     z-index: -1;
