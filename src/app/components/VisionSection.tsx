@@ -1,28 +1,28 @@
-import { Calendar, DollarSign, Users } from "lucide-react";
+// import { Calendar, DollarSign, Users } from "lucide-react";
 import Heading2 from "./ui/Heading2";
 import Para1 from "./ui/Para1";
-import VisionCard from "./ui/VisionCard";
+// import VisionCard from "./ui/VisionCard";
 
-const solutions = [
-  {
-    icon: <Calendar size={64} className="text-brand-br1" />,
-    alt: "Founded In",
-    title: "Founded In",
-    description: "2025",
-  },
-  {
-    icon: <DollarSign size={64} className="text-brand-br1" />,
-    alt: "Prices distributed",
-    title: "Prices distributed",
-    description: "USD 10k +",
-  },
-  {
-    icon: <Users size={64} className="text-brand-br1" />,
-    alt: "Users",
-    title: "Users",
-    description: "105 +",
-  },
-];
+// const solutions = [
+//   {
+//     icon: <Calendar size={64} className="text-brand-br1" />,
+//     alt: "Founded In",
+//     title: "Founded In",
+//     description: "2025",
+//   },
+//   {
+//     icon: <DollarSign size={64} className="text-brand-br1" />,
+//     alt: "Prices distributed",
+//     title: "Prices distributed",
+//     description: "USD 10k +",
+//   },
+//   {
+//     icon: <Users size={64} className="text-brand-br1" />,
+//     alt: "Users",
+//     title: "Users",
+//     description: "105 +",
+//   },
+// ];
 
 function VisionSection() {
   return (
@@ -36,7 +36,7 @@ function VisionSection() {
             where luck meets opportunity, and every ticket counts
           </Para1>
         </div>
-        <div className="flex flex-wrap justify-center gap-6">
+        {/* <div className="flex flex-wrap justify-center gap-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {solutions.map((solution, index) => (
               <VisionCard
@@ -48,7 +48,7 @@ function VisionSection() {
               />
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );
