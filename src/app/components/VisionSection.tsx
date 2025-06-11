@@ -30,7 +30,7 @@ function VisionSection() {
       <div className="max-w-6xl flex flex-col justify-center items-center">
         {/* <Label text="Vision" /> */}
         <Heading2>Our Vision</Heading2>
-        <div className="mb-8">
+        <div className="">
           <Para1>
             We want to create a democratic, long-term sweepstake experience
             where luck meets opportunity, and every ticket counts
