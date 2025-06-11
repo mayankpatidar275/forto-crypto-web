@@ -9,6 +9,7 @@ interface StatCardProps {
   label: string;
   className?: string;
   icon: ReactNode;
+  href: string;
 }
 
 const StatCard2: React.FC<StatCardProps> = ({

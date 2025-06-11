@@ -1,29 +1,30 @@
 import { Instagram, Mail, Send, X } from "lucide-react";
 import ContactCard from "./ui/ContactCard";
 import Heading2 from "./ui/Heading2";
+import StatCard3 from "./ui/StatCard2";
 // import Label from "./ui/Label";
 
 const contacts = [
   {
-    icon: <Mail size={64} className="text-brand-br1" />,
+    icon: <Mail size={40} className="text-brand-br1" />,
     title: "Email Us",
     description: "support@forto.com",
     href: "mailto:support@forto.com",
   },
   {
-    icon: <X size={64} className="text-brand-br1" />,
+    icon: <X size={40} className="text-brand-br1" />,
     title: "X",
     description: "@username",
     href: "https://t.me/X",
   },
   {
-    icon: <Instagram size={64} className="text-brand-br1" />,
+    icon: <Instagram size={40} className="text-brand-br1" />,
     title: "Instagram",
     description: "@username",
     href: "https://t.me/Instagram",
   },
   {
-    icon: <Send size={64} className="text-brand-br1" />,
+    icon: <Send size={40} className="text-brand-br1" />,
     title: "Telegram",
     description: "@TelegramHandle",
     href: "https://t.me/TelegramHandle",
@@ -49,8 +50,19 @@ const ContactSection = () => {
             the next stage of AI innovation—together.
           </Para1>
         </div> */}
+        <div className="flex flex-col items-center gap-6 md:hidden w-[90vw]">
+          {contacts.map((item, index) => (
+            <StatCard3
+              key={index}
+              value={item.title}
+              label={item.description}
+              icon={item.icon}
+              href={item.href}
+            />
+          ))}
+        </div>
         <div className="flex flex-wrap justify-center gap-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {contacts.map((contact, index) => (
               <ContactCard
                 key={index}

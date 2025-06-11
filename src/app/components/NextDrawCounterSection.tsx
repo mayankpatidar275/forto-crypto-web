@@ -51,14 +51,7 @@ function NextDrawCounterSection() {
   return (
     <section className="cp-x cp-y flex justify-center">
       <div className="max-w-6xl flex flex-col justify-center items-center">
-        {/* <Label text="Vision" /> */}
         <Heading2>Next Draw</Heading2>
-        {/* <div className="mb-8">
-          <Para1>
-            We want to create a democratic, long-term sweepstake experience
-            where luck meets opportunity, and every ticket counts
-          </Para1>
-        </div> */}
         <div className="mb-8">
           <CountDown targetDate={getLastDayOfCurrentMonth()} />
         </div>
@@ -70,6 +63,7 @@ function NextDrawCounterSection() {
               value={item.value}
               label={item.label}
               icon={item.icon}
+              href=""
             />
           ))}
         </div>
