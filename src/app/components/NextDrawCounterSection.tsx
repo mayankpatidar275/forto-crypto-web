@@ -3,6 +3,7 @@ import CountDown from "./ui/CountDown";
 import Heading2 from "./ui/Heading2";
 import Label2 from "./ui/Label2";
 import SolutionCard from "./ui/SolutionCard";
+import StatCard2 from "./ui/StatCard2";
 
 const solutions = [
   {
@@ -28,6 +29,24 @@ const solutions = [
   },
 ];
 
+const stats = [
+  {
+    value: "100k",
+    label: "Prize Pool",
+    icon: <Coins size={40} className="text-brand-br1" />,
+  },
+  {
+    value: "1k",
+    label: "Users",
+    icon: <Users size={40} className="text-brand-br1" />,
+  },
+  {
+    value: "USD 1000",
+    label: "Jackpot",
+    icon: <PartyPopper size={40} className="text-brand-br1" />,
+  },
+];
+
 function NextDrawCounterSection() {
   return (
     <section className="cp-x cp-y flex justify-center">
@@ -43,7 +62,19 @@ function NextDrawCounterSection() {
         <div className="mb-8">
           <CountDown targetDate={getLastDayOfCurrentMonth()} />
         </div>
-        <div className="flex flex-wrap justify-center gap-6">
+
+        <div className="flex flex-col items-center gap-6 lg:hidden w-full">
+          {stats.map((item, index) => (
+            <StatCard2
+              key={index}
+              value={item.value}
+              label={item.label}
+              icon={item.icon}
+            />
+          ))}
+        </div>
+
+        <div className="hidden lg:flex flex-wrap justify-center gap-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {solutions.map((solution, index) => (
               <SolutionCard
