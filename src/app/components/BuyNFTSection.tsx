@@ -283,6 +283,10 @@ export default function BuyNFTSection(nft: {
               onChange={handleTicketChange}
               inputMode="numeric"
               pattern="[0-9]*"
+              onBlur={() => {
+                if (ticketCount == "" || !(Number(ticketCount) > 0))
+                  setTicketCount("1");
+              }}
               min={1}
               className="bg-background text-white border border-border px-3 py-2 rounded-md w-full"
             />
