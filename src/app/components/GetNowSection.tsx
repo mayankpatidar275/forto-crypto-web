@@ -84,7 +84,7 @@ const GetNowSection = () => {
         </div>
         <div className="flex flex-wrap justify-center gap-8 px-4 mt-8">
           {nfts.map((nft) => (
-            <div key={nft.id} className="w-32">
+            <div key={nft.id} className="w-36">
               <Link
                 href={{
                   pathname: `/nfts`,
