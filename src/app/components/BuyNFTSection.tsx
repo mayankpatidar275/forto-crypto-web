@@ -1,19 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { usePrivy, useWallets } from "@privy-io/react-auth";
 import Loader from "@/app/components/ui/Loader";
 import {
   useAddToCart,
   useMintFreeNft,
   useStoreUser,
 } from "@/custom-hooks/mutations";
-import { NFTWithIdAndImage, NFTWithType } from "@/types/nft";
-import { useLogin } from "@privy-io/react-auth";
-import Image from "next/image";
-import { ethers } from "ethers";
+import { useCart, useNfts } from "@/custom-hooks/queries";
+import { NFTWithIdAndImage } from "@/types/nft";
 import { connectToContract } from "@/utils/helper";
-import { useCart } from "@/custom-hooks/queries";
+import { useLogin, usePrivy, useWallets } from "@privy-io/react-auth";
+import { ethers } from "ethers";
+import Image from "next/image";
+import { useState } from "react";
 
 function getCurrentMonth(): string {
   const date = new Date();
@@ -24,14 +23,11 @@ export default function BuyNFTSection(nft: {
   nftId: string | null;
   nftImageUrl: string | null;
 }) {
-  const [ticketCount, setTicketCount] = useState(1);
-  //   const [loading, setLoading] = useState(false);
+  const [ticketCount, setTicketCount] = useState("1");
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const [nfts, setNfts] = useState<NFTWithType[]>([]);
+  // const [nfts, setNfts] = useState<NFTWithType[]>([]);
   const [selectedNft, setSelectedNft] = useState<NFTWithIdAndImage>({
     nftId: nft.nftId,
     nftImageUrl: nft.nftImageUrl,
@@ -48,7 +44,19 @@ export default function BuyNFTSection(nft: {
   const userId = user?.id;
 
   // Only call useCart if userId exists
-  const { data: myCart, isLoading } = useCart(userId || "");
+  const {
+    data: myCart,
+    isLoading: isLoadingCart,
+    error: errorLoadingCart,
+  } = useCart(userId!);
+
+  const {
+    data: nfts,
+    isLoading: isLoadingNfts,
+    error: errorLoadingNfts,
+  } = useNfts();
+
+  console.log(nfts);
 
   const { login } = useLogin({
     onComplete: async (user) => {
@@ -72,11 +80,14 @@ export default function BuyNFTSection(nft: {
   });
 
   // Number of FORTO tokens required per ticket
-  const FORTO_PER_TICKET = 10;
+  const FORTO_PER_TICKET = 100;
 
   const handleTicketChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = parseInt(e.target.value, 10);
-    setTicketCount(isNaN(val) ? 1 : Math.max(1, val));
+    const val = e.target.value;
+    if (/^\d*$/.test(val)) {
+      // allow only numeric input
+      setTicketCount(val);
+    }
   };
 
   function isCartItemAlreadyExist() {
@@ -178,34 +189,21 @@ export default function BuyNFTSection(nft: {
     }
   };
 
-  useEffect(() => {
-    const fetchNFTs = async () => {
-      try {
-        setLoading(true);
-        // const response = await fetch(`/api/nfts?currency=${currency}&limit=6`);
-        const response = await fetch(`/api/nfts`);
-        console.log("res: ", response);
-        const data = await response.json();
-        console.log("datadata: ", data);
+  const totalCost = ticketCount
+    ? parseInt(ticketCount || "1", 10) * FORTO_PER_TICKET
+    : 0;
 
-        if (data.success) {
-          setNfts(data.data);
-        } else {
-          throw new Error(data.message || "Failed to fetch NFTs");
-        }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Unknown error");
-      } finally {
-        setLoading(false);
-      }
-    };
+  if (isLoadingNfts || isLoadingCart) {
+    return <Loader className="mx-auto my-auto flex justify-center" />;
+  }
 
-    fetchNFTs();
-    // }, [currency]);
-  }, []);
-
-  const totalCost = ticketCount * FORTO_PER_TICKET;
-
+  if (errorLoadingNfts || errorLoadingCart) {
+    return (
+      <div className="mx-auto w-full my-auto text-center">
+        Something went wrong!
+      </div>
+    );
+  }
   return (
     <section className="cp-x cp-y flex justify-center">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
@@ -214,17 +212,21 @@ export default function BuyNFTSection(nft: {
             <Loader className="text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
           )} */}
           {selectedNft && selectedNft.nftImageUrl && (
-            <img
-              src={selectedNft?.nftImageUrl}
+            <Image
+              src={selectedNft?.nftImageUrl || "/fallback-image.jpg"}
               alt="Forto NFT Ticket"
               className={`w-full h-72 rounded-md object-cover transition-opacity duration-500 ${
                 imageLoaded ? "opacity-100" : "opacity-0"
               }`}
-              onLoad={() => setImageLoaded(true)}
+              width={500}
+              height={288}
+              onLoadingComplete={() => setImageLoaded(true)}
+              style={{ width: "100%", height: "18rem", objectFit: "contain" }}
+              // unoptimized // remove this if you want Next.js optimization and host images locally or allow remote domains
             />
           )}
           <div className="flex justify-around gap-4">
-            {nfts.map((item, index) => (
+            {nfts.data.map((item, index) => (
               <div
                 key={index}
                 className={`cursor-pointer border-2 rounded-md ${
@@ -234,11 +236,16 @@ export default function BuyNFTSection(nft: {
                 }`}
               >
                 <Image
-                  src={item.imageUrl}
-                  alt={`Thumbnail ${index}`}
+                  src={item.imageUrl || "/fallback-thumbnail.jpg"}
+                  alt={
+                    item.title
+                      ? `Thumbnail of ${item.title}`
+                      : `Thumbnail ${index + 1}`
+                  }
                   width={150}
                   height={50}
                   priority
+                  className="cursor-pointer rounded-md hover:opacity-80 transition-opacity duration-300"
                   onClick={() => {
                     setImageLoaded(false);
                     setSelectedNft({
@@ -254,7 +261,7 @@ export default function BuyNFTSection(nft: {
 
         <div className="flex flex-col gap-6">
           <h2 className="text-3xl font-bold font-josef tracking-tight">
-            1 FORTO
+            100 FORTO
           </h2>
           <p className="text-link text-sm leading-relaxed">
             Every ticket you buy enters you into a decade-long sweepstakes. Stay
@@ -271,9 +278,11 @@ export default function BuyNFTSection(nft: {
               Number of Tickets
             </label>
             <input
-              type="number"
+              type="text"
               value={ticketCount}
               onChange={handleTicketChange}
+              inputMode="numeric"
+              pattern="[0-9]*"
               min={1}
               className="bg-background text-white border border-border px-3 py-2 rounded-md w-full"
             />

@@ -14,14 +14,14 @@ const contacts = [
   {
     icon: <X size={40} className="text-brand-br1" />,
     title: "X",
-    description: "@username",
-    href: "https://t.me/X",
+    description: "@fortotoken",
+    href: "https://x.com/fortotoken",
   },
   {
     icon: <Instagram size={40} className="text-brand-br1" />,
     title: "Instagram",
-    description: "@username",
-    href: "https://t.me/Instagram",
+    description: "@fortotoken",
+    href: "https://instagram.com/fortotoken",
   },
   {
     icon: <Send size={40} className="text-brand-br1" />,
