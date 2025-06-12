@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import Label from "./ui/Label";
 import Para1 from "./ui/Para1";
+import Image from "next/image";
 
 function HeroSection() {
   const rotatingImageRef = useRef(null);
@@ -47,20 +48,19 @@ function HeroSection() {
           </a>
         </div>
 
-        <figure className="flex flex-col justify-center items-center -z-1 w-full mb-10 relative overflow-hidden">
-          <img
-            ref={rotatingImageRef}
+        <figure
+          ref={rotatingImageRef}
+          className="flex flex-col justify-center items-center -z-1 w-full mb-10 relative overflow-hidden"
+        >
+          <Image
             src="https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min.avif"
             alt=""
             className="h-full max-w-full w-auto inline-block"
             loading="lazy"
             sizes="(max-width: 767px) 83vw, 500px"
-            srcSet="
-              https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min-p-500.avif 500w,
-              https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min-p-800.avif 800w,
-              https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min-p-1080.avif 1080w,
-              https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min-p-1600.avif 1600w,
-              https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min.avif 4000w"
+            width={4000}
+            height={4000}
+            style={{ height: "100%", width: "auto" }}
           />
         </figure>
       </div>
