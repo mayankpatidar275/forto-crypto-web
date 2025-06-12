@@ -259,7 +259,7 @@ export default function BuyNFTSection(nft: {
           </div>
         </div>
 
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4 sm:gap-6">
           <h2 className="text-3xl font-bold font-josef tracking-tight">
             100 FORTO
           </h2>
