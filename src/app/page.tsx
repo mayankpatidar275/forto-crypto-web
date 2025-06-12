@@ -1,3 +1,5 @@
+"use client";
+import { useRef } from "react";
 import ContactSection from "./components/ContactSection";
 import GetNowSection from "./components/GetNowSection";
 import HeroSection from "./components/HeroSection";
@@ -7,11 +9,21 @@ import VisionSection from "./components/VisionSection";
 import WinnersSection from "./components/WinnersSection";
 
 export default function Home() {
+  const buySectionRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollToBuy = () => {
+    if (buySectionRef.current) {
+      buySectionRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <div className="">
-      <HeroSection />
+      <HeroSection scrollToBuy={scrollToBuy} />
       <NextDrawCounterSection />
-      <GetNowSection />
+      <div ref={buySectionRef}>
+        <GetNowSection />
+      </div>
       <WinnersSection />
       <HowSection />
       <VisionSection />
