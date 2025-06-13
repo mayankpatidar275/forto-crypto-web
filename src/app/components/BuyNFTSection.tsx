@@ -236,12 +236,8 @@ export default function BuyNFTSection(nft: {
                 }`}
               >
                 <Image
-                  src={item.imageUrl || "/fallback-thumbnail.jpg"}
-                  alt={
-                    item.title
-                      ? `Thumbnail of ${item.title}`
-                      : `Thumbnail ${index + 1}`
-                  }
+                  src={item.imageUrl}
+                  alt={item.title}
                   width={150}
                   height={50}
                   priority
