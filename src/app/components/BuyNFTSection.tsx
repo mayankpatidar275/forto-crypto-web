@@ -3,11 +3,11 @@
 import Loader from "@/app/components/ui/Loader";
 import {
   useAddToCart,
-  useMintFreeNft,
+  // useMintFreeNft,
   useStoreUser,
 } from "@/custom-hooks/mutations";
 import { useCart, useNfts } from "@/custom-hooks/queries";
-import { NFTWithIdAndImage } from "@/types/nft";
+import { NFTWithIdAndImage, NFTWithType } from "@/types/nft";
 import { connectToContract } from "@/utils/helper";
 import { useLogin, usePrivy, useWallets } from "@privy-io/react-auth";
 import { ethers } from "ethers";
@@ -37,7 +37,7 @@ export default function BuyNFTSection(nft: {
   const { connectWallet } = usePrivy();
   const { ready, authenticated, user } = usePrivy();
 
-  const mintFreeNftMutation = useMintFreeNft();
+  // const mintFreeNftMutation = useMintFreeNft();
   const addToCartMutation = useAddToCart();
   const storeUserMutation = useStoreUser();
 
@@ -119,7 +119,7 @@ export default function BuyNFTSection(nft: {
           cartItem: {
             userId: user.id,
             nftId: selectedNft.nftId,
-            quantity: ticketCount,
+            quantity: Number(ticketCount),
           },
         });
       } else {
@@ -226,7 +226,7 @@ export default function BuyNFTSection(nft: {
             />
           )}
           <div className="flex justify-around gap-4">
-            {nfts.data.map((item, index) => (
+            {nfts.data.map((item: NFTWithType, index: number) => (
               <div
                 key={index}
                 className={`cursor-pointer border-2 rounded-md ${
