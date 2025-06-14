@@ -20,7 +20,7 @@ export default function Home() {
   return (
     <div className="">
       <HeroSection scrollToBuy={scrollToBuy} />
-      <NextDrawCounterSection />
+      <NextDrawCounterSection scrollToBuy={scrollToBuy} />
       <div ref={buySectionRef}>
         <GetNowSection />
       </div>

@@ -47,7 +47,7 @@ const stats = [
   },
 ];
 
-function NextDrawCounterSection() {
+function NextDrawCounterSection({ scrollToBuy }: { scrollToBuy: () => void }) {
   return (
     <section className="cp-x cp-y flex justify-center">
       <div className="max-w-6xl flex flex-col justify-center items-center">
@@ -81,7 +81,7 @@ function NextDrawCounterSection() {
             ))}
           </div>
         </div>
-        <div className="mt-8">
+        <div onClick={scrollToBuy} className="mt-8">
           <Label2 text="Get Your Ticket" />
         </div>
       </div>
