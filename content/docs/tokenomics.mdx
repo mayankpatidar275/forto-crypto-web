@@ -5,7 +5,7 @@ icon: "📄"
 layout: "doc"
 ---
 
-# FORTO Tokenomics Whitepaper
+{/* # FORTO Tokenomics Whitepaper */}
 
 ## 1. Introduction to the FORTO Token
 
@@ -20,22 +20,26 @@ A capped supply ensures sustained scarcity, helping preserve and potentially inc
 
 ## 2. Comprehensive Token Distribution & Vesting
 
-| Allocation                      | %   | Amount (FORTO) | Vesting Schedule                                  |
-| ------------------------------- | --- | -------------- | ------------------------------------------------- |
-| Prize Pool                      | 20% | 20,000,000     | Unlocked at launch; gradually allocated as prizes |
-| Presale & Fundraising           | 15% | 15,000,000     | 25% at TGE¹, linear over 6 months                 |
-| Team & Advisors                 | 30% | 30,000,000     | 6-month cliff, then linear over 12 months         |
-| Marketing, Community & Partners | 15% | 15,000,000     | 10% at TGE, then linear over 16 months            |
-| Liquidity & Listings            | 20% | 20,000,000     | Immediately unlocked                              |
+| Allocation                      | %   | Amount (FORTO) | Vesting Schedule                                        |
+| ------------------------------- | --- | -------------- | ------------------------------------------------------- |
+| Prize Pool                      | 20% | 20,000,000     | Unlocked at launch; gradually allocated as token prizes |
+| Presale & Fundraising           | 15% | 15,000,000     | 25% at TGE¹, linear over 6 months                       |
+| Team & Advisors                 | 30% | 30,000,000     | 6-month cliff, then linear vesting over 12 months       |
+| Marketing, Community & Partners | 15% | 15,000,000     | 10% at TGE, then linear vesting over 16 months          |
+| Liquidity & Listings            | 20% | 20,000,000     | Immediately unlocked to seed DEX/CEX pools              |
 
 ¹ **TGE** = Token Generation Event (official token launch).  
-_“Prize Pool” tokens power incentives like staking and DAO bounties—distinct from funding via NFT ticket sales._
+_Note: The “Prize Pool” bucket listed here refers to tokens allocated on-chain for various on-platform incentives (e.g., staking rewards, DAO bounties) and is distinct from the “Prize Pool Funding” that comes from NFT ticket sales (described in Section 3)._
 
 ---
 
 ## 3. NFT Lottery Tickets & Economic Flow
 
+Users must hold FORTO tokens to mint NFT Lottery Tickets:
+
 **Cost per NFT Lottery Ticket:** 100 FORTO
+
+When a user mints one “Lifetime Lottery Ticket” NFT for 100 FORTO, the revenue is split as follows (all on-chain via transparent, audited smart contracts):
 
 | Allocation                    | %   | Amount per Ticket (FORTO) |
 | ----------------------------- | --- | ------------------------- |
@@ -44,25 +48,38 @@ _“Prize Pool” tokens power incentives like staking and DAO bounties—distin
 | Community & Ecosystem Rewards | 4%  | 4                         |
 | Burn (Deflationary Mechanism) | 1%  | 1                         |
 
-- **Prize Pool:** Funds every draw.
-- **Operations & Marketing:** Maintains platform, audits, growth.
-- **Community & Ecosystem:** Airdrops, bounties, rewards.
-- **Burn:** Reduces supply, increasing token scarcity.
+- **Prize Pool Funding (60 FORTO):** Directly tops up the on-chain prize pool that powers every draw.
+- **Operations & Marketing (35 FORTO):** Covers platform maintenance, development, audits, and promotional activities.
+- **Community & Ecosystem (4 FORTO):** Funds airdrops, bounties, partnerships, and other community initiatives.
+- **Burn (1 FORTO):** Permanently removes FORTO from circulation, steadily increasing scarcity.
 
 ---
 
 ## 4. Proprietary Prize Distribution & Draw Schedule
 
-### 4.1 FORTO FairDraw Protocol™
+### 4.1. FORTO FairDraw Protocol™ (Three Tiers)
 
-**Three Tiers:**
+Every draw’s total prize pool (collected from NFT ticket sales) is divided into three tiers:
 
-- **Mega Tier (50%)** — 1 winner
-- **Mid Tier (25%)** — multiple winners
-- **Micro Tier (25%)** — more winners
+#### Mega Tier (50% of Draw Pool)
 
-> 📌 **Up to 42%** of participants win in Mid + Micro tiers.  
-> Mid winners get **4×** Micro winners.
+- Exactly **1 winner** per draw.
+- **Mega Prize** = 0.50 × (draw’s pool)
+
+#### Mid Tier (25% of Draw Pool)
+
+- Multiple winners, chosen after the Mega winner.
+- **Total Mid-pool** = 0.25 × (draw’s pool)
+- Each Mid winner’s prize is engineered to be **4×** each Micro winner’s amount.
+
+#### Micro Tier (25% of Draw Pool)
+
+- Multiple winners, chosen last.
+- **Total Micro-pool** = 0.25 × (draw’s pool)
+- Distributes smaller prizes to a broad base.
+
+> Key Rule:
+> After the single Mega winner is selected, up to 42 % of all participants (rounded down) win in Mid + Micro combined. Within that 42 %, the on-chain algorithm assigns 1/5 of “secondary winners” to Mid and 4/5 to Micro—ensuring each Mid prize = 4 × each Micro prize.
 
 ---
 
