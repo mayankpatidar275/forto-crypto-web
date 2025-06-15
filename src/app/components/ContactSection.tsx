@@ -2,6 +2,7 @@ import { Instagram, Mail, Send, X } from "lucide-react";
 import ContactCard from "./ui/ContactCard";
 import Heading2 from "./ui/Heading2";
 import StatCard3 from "./ui/StatCard2";
+import { socialLinks } from "../data/data";
 // import Label from "./ui/Label";
 
 const contacts = [
@@ -9,25 +10,25 @@ const contacts = [
     icon: <Mail size={40} className="text-brand-br1" />,
     title: "Email Us",
     description: "support@forto.com",
-    href: "mailto:support@forto.com",
+    href: socialLinks.email.href,
   },
   {
     icon: <X size={40} className="text-brand-br1" />,
     title: "X",
     description: "@fortotoken",
-    href: "https://x.com/fortotoken",
+    href: socialLinks.x.href,
   },
   {
     icon: <Instagram size={40} className="text-brand-br1" />,
     title: "Instagram",
     description: "@fortotoken",
-    href: "https://instagram.com/fortotoken",
+    href: socialLinks.instagram.href,
   },
   {
     icon: <Send size={40} className="text-brand-br1" />,
     title: "Telegram",
     description: "@TelegramHandle",
-    href: "https://t.me/TelegramHandle",
+    href: socialLinks.telegram.href,
   },
   // {
   //   icon: <MessageCircle size={32} className="text-brand-br1" />,

@@ -1,4 +1,5 @@
 import { WhiteLogo } from "@/app/assets";
+import { socialLinks } from "@/app/data/data";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -27,11 +28,8 @@ export default function Footer() {
             Fair. Smart. Rewarding
             <br />
             <br />
-            <a
-              href="mailto:contact@yourdomain.com"
-              className="hover:text-white"
-            >
-              contact@yourdomain.com
+            <a href={socialLinks.email.href} className="hover:text-white">
+              {socialLinks.email.address}
             </a>
           </p>
         </div>
@@ -77,7 +75,7 @@ export default function Footer() {
         <div className="flex-1 text-center md:text-left">
           <h4 className="text-lg font-semibold mb-8">Social</h4>
           <ul className="space-y-2 text-link text-md">
-            <li>
+            {/* <li>
               <a
                 href="https://www.linkedin.com/"
                 target="_blank"
@@ -96,10 +94,10 @@ export default function Footer() {
               >
                 YouTube
               </a>
-            </li>
+            </li> */}
             <li>
               <a
-                href="https://instagram.com/"
+                href={socialLinks.instagram.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-white"
@@ -107,7 +105,7 @@ export default function Footer() {
                 Instagram
               </a>
             </li>
-            <li>
+            {/* <li>
               <a
                 href="https://facebook.com/"
                 target="_blank"
@@ -116,10 +114,10 @@ export default function Footer() {
               >
                 Facebook
               </a>
-            </li>
+            </li> */}
             <li>
               <a
-                href="https://x.com/"
+                href={socialLinks.x.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-white"
