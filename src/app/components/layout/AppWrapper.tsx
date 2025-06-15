@@ -15,10 +15,9 @@ export default function AppWrapper({
   const pathname = usePathname();
   const isDocsPage = pathname.startsWith("/docs");
 
-  if (!ready) return <Loader className="mx-auto my-auto" />;
-
   // If docs page, skip header/footer but still return children
   if (isDocsPage) return <>{children}</>;
+  if (!ready) return <Loader className="mx-auto my-auto" />;
 
   return (
     <>
