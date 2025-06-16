@@ -3,6 +3,7 @@
 import React, { ReactNode } from "react";
 import clsx from "clsx";
 import Para1 from "./Para1";
+import Link from "next/link";
 
 interface StatCardProps {
   value: string;
@@ -16,10 +17,12 @@ const StatCard2: React.FC<StatCardProps> = ({
   value,
   label,
   className,
+  href,
   icon,
 }) => {
   return (
-    <div
+    <Link
+      href={href}
       className={clsx(
         "gradient-card-bg bg-background-b3 p-8 rounded-2xl shadow-md w-full flex justify-between items-center",
         className
@@ -32,7 +35,7 @@ const StatCard2: React.FC<StatCardProps> = ({
         <Para1 className="text-left ml-0">{label}</Para1>
       </div>
       {icon}
-    </div>
+    </Link>
   );
 };
 

@@ -20,9 +20,9 @@ const navLinks = [
   // { href: "/contact", label: "Contact" },
   // { href: "/", label: "Home" },
   { href: "/docs", label: "Docs" },
-  // { href: "/tokenomics", label: "Tokenomics" },
+  { href: "/docs/tokenomics", label: "Tokenomics" },
   // { href: "/about", label: "About" },
-  // { href: "/faq", label: "FAQ" },
+  { href: "/faq", label: "FAQ" },
   // { href: "/contact", label: "Contact" },
 ];
 
