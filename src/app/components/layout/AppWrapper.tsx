@@ -22,6 +22,7 @@ export default function AppWrapper({
   return (
     <>
       <div className="glow-top"></div>
+      <div className="scan-line"></div>
       <Header />
       <main className="flex-grow">{children}</main>
       <Footer />

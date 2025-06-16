@@ -52,6 +52,21 @@ body {
 }
 
 @layer components {
+  .scan-line {
+    position: fixed;
+    height: 2px;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    animation: scan 8s linear infinite;
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--brand-br1),
+      transparent
+    );
+    opacity: 0.2;
+  }
   .glow-top {
     z-index: -1;
     position: absolute;
@@ -116,5 +131,15 @@ body {
       var(--background-b1),
       var(--background-b2)
     );
+  }
+}
+
+@keyframes scan {
+  from {
+    transform: translateY(-100%);
+  }
+
+  to {
+    transform: translateY(100vh);
   }
 }
