@@ -4,6 +4,7 @@ import "./globals.css";
 import Providers from "./components/providers/Providers";
 import AppWrapper from "./components/layout/AppWrapper";
 import { RootProvider } from "fumadocs-ui/provider";
+import { ThemeProvider } from "next-themes";
 
 const roboto = Roboto({
   weight: "400",
@@ -24,21 +25,19 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${roboto.className} antialiased min-h-screen flex flex-col`}
-        // you can use Tailwind CSS too
-        // style={{
-        //   display: "flex",
-        //   flexDirection: "column",
-        //   minHeight: "100vh",
-        // }}
       >
         <Providers>
           <AppWrapper>
-            <RootProvider
-              // theme={{ enabled: false }}
-              search={{ enabled: false }}
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              forcedTheme="dark"
+              enableSystem={false}
             >
-              {children}
-            </RootProvider>
+              <RootProvider search={{ enabled: false }}>
+                {children}
+              </RootProvider>
+            </ThemeProvider>
           </AppWrapper>
         </Providers>
       </body>
