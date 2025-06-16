@@ -27,7 +27,7 @@ const contacts = [
   {
     icon: <Send size={40} className="text-brand-br1" />,
     title: "Telegram",
-    description: "@TelegramHandle",
+    description: "Join Community",
     href: socialLinks.telegram.href,
   },
   // {

@@ -10,7 +10,7 @@ export const socialLinks = {
     href: "mailto:support@forto.com",
   },
   telegram: {
-    href: "https://t.me/TelegramHandle",
+    href: "https://t.me/+a_6F5vB32xAzMDg0",
   },
 };
 

@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
 import Para2 from "./Para2";
+import Link from "next/link";
 
 type ContactCardProps = {
   icon: ReactNode;
@@ -15,7 +16,7 @@ const ContactCard: React.FC<ContactCardProps> = ({
   href,
 }) => {
   return (
-    <a href={href}>
+    <Link href={href}>
       <div className="flex flex-col gap-4 lg:gap-6 items-center px-12 py-14 rounded-2xl bg-background-b3 max-w-2xl">
         {icon}
 
@@ -24,7 +25,7 @@ const ContactCard: React.FC<ContactCardProps> = ({
         </h6>
         <Para2>{description}</Para2>
       </div>
-    </a>
+    </Link>
   );
 };
 
