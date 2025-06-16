@@ -12,8 +12,9 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "Forto - SweepStakes",
-  description: "Forto - SweepStakes",
+  title: "Forto Token: 1 Entry, Multiple Chances to Win, Life Changing Prices",
+  description:
+    "Forto Token isn't just a lottery, it's a revolution. For the first time, your single ticket is your key to winning multiple times. Multiple winners, Multiple Chances and life changing prices",
 };
 
 export default function RootLayout({
