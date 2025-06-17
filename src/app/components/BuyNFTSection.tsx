@@ -56,8 +56,6 @@ export default function BuyNFTSection(nft: {
     error: errorLoadingNfts,
   } = useNfts();
 
-  console.log(nfts);
-
   const { login } = useLogin({
     onComplete: async (user) => {
       try {

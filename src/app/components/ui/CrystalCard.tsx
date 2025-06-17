@@ -2,6 +2,7 @@
 
 import React from "react";
 import { NFTWithType } from "@/types/nft";
+import Image from "next/image";
 
 interface CrystalCardProps {
   nft: NFTWithType;
@@ -30,22 +31,22 @@ const CrystalCard: React.FC<CrystalCardProps> = ({ nft }) => {
 
   return (
     <div className="nft-card-item flex flex-col justify-center items-center gap-2">
-      <img
+      <Image
         src={nft.imageUrl}
         alt={nft.title}
         className="nft-preview-image w-full h-auto object-cover rounded-lg shadow-lg"
         loading="lazy"
+        width={500}
+        height={288}
       />
-      {/* <div className="text-center">
+      <div className="text-center">
         <h3 className="font-bold">{nft.title}</h3>
-        <p className="text-sm text-gray-600">{nft.type.name}</p>
-        <p className="font-bold">
-
-        </p>
+        {/* <p className="text-sm text-gray-600">{nft.description}</p> */}
+        {/* <p className="font-bold"></p>
         {!nft.available && (
           <span className="text-xs text-red-500">Sold Out</span>
-        )}
-      </div> */}
+        )} */}
+      </div>
     </div>
   );
 };
