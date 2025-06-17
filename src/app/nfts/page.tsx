@@ -1,8 +1,9 @@
 "use client";
 import BuyNFTSection from "@/app/components/BuyNFTSection";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function BuyLotteryForm() {
+function BuyLotteryFormContent() {
   const searchParams = useSearchParams();
   const nftId = searchParams.get("nftId");
   const nftImageUrl = searchParams.get("nftImageUrl");
@@ -15,4 +16,12 @@ export default function BuyLotteryForm() {
   };
 
   return <BuyNFTSection {...nft} />;
+}
+
+export default function BuyLotteryForm() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <BuyLotteryFormContent />
+    </Suspense>
+  );
 }
