@@ -22,6 +22,7 @@ function getCurrentMonth(): string {
 export default function BuyNFTSection(nft: {
   nftId: string | null;
   nftImageUrl: string | null;
+  nftTitle: string | null;
 }) {
   const [ticketCount, setTicketCount] = useState("1");
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -31,6 +32,7 @@ export default function BuyNFTSection(nft: {
   const [selectedNft, setSelectedNft] = useState<NFTWithIdAndImage>({
     nftId: nft.nftId,
     nftImageUrl: nft.nftImageUrl,
+    nftTitle: nft.nftTitle,
   });
 
   const { wallets } = useWallets();
@@ -245,6 +247,7 @@ export default function BuyNFTSection(nft: {
                     setSelectedNft({
                       nftId: item.id,
                       nftImageUrl: item.imageUrl,
+                      nftTitle: item.title,
                     });
                   }}
                 />
@@ -255,7 +258,8 @@ export default function BuyNFTSection(nft: {
 
         <div className="flex flex-col gap-4 sm:gap-6">
           <h2 className="text-3xl font-bold font-josef tracking-tight">
-            100 FORTO
+            {selectedNft.nftTitle}{" "}
+            <span className="text-brand-br1">100 FORTO</span>
           </h2>
           <p className="text-link text-sm leading-relaxed">
             Every ticket you buy enters you into a decade-long sweepstakes. Stay

@@ -47,7 +47,11 @@ const GetNowSection = () => {
               <Link
                 href={{
                   pathname: `/nfts`,
-                  query: { nftId: nft.id, nftImageUrl: nft.imageUrl },
+                  query: {
+                    nftId: nft.id,
+                    nftImageUrl: nft.imageUrl,
+                    nftTitle: nft.title,
+                  },
                 }}
                 className="block"
               >
