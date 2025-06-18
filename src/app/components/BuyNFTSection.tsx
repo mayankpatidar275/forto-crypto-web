@@ -144,7 +144,7 @@ export default function BuyNFTSection(nft: {
       if (!wallets[0]) {
         connectWallet({
           walletChainType: "ethereum-only",
-          walletList: ["metamask"],
+          // walletList: ["metamask"],
         });
         return;
       }
@@ -197,10 +197,17 @@ export default function BuyNFTSection(nft: {
     return <Loader className="mx-auto my-auto flex justify-center" />;
   }
 
-  if (errorLoadingNfts || errorLoadingCart) {
+  if (errorLoadingNfts) {
     return (
       <div className="mx-auto w-full my-auto text-center">
-        Something went wrong!
+        Something went wrong while loading NFTs!
+      </div>
+    );
+  }
+  if (errorLoadingCart) {
+    return (
+      <div className="mx-auto w-full my-auto text-center">
+        Something went wrong while loading your cart!
       </div>
     );
   }

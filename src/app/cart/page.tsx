@@ -35,7 +35,7 @@ const CartPage = () => {
       if (!wallets[0]) {
         connectWallet({
           walletChainType: "ethereum-only",
-          walletList: ["metamask"],
+          // walletList: ["metamask"],
         });
         return;
       }

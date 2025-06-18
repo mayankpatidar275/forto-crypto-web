@@ -30,7 +30,7 @@ const ConnectBtn = () => {
             onClick={() =>
               connectWallet({
                 walletChainType: "ethereum-only",
-                walletList: ["metamask"],
+                // walletList: ["metamask"],
               })
             }
             className="btn-primary"
