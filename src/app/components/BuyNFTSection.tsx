@@ -7,6 +7,7 @@ import {
   // useStoreUser,
 } from "@/custom-hooks/mutations";
 import { useCart, useNfts } from "@/custom-hooks/queries";
+import { useAuth } from "@/custom-hooks/useAuth";
 import { useUserLogin } from "@/custom-hooks/useUserLogin";
 import { NFTWithIdAndImage, NFTWithType } from "@/types/nft";
 import { connectToContract } from "@/utils/helper";
@@ -39,19 +40,18 @@ export default function BuyNFTSection(nft: {
   const { wallets } = useWallets();
   const { connectWallet } = usePrivy();
   const { ready, authenticated, user } = usePrivy();
+  const { state } = useAuth();
 
   // const mintFreeNftMutation = useMintFreeNft();
   const addToCartMutation = useAddToCart();
   // const storeUserMutation = useStoreUser();
-
-  const userId = user?.id;
 
   // Only call useCart if userId exists
   const {
     data: myCart,
     isLoading: isLoadingCart,
     error: errorLoadingCart,
-  } = useCart(userId!);
+  } = useCart(state.userPrivyId);
 
   const {
     data: nfts,

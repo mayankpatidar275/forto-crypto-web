@@ -3650,6 +3650,8 @@ export const CONTRACT_ABI = [
   },
 ];
 
+export const USER_UPLOADED = "USER_UPLOADED";
+
 // export const Questions: QuestionType[] = [
 //   {
 //     id: "1",

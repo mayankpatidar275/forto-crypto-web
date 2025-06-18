@@ -1,7 +1,11 @@
 import { useLogin, usePrivy } from "@privy-io/react-auth";
 import { useStoreUser } from "@/custom-hooks/mutations";
+import { useAuth } from "./useAuth";
+import { USER_UPLOADED } from "@/utils/constants";
+import { useEffect } from "react";
 
 export const useUserLogin = () => {
+  const { state, dispatch } = useAuth();
   const { login } = useLogin({
     onComplete: async (user) => {
       try {
@@ -12,6 +16,11 @@ export const useUserLogin = () => {
             walletAddress: user.user.wallet?.address || "",
             email: user.user.email?.address || "",
           },
+        });
+        // TODO: make it atomic, if it fails delete the user from privy also
+        dispatch({
+          actionType: USER_UPLOADED,
+          value: user.user.id,
         });
       } catch (error) {
         console.error("Failed to store user:", error);
@@ -26,6 +35,9 @@ export const useUserLogin = () => {
 
   const storeUserMutation = useStoreUser();
 
+  useEffect(() => {
+    console.log("state:", state);
+  }, [state]);
   return {
     login,
     ready,
