@@ -1,31 +1,37 @@
 "use client";
 
 import { useCart, useNfts } from "@/custom-hooks/queries";
-import { usePrivy, useWallets } from "@privy-io/react-auth";
-import React, { useState } from "react";
-import CartItemCard from "../components/ui/CartItemCard";
+import { useUserLogin } from "@/custom-hooks/useUserLogin";
 import { CartItemType } from "@/types/cart";
 import { NFTWithType } from "@/types/nft";
 import { connectToContract } from "@/utils/helper";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { ethers } from "ethers";
+import CartItemCard from "../components/ui/CartItemCard";
 
 const CartPage = () => {
-  const { ready, authenticated, user, login } = usePrivy();
+  const { authenticated, user } = usePrivy();
   const userId = user?.id;
 
   const { data: myCart, isLoading, error } = useCart(userId || "");
   const { data: nfts } = useNfts();
   const { wallets } = useWallets();
-  const { connectWallet } = usePrivy();
+  const { connectWallet, ready } = usePrivy();
 
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
+
+  const { login } = useUserLogin();
 
   // Number of FORTO tokens required per ticket
   const FORTO_PER_TICKET = 10;
 
   const handleBuyClick = async () => {
     try {
-      setLoading(true);
+      // setLoading(true);
+      if (!ready) {
+        alert("Authenticat");
+        return;
+      }
 
       if (!authenticated) {
         login();
@@ -79,7 +85,7 @@ const CartPage = () => {
       console.error("Error minting NFT:", error);
       alert("Failed to mint NFT. Check the console for details.");
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   };
 

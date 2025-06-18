@@ -4,12 +4,13 @@ import Loader from "@/app/components/ui/Loader";
 import {
   useAddToCart,
   // useMintFreeNft,
-  useStoreUser,
+  // useStoreUser,
 } from "@/custom-hooks/mutations";
 import { useCart, useNfts } from "@/custom-hooks/queries";
+import { useUserLogin } from "@/custom-hooks/useUserLogin";
 import { NFTWithIdAndImage, NFTWithType } from "@/types/nft";
 import { connectToContract } from "@/utils/helper";
-import { useLogin, usePrivy, useWallets } from "@privy-io/react-auth";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { ethers } from "ethers";
 import Image from "next/image";
 import { useState } from "react";
@@ -41,7 +42,7 @@ export default function BuyNFTSection(nft: {
 
   // const mintFreeNftMutation = useMintFreeNft();
   const addToCartMutation = useAddToCart();
-  const storeUserMutation = useStoreUser();
+  // const storeUserMutation = useStoreUser();
 
   const userId = user?.id;
 
@@ -58,26 +59,7 @@ export default function BuyNFTSection(nft: {
     error: errorLoadingNfts,
   } = useNfts();
 
-  const { login } = useLogin({
-    onComplete: async (user) => {
-      try {
-        console.log("User logged in successfully!", user);
-        await storeUserMutation.mutateAsync({
-          user: {
-            privyId: user.user.id,
-            walletAddress: user.user.wallet?.address || "",
-            email: user.user.email?.address || "",
-          },
-        });
-      } catch (error) {
-        console.error("Failed to store user:", error);
-      }
-    },
-    onError: (error) => {
-      // Handle login errors
-      console.log("Login failed:", error);
-    },
-  });
+  const { login } = useUserLogin();
 
   // Number of FORTO tokens required per ticket
   const FORTO_PER_TICKET = 100;
@@ -91,7 +73,6 @@ export default function BuyNFTSection(nft: {
   };
 
   function isCartItemAlreadyExist() {
-    console.log("my cart: ", myCart);
     const items = myCart?.data?.items;
     for (let i = 0; i < items?.length; i++) {
       const nftId = items[i].nftId;
@@ -103,6 +84,9 @@ export default function BuyNFTSection(nft: {
   }
 
   const handleAddToCartClick = async () => {
+    if (!ready) {
+      alert("Authenticator is not ready");
+    }
     if (!authenticated) {
       login();
       return;
@@ -135,6 +119,10 @@ export default function BuyNFTSection(nft: {
   const handleBuyClick = async () => {
     try {
       setLoading(true);
+
+      if (!ready) {
+        alert("Authenticator is not ready");
+      }
 
       if (!authenticated) {
         login();

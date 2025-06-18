@@ -1,10 +1,12 @@
+import { useUserLogin } from "@/custom-hooks/useUserLogin";
 import { usePrivy } from "@privy-io/react-auth";
 import { User } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
 const LoginUser = () => {
-  const { authenticated, login, ready } = usePrivy();
+  const { authenticated, ready } = usePrivy();
+  const { login } = useUserLogin();
   const disableLogin = !ready || (ready && authenticated);
 
   return (
@@ -19,7 +21,7 @@ const LoginUser = () => {
         <div className="flex items-center">
           <button
             disabled={disableLogin}
-            onClick={login}
+            onClick={() => login()}
             className="btn-primary"
           >
             Login
