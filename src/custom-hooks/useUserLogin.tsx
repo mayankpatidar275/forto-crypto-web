@@ -17,6 +17,7 @@ export const useUserLogin = () => {
             email: user.user.email?.address || "",
           },
         });
+        // TODO: clear the state on logout
         // TODO: make it atomic, if it fails delete the user from privy also
         dispatch({
           actionType: USER_UPLOADED,

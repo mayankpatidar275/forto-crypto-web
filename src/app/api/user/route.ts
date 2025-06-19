@@ -24,8 +24,8 @@ export async function POST(request: Request) {
     const newUser = await prisma.user.create({
       data: {
         privyId: userData.privyId,
-        walletAddress: userData.walletAddress,
-        email: userData.email,
+        walletAddress: userData.walletAddress?.trim() || null,
+        email: userData.email?.trim() || "",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
