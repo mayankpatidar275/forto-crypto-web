@@ -11,7 +11,7 @@ import { connectToContract } from "@/utils/helper";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { ethers } from "ethers";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function getCurrentMonth(): string {
   const date = new Date();
@@ -168,6 +168,15 @@ export default function BuyNFTSection() {
     ? parseInt(ticketCount || "1", 10) * FORTO_PER_TICKET
     : 0;
 
+  useEffect(() => {
+    if (!state.selectedNft) {
+      dispatch({
+        actionType: SELECT_NFT,
+        value: nfts?.data[0],
+      });
+    }
+  }, [nfts, dispatch, state.selectedNft]);
+
   if (isLoadingNfts || isLoadingCart) {
     return <Loader className="mx-auto my-auto flex justify-center" />;
   }
@@ -193,9 +202,9 @@ export default function BuyNFTSection() {
           {/* {!imageLoaded && (
             <Loader className="text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
           )} */}
-          {state.selectedNft && (
+          {state?.selectedNft ? (
             <Image
-              src={state.selectedNft.imageUrl || "/fallback-image.jpg"}
+              src={state.selectedNft?.imageUrl || "/fallback-image.jpg"}
               alt="Forto NFT Ticket"
               className={`w-full h-72 rounded-md object-cover transition-opacity duration-500 ${
                 imageLoaded ? "opacity-100" : "opacity-0"
@@ -206,6 +215,8 @@ export default function BuyNFTSection() {
               style={{ width: "100%", height: "18rem", objectFit: "contain" }}
               // unoptimized // remove this if you want Next.js optimization and host images locally or allow remote domains
             />
+          ) : (
+            <div>Failed to load NFT</div>
           )}
           <div className="flex justify-around gap-4">
             {nfts.data.map((item: NFTWithType, index: number) => (
@@ -239,10 +250,9 @@ export default function BuyNFTSection() {
 
         <div className="flex flex-col gap-4 sm:gap-6">
           <h2 className="text-3xl font-bold font-josef tracking-tight">
-            {state.selectedNft.title}{" "}
-            <span className="text-brand-br1">
-              {state.selectedNft.price} FORTO
-            </span>
+            {state?.selectedNft?.title || nfts[0]?.title}{" "}
+            <span className="text-brand-br1"></span>
+            {state.selectedNft?.price || nfts[0]?.price} FORTO
           </h2>
           <p className="text-link text-sm leading-relaxed">
             Every ticket you buy enters you into a decade-long sweepstakes. Stay
