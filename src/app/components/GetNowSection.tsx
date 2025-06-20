@@ -60,7 +60,7 @@ const GetNowSection = () => {
                   handleNftClick(nft);
                 }}
                 href={{
-                  pathname: `/nfts`,
+                  pathname: `/buy-nfts/${nft.title}`,
                 }}
                 className="block"
               >

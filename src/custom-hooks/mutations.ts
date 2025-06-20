@@ -9,8 +9,8 @@ import { addToCart, removeFromCart } from "@/services/api/cartApi";
 function useMutationWithSuccessMessage<TVariables>(
   mutationFn: (variables: TVariables) => Promise<void>,
   successMessage: string | null,
-  queryKey: string[],
-  navigateTo: string | null = null
+  queryKey: string[]
+  // navigateTo: string | null = null
 ) {
   const queryClient = useQueryClient();
   // const navigate = useNavigate();
@@ -45,7 +45,7 @@ export const useStoreUser = () =>
 
 // Cart mutations
 export const useAddToCart = () =>
-  useMutationWithSuccessMessage(addToCart, "Item Added to Cart", ["cart"]);
+  useMutationWithSuccessMessage(addToCart, "NFT added to cart!", ["cart"]);
 
 // Cart mutations
 export const useRemoveFromCart = () =>
