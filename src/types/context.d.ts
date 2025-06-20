@@ -2,7 +2,7 @@ import { SelectedNftType } from "./nft";
 import { SELECT_NFT, USER_UPLOADED } from "@/utils/constants";
 
 export interface ContextValue {
-  state: AuthStateType;
+  state: ContextStateType;
   dispatch: React.Dispatch<ReducerAction>;
 }
 

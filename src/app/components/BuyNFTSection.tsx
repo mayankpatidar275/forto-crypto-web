@@ -63,7 +63,7 @@ export default function BuyNFTSection() {
     const items = myCart?.data?.items;
     for (let i = 0; i < items?.length; i++) {
       const nftId = items[i].nftId;
-      if (nftId === state.selectedNft.id) {
+      if (nftId === state.selectedNft?.id) {
         return true;
       }
     }

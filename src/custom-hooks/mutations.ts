@@ -8,7 +8,7 @@ import { addToCart, removeFromCart } from "@/services/api/cartApi";
 // Generalized mutation function
 function useMutationWithSuccessMessage<TVariables>(
   mutationFn: (variables: TVariables) => Promise<void>,
-  successMessage: string,
+  successMessage: string | null,
   queryKey: string[],
   navigateTo: string | null = null
 ) {
@@ -20,7 +20,7 @@ function useMutationWithSuccessMessage<TVariables>(
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey, exact: true });
       // if (navigateTo) navigate(navigateTo);
-      toast.success(successMessage);
+      if (successMessage) toast.success(successMessage);
     },
     onError: () => {
       toast.error("Something went wrong!");
@@ -41,15 +41,11 @@ export const useMintFreeNft = () =>
 
 // Users mutations
 export const useStoreUser = () =>
-  useMutationWithSuccessMessage(storeUser, "User stored successfully", [
-    "users",
-  ]);
+  useMutationWithSuccessMessage(storeUser, null, ["users"]);
 
 // Cart mutations
 export const useAddToCart = () =>
-  useMutationWithSuccessMessage(addToCart, "Added to cart successfully", [
-    "cart",
-  ]);
+  useMutationWithSuccessMessage(addToCart, "Item Added to Cart", ["cart"]);
 
 // Cart mutations
 export const useRemoveFromCart = () =>

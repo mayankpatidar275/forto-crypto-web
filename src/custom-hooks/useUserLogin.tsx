@@ -1,34 +1,51 @@
 import { useLogin, usePrivy } from "@privy-io/react-auth";
 import { useStoreUser } from "@/custom-hooks/mutations";
 import { USER_UPLOADED } from "@/utils/constants";
-import { useEffect } from "react";
 import { useAppContext } from "./useAppContext";
+import toast from "react-hot-toast";
+import { useUserLogout } from "./useUserLogout";
 
 export const useUserLogin = () => {
-  const { state, dispatch } = useAppContext();
+  const { dispatch } = useAppContext();
+  const { logout } = useUserLogout();
   const { login } = useLogin({
     onComplete: async (user) => {
       try {
         console.log("User logged in successfully!", user);
+        const privyId = user.user.id;
+        const walletAddress = user.user.wallet?.address;
+        const email = user.user.email?.address;
+        if (!privyId) {
+          return console.log("Privy ID not found: ", privyId);
+          // return toast.error("Privy ID not found");
+        }
+        if (!email) {
+          return console.log("Email not found: ", email);
+          // return toast.error("Email not found");
+        }
+
         await storeUserMutation.mutateAsync({
           user: {
-            privyId: user.user.id,
-            walletAddress: user.user.wallet?.address || "",
-            email: user.user.email?.address || "",
+            privyId,
+            walletAddress,
+            email,
           },
         });
-        // TODO: clear the state on logout
         // TODO: make it atomic, if it fails delete the user from privy also
+        // IMP: TODO: dispatch on success of mutation
         dispatch({
           actionType: USER_UPLOADED,
-          value: user.user.id,
+          value: privyId,
         });
       } catch (error) {
         console.error("Failed to store user:", error);
+        logout();
+        toast.error("Failed to store user!");
       }
     },
     onError: (error) => {
       console.log("Login failed:", error);
+      // toast.error("Privy Login Failed!");
     },
   });
 
@@ -36,9 +53,6 @@ export const useUserLogin = () => {
 
   const storeUserMutation = useStoreUser();
 
-  useEffect(() => {
-    console.log("state:", state);
-  }, [state]);
   return {
     login,
     ready,

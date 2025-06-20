@@ -5,6 +5,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 // import Loader from "../ui/Loader";
 import { usePathname } from "next/navigation";
+import { Toaster } from "react-hot-toast";
 
 export default function AppWrapper({
   children,
@@ -21,6 +22,7 @@ export default function AppWrapper({
 
   return (
     <>
+      <Toaster position="bottom-right" />
       <div className="glow-top"></div>
       <div className="scan-line"></div>
       <Header />
