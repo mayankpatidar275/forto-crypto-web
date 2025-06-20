@@ -9,18 +9,14 @@ import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { ethers } from "ethers";
 import CartItemCard from "../components/ui/CartItemCard";
 import Loader from "../components/ui/Loader";
+import { useAppContext } from "@/custom-hooks/useAppContext";
 
 const CartPage = () => {
-  const { authenticated, user } = usePrivy();
-  const userId = user?.id;
-
-  const { data: myCart, isLoading, error } = useCart(userId || "");
-  const { data: nfts } = useNfts();
+  const { authenticated, connectWallet, ready } = usePrivy();
   const { wallets } = useWallets();
-  const { connectWallet, ready } = usePrivy();
-
-  // const [loading, setLoading] = useState(true);
-
+  const { state } = useAppContext();
+  const { data: myCart, isLoading, error } = useCart(state.userPrivyId);
+  const { data: nfts } = useNfts();
   const { login } = useUserLogin();
 
   // Number of FORTO tokens required per ticket
@@ -111,7 +107,7 @@ const CartPage = () => {
     }, 0);
   }
 
-  if (!userId) {
+  if (!state.userPrivyId) {
     return <div className="text-white">Please log in to view your cart.</div>;
   }
 
