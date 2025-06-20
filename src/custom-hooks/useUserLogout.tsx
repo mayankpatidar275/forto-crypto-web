@@ -11,7 +11,7 @@ export const useUserLogout = () => {
         actionType: USER_UPLOADED,
         value: "",
       });
-      toast.error("Logged Out Successfully!");
+      toast.success("Logged Out Successfully!");
     },
   });
   return {
