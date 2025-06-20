@@ -4,6 +4,7 @@ import { useRemoveFromCart } from "@/custom-hooks/mutations";
 import { useNftById } from "@/custom-hooks/queries";
 import Image from "next/image";
 import React from "react";
+import Loader from "./Loader";
 
 export interface CartItemCardProps {
   addedAt: string;
@@ -30,16 +31,17 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ id, nftId, quantity }) => {
   //     console.log("Change quantity", type, "for", id);
   //   };
 
-  if (isLoading) return <div className="text-white">Loading...</div>;
+  if (isLoading)
+    return <Loader className="mx-auto my-auto flex justify-center" />;
   if (error || !nft)
     return <div className="text-red-500">Failed to load item.</div>;
 
   if (removeFromCartMutation.isPending) {
-    return <div>Removing...</div>;
+    return <Loader className="mx-auto my-auto flex justify-center" />;
   }
 
   return (
-    <div className="max-w-6xl mx-auto flex gap-4 sm:gap-12 items-start">
+    <div className="max-w-6xl mx-auto flex gap-4 sm:gap-12 items-start w-full">
       <div className="relative w-36 h-36 overflow-hidden shadow-lg flex flex-col gap-4 shrink-0">
         <Image
           src={nft.imageUrl}

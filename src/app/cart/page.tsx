@@ -8,6 +8,7 @@ import { connectToContract } from "@/utils/helper";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { ethers } from "ethers";
 import CartItemCard from "../components/ui/CartItemCard";
+import Loader from "../components/ui/Loader";
 
 const CartPage = () => {
   const { authenticated, user } = usePrivy();
@@ -115,7 +116,7 @@ const CartPage = () => {
   }
 
   if (isLoading) {
-    return <div className="text-white">Loading your cart...</div>;
+    return <Loader className="mx-auto my-auto flex justify-center" />;
   }
 
   if (error || !myCart?.success) {
@@ -132,7 +133,7 @@ const CartPage = () => {
     <section className="relative cp-x cp-y justify-center">
       <div className="flex flex-col gap-8">
         {myCart.data.items.length === 0 ? (
-          <div className="text-white">Your cart is empty.</div>
+          <div className="text-white text-center">Your cart is empty.</div>
         ) : (
           myCart.data.items.map((item: CartItemType) => (
             <CartItemCard key={item.id} {...item} />
