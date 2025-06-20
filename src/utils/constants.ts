@@ -3651,6 +3651,7 @@ export const CONTRACT_ABI = [
 ];
 
 export const USER_UPLOADED = "USER_UPLOADED";
+export const SELECT_NFT = "SELECT_NFT";
 
 // export const Questions: QuestionType[] = [
 //   {

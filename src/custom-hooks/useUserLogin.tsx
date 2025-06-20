@@ -1,11 +1,11 @@
 import { useLogin, usePrivy } from "@privy-io/react-auth";
 import { useStoreUser } from "@/custom-hooks/mutations";
-import { useAuth } from "./useAuth";
 import { USER_UPLOADED } from "@/utils/constants";
 import { useEffect } from "react";
+import { useAppContext } from "./useAppContext";
 
 export const useUserLogin = () => {
-  const { state, dispatch } = useAuth();
+  const { state, dispatch } = useAppContext();
   const { login } = useLogin({
     onComplete: async (user) => {
       try {

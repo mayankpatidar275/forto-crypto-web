@@ -3,7 +3,7 @@
 import { PrivyProvider } from "@privy-io/react-auth";
 import React from "react";
 import { ReactQueryClientProvider } from "./ReactQueryClientProvider";
-import AuthProvider from "@/app/context/AuthContext/AuthProvider";
+import { ContextProvider } from "./ContextProvider";
 
 const Providers = ({
   children,
@@ -12,7 +12,7 @@ const Providers = ({
 }>) => {
   return (
     <ReactQueryClientProvider>
-      <AuthProvider>
+      <ContextProvider>
         <PrivyProvider
           appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ""}
           config={{
@@ -34,7 +34,7 @@ const Providers = ({
         >
           {children}
         </PrivyProvider>
-      </AuthProvider>
+      </ContextProvider>
     </ReactQueryClientProvider>
   );
 };

@@ -12,6 +12,13 @@ export interface NFTWithType {
   type: NFTType;
 }
 
+export interface SelectedNftType {
+  id: string;
+  title: string;
+  imageUrl: string;
+  price: number;
+}
+
 export interface NFTWithIdAndImage {
   nftId: string | null;
   nftImageUrl: string | null;

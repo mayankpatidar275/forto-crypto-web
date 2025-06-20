@@ -1,13 +1,22 @@
-export interface AuthContextValue {
+import { SelectedNftType } from "./nft";
+import { SELECT_NFT, USER_UPLOADED } from "@/utils/constants";
+
+export interface ContextValue {
   state: AuthStateType;
   dispatch: React.Dispatch<ReducerAction>;
 }
 
-export interface AuthStateType {
+export interface ContextStateType {
   userPrivyId: string;
+  selectedNft: SelectedNftType | null;
 }
 
-export interface ReducerAction {
-  actionType: string;
-  value: string;
-}
+export type ReducerAction =
+  | {
+      actionType: typeof USER_UPLOADED;
+      value: string; // ✅ userPrivyId is always a string
+    }
+  | {
+      actionType: typeof SELECT_NFT;
+      value: SelectedNftType | null; // ✅ selectedNft is always SelectedNftType or null
+    };

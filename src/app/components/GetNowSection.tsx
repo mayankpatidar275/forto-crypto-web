@@ -2,10 +2,12 @@
 
 import CrystalCard from "./ui/CrystalCard";
 import Heading2 from "./ui/Heading2";
-import { NFTWithType } from "@/types/nft";
+import { NFTWithType, SelectedNftType } from "@/types/nft";
 import Link from "next/link";
 import Loader from "./ui/Loader";
 import { useNfts } from "@/custom-hooks/queries";
+import { SELECT_NFT } from "@/utils/constants";
+import { useAppContext } from "@/custom-hooks/useAppContext";
 // import { CrystalCardSkeleton } from "./ui/CrystalCardSkeleton";
 
 const GetNowSection = () => {
@@ -14,6 +16,15 @@ const GetNowSection = () => {
     isLoading: isLoadingNfts,
     error: errorLoadingNfts,
   } = useNfts();
+
+  const { dispatch } = useAppContext();
+
+  function handleNftClick(nft: SelectedNftType) {
+    dispatch({
+      actionType: SELECT_NFT,
+      value: nft,
+    });
+  }
 
   if (isLoadingNfts) {
     return <Loader className="mx-auto my-auto flex justify-center" />;
@@ -45,13 +56,11 @@ const GetNowSection = () => {
           {nfts.data.map((nft: NFTWithType) => (
             <div key={nft.id} className="w-36">
               <Link
+                onClick={() => {
+                  handleNftClick(nft);
+                }}
                 href={{
                   pathname: `/nfts`,
-                  query: {
-                    nftId: nft.id,
-                    nftImageUrl: nft.imageUrl,
-                    nftTitle: nft.title,
-                  },
                 }}
                 className="block"
               >

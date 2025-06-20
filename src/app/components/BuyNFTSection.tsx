@@ -1,15 +1,12 @@
 "use client";
 
 import Loader from "@/app/components/ui/Loader";
-import {
-  useAddToCart,
-  // useMintFreeNft,
-  // useStoreUser,
-} from "@/custom-hooks/mutations";
+import { useAddToCart } from "@/custom-hooks/mutations";
 import { useCart, useNfts } from "@/custom-hooks/queries";
-import { useAuth } from "@/custom-hooks/useAuth";
+import { useAppContext } from "@/custom-hooks/useAppContext";
 import { useUserLogin } from "@/custom-hooks/useUserLogin";
-import { NFTWithIdAndImage, NFTWithType } from "@/types/nft";
+import { NFTWithType } from "@/types/nft";
+import { SELECT_NFT } from "@/utils/constants";
 import { connectToContract } from "@/utils/helper";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { ethers } from "ethers";
@@ -21,26 +18,16 @@ function getCurrentMonth(): string {
   return date.toLocaleString("default", { month: "long", year: "numeric" });
 }
 
-export default function BuyNFTSection(nft: {
-  nftId: string | null;
-  nftImageUrl: string | null;
-  nftTitle: string | null;
-}) {
+export default function BuyNFTSection() {
   const [ticketCount, setTicketCount] = useState("1");
   const [imageLoaded, setImageLoaded] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // const [nfts, setNfts] = useState<NFTWithType[]>([]);
-  const [selectedNft, setSelectedNft] = useState<NFTWithIdAndImage>({
-    nftId: nft.nftId,
-    nftImageUrl: nft.nftImageUrl,
-    nftTitle: nft.nftTitle,
-  });
+  const { state, dispatch } = useAppContext();
 
   const { wallets } = useWallets();
   const { connectWallet } = usePrivy();
   const { ready, authenticated, user } = usePrivy();
-  const { state } = useAuth();
 
   // const mintFreeNftMutation = useMintFreeNft();
   const addToCartMutation = useAddToCart();
@@ -76,7 +63,7 @@ export default function BuyNFTSection(nft: {
     const items = myCart?.data?.items;
     for (let i = 0; i < items?.length; i++) {
       const nftId = items[i].nftId;
-      if (nftId === selectedNft.nftId) {
+      if (nftId === state.selectedNft.id) {
         return true;
       }
     }
@@ -92,17 +79,17 @@ export default function BuyNFTSection(nft: {
       return;
     }
 
-    if (!selectedNft) {
+    if (!state.selectedNft) {
       alert("Please select an NFT first");
       return;
     }
 
     try {
-      if (user && user.id && selectedNft && selectedNft.nftId) {
+      if (user && user.id && state.selectedNft && state.selectedNft.id) {
         await addToCartMutation.mutateAsync({
           cartItem: {
             userId: user.id,
-            nftId: selectedNft.nftId,
+            nftId: state.selectedNft.id,
             quantity: Number(ticketCount),
           },
         });
@@ -206,9 +193,9 @@ export default function BuyNFTSection(nft: {
           {/* {!imageLoaded && (
             <Loader className="text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
           )} */}
-          {selectedNft && selectedNft.nftImageUrl && (
+          {state.selectedNft && (
             <Image
-              src={selectedNft?.nftImageUrl || "/fallback-image.jpg"}
+              src={state.selectedNft.imageUrl || "/fallback-image.jpg"}
               alt="Forto NFT Ticket"
               className={`w-full h-72 rounded-md object-cover transition-opacity duration-500 ${
                 imageLoaded ? "opacity-100" : "opacity-0"
@@ -225,7 +212,7 @@ export default function BuyNFTSection(nft: {
               <div
                 key={index}
                 className={`cursor-pointer border-2 rounded-md ${
-                  selectedNft?.nftImageUrl === item.imageUrl
+                  state.selectedNft?.imageUrl === item.imageUrl
                     ? "border-brand-br2"
                     : "border-transparent"
                 }`}
@@ -239,10 +226,9 @@ export default function BuyNFTSection(nft: {
                   className="cursor-pointer rounded-md hover:opacity-80 transition-opacity duration-300"
                   onClick={() => {
                     setImageLoaded(false);
-                    setSelectedNft({
-                      nftId: item.id,
-                      nftImageUrl: item.imageUrl,
-                      nftTitle: item.title,
+                    dispatch({
+                      actionType: SELECT_NFT,
+                      value: item,
                     });
                   }}
                 />
@@ -253,8 +239,10 @@ export default function BuyNFTSection(nft: {
 
         <div className="flex flex-col gap-4 sm:gap-6">
           <h2 className="text-3xl font-bold font-josef tracking-tight">
-            {selectedNft.nftTitle}{" "}
-            <span className="text-brand-br1">100 FORTO</span>
+            {state.selectedNft.title}{" "}
+            <span className="text-brand-br1">
+              {state.selectedNft.price} FORTO
+            </span>
           </h2>
           <p className="text-link text-sm leading-relaxed">
             Every ticket you buy enters you into a decade-long sweepstakes. Stay
