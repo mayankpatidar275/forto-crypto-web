@@ -7,15 +7,14 @@ import { useUserLogin } from "@/custom-hooks/useUserLogin";
 import { CartItemType } from "@/types/cart";
 import { NFTWithType } from "@/types/nft";
 import { buyNfts } from "@/utils/helper";
-import { usePrivy, useWallets } from "@privy-io/react-auth";
+import { usePrivy } from "@privy-io/react-auth";
 import CartItemCard from "../components/ui/CartItemCard";
 import Loader from "../components/ui/Loader";
 
 const CartPage = () => {
   const { authenticated, ready } = usePrivy();
-  const { wallets } = useWallets();
   const { state } = useAppContext();
-  const { data: myCart, isLoading, error } = useCart(state.userPrivyId);
+  const { data: myCart, isLoading, error } = useCart(state?.userPrivyId);
   const { data: nfts } = useNfts();
   const { login } = useUserLogin();
   const { ensureWalletConnection } = useUserConnectWallet();
@@ -24,7 +23,7 @@ const CartPage = () => {
     try {
       // setLoading(true);
       if (!ready) {
-        alert("Authenticat");
+        alert("Wallet is not ready. Please wait...");
         return;
       }
 
@@ -37,7 +36,14 @@ const CartPage = () => {
 
       const imageUrls = getImageUrls();
 
-      await buyNfts(Number(state.selectedNft?.price), imageUrls);
+      const price = nfts?.data?.[0]?.price;
+
+      if (!price) {
+        alert("Price is unavailable.");
+        return;
+      }
+
+      await buyNfts(price, imageUrls);
     } catch (error) {
       console.error("Error minting NFT:", error);
       alert("Failed to mint NFT. Check the console for details.");
@@ -46,13 +52,26 @@ const CartPage = () => {
     }
   };
 
-  function getImageUrls() {
-    return [];
+  function getImageUrls(): string[] {
+    if (!myCart?.data?.items || !nfts?.data) return [];
+
+    const urls: string[] = [];
+
+    for (const item of myCart.data.items) {
+      const matchingNft = nfts.data.find(
+        (nft: NFTWithType) => nft.id === item.nftId
+      );
+      if (matchingNft?.imageUrl) {
+        const repeatedUrls = Array(item.quantity).fill(matchingNft.imageUrl);
+        urls.push(...repeatedUrls);
+      }
+    }
+
+    return urls;
   }
 
-  function findTotalCost() {
-    if (!myCart?.data?.items || !nfts || !nfts?.data || nfts.data.length == 0)
-      return 0;
+  function findTotalCost(): number {
+    if (!myCart?.data?.items || !nfts?.data) return 0;
 
     return myCart.data.items.reduce((total: number, item: CartItemType) => {
       const matchingNft = nfts.data.find(
@@ -71,7 +90,7 @@ const CartPage = () => {
   //   }, 0);
   // }
 
-  if (!state.userPrivyId) {
+  if (!state?.userPrivyId) {
     return <div className="text-white">Please log in to view your cart.</div>;
   }
 
@@ -111,7 +130,6 @@ const CartPage = () => {
         </div>
 
         <button
-          disabled={!wallets[0]}
           onClick={handleBuyClick}
           className="bg-background-b1 font-semibold text-lg cursor-pointer text-heading hover:bg-brand-br1 text-center rounded-[15px] px-7 py-2.5 leading-[1.4] transition-[background-color,transform, scale] duration-400 ease-[cubic-bezier(.25,.46,.45,.94)] hover:scale-[0.93]"
         >
