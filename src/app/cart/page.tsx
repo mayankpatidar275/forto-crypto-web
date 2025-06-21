@@ -1,26 +1,24 @@
 "use client";
 
 import { useCart, useNfts } from "@/custom-hooks/queries";
+import { useAppContext } from "@/custom-hooks/useAppContext";
+import { useUserConnectWallet } from "@/custom-hooks/useUserConnectWallet";
 import { useUserLogin } from "@/custom-hooks/useUserLogin";
 import { CartItemType } from "@/types/cart";
 import { NFTWithType } from "@/types/nft";
-import { connectToContract } from "@/utils/helper";
+import { buyNfts } from "@/utils/helper";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
-import { ethers } from "ethers";
 import CartItemCard from "../components/ui/CartItemCard";
 import Loader from "../components/ui/Loader";
-import { useAppContext } from "@/custom-hooks/useAppContext";
 
 const CartPage = () => {
-  const { authenticated, connectWallet, ready } = usePrivy();
+  const { authenticated, ready } = usePrivy();
   const { wallets } = useWallets();
   const { state } = useAppContext();
   const { data: myCart, isLoading, error } = useCart(state.userPrivyId);
   const { data: nfts } = useNfts();
   const { login } = useUserLogin();
-
-  // Number of FORTO tokens required per ticket
-  const FORTO_PER_TICKET = 10;
+  const { ensureWalletConnection } = useUserConnectWallet();
 
   const handleBuyClick = async () => {
     try {
@@ -35,49 +33,11 @@ const CartPage = () => {
         return;
       }
 
-      if (!wallets[0]) {
-        connectWallet({
-          walletChainType: "ethereum-only",
-          // walletList: ["metamask"],
-        });
-        return;
-      }
+      await ensureWalletConnection();
 
-      // Connect to the ticket and token contracts
-      const ticketContract = await connectToContract("FORTO_TICKET");
-      const tokenContract = await connectToContract("FORTO_TOKEN");
-      if (!ticketContract || !tokenContract) {
-        throw new Error("Unable to connect to contracts");
-      }
-      console.log("calculating forto cost...");
+      const imageUrls = getImageUrls();
 
-      // 1) figure out how many FORTO we need, scaled to 18 decimals
-      const totalForto = BigInt(findTotalTickets()) * BigInt(FORTO_PER_TICKET);
-      const cost = ethers.parseUnits(totalForto.toString(), 18);
-
-      console.log("Cost in FORTO:", cost.toString());
-
-      // 2) give the ticket contract permission to pull that many FORTO
-      const approveTx = await tokenContract.approve(
-        "0x188003513f2EEfEB5Bcf0cdBaD50367C1Dcc8dDB",
-        cost
-      );
-      await approveTx.wait();
-      console.log("Approved FORTO:", cost.toString());
-
-      // Prepare token URIs for minted NFTs
-      const tokenURIs = new Array(findTotalTickets()).fill(
-        "https://images.unsplash.com/photo-1746980885762-d31b3ee71d4c?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8"
-      );
-
-      // 3) now mint — the contract will internally transferFrom() your tokens
-      const mintTx = await ticketContract.mintNFT(
-        findTotalTickets(),
-        tokenURIs
-      );
-      await mintTx.wait();
-
-      alert(`Successfully minted ${findTotalTickets()} NFT(s)!`);
+      await buyNfts(Number(state.selectedNft?.price), imageUrls);
     } catch (error) {
       console.error("Error minting NFT:", error);
       alert("Failed to mint NFT. Check the console for details.");
@@ -85,6 +45,10 @@ const CartPage = () => {
       // setLoading(false);
     }
   };
+
+  function getImageUrls() {
+    return [];
+  }
 
   function findTotalCost() {
     if (!myCart?.data?.items || !nfts || !nfts?.data || nfts.data.length == 0)
@@ -99,13 +63,13 @@ const CartPage = () => {
     }, 0);
   }
 
-  function findTotalTickets() {
-    if (!myCart?.data?.items) return 0;
+  // function findTotalTickets() {
+  //   if (!myCart?.data?.items) return 0;
 
-    return myCart.data.items.reduce((total: number, item: CartItemType) => {
-      return total + item.quantity;
-    }, 0);
-  }
+  //   return myCart.data.items.reduce((total: number, item: CartItemType) => {
+  //     return total + item.quantity;
+  //   }, 0);
+  // }
 
   if (!state.userPrivyId) {
     return <div className="text-white">Please log in to view your cart.</div>;

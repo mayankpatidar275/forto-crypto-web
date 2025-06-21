@@ -1,10 +1,10 @@
-import React from "react";
+import { useUserConnectWallet } from "@/custom-hooks/useUserConnectWallet";
+import { useWallets } from "@privy-io/react-auth";
 import Link from "next/link";
-import { usePrivy, useWallets } from "@privy-io/react-auth";
 
 const ConnectBtn = () => {
-  const { connectWallet } = usePrivy();
   const { wallets } = useWallets();
+  const { ensureWalletConnection } = useUserConnectWallet();
   function handleDisconnectWallet() {
     console.log("disconnecting");
     wallets[0].disconnect();
@@ -27,12 +27,7 @@ const ConnectBtn = () => {
         <div className="flex items-center">
           <button
             disabled={wallets[0]}
-            onClick={() =>
-              connectWallet({
-                walletChainType: "ethereum-only",
-                // walletList: ["metamask"],
-              })
-            }
+            onClick={async () => await ensureWalletConnection()}
             className="btn-primary"
           >
             Connect

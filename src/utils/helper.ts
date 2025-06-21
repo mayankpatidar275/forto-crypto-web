@@ -89,3 +89,38 @@ export const getLastDayOfCurrentMonth = () => {
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0); // Day 0 of next month = last day of current
   return lastDay.toISOString();
 };
+
+export const buyNfts = async (rate: number, imageUrls: string[]) => {
+  const numberOfTickets = imageUrls.length;
+  if (!numberOfTickets) {
+    console.log("Number of Tickets is required: ", numberOfTickets);
+    return;
+  }
+  // Connect to the ticket and token contracts
+  const ticketContract = await connectToContract("FORTO_TICKET");
+  const tokenContract = await connectToContract("FORTO_TOKEN");
+  if (!ticketContract || !tokenContract) {
+    throw new Error("Unable to connect to contracts");
+  }
+  console.log("calculating forto cost...");
+
+  // 1) figure out how many FORTO we need, scaled to 18 decimals
+  const totalForto = BigInt(numberOfTickets) * BigInt(rate);
+  const cost = ethers.parseUnits(totalForto.toString(), 18);
+
+  console.log("Cost in FORTO:", cost.toString());
+
+  // 2) give the ticket contract permission to pull that many FORTO
+  const approveTx = await tokenContract.approve(
+    "0x188003513f2EEfEB5Bcf0cdBaD50367C1Dcc8dDB",
+    cost
+  );
+  await approveTx.wait();
+  console.log("Approved FORTO:", cost.toString());
+
+  // 3) now mint — the contract will internally transferFrom() your tokens
+  const mintTx = await ticketContract.mintNFT(numberOfTickets, imageUrls);
+  await mintTx.wait();
+
+  alert(`Successfully minted ${numberOfTickets} NFT(s)!`);
+};
