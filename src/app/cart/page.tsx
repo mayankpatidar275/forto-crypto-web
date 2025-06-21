@@ -10,6 +10,7 @@ import { buyNfts } from "@/utils/helper";
 import { usePrivy } from "@privy-io/react-auth";
 import CartItemCard from "../components/ui/CartItemCard";
 import Loader from "../components/ui/Loader";
+import toast from "react-hot-toast";
 
 const CartPage = () => {
   const { authenticated, ready } = usePrivy();
@@ -32,7 +33,10 @@ const CartPage = () => {
         return;
       }
 
-      await ensureWalletConnection();
+      const alreadyConnected = await ensureWalletConnection();
+      if (!alreadyConnected) {
+        return;
+      }
 
       const imageUrls = getImageUrls();
 
@@ -46,7 +50,7 @@ const CartPage = () => {
       await buyNfts(price, imageUrls);
     } catch (error) {
       console.error("Error minting NFT:", error);
-      alert("Failed to mint NFT. Check the console for details.");
+      toast.error("Failed to mint NFT.");
     } finally {
       // setLoading(false);
     }
@@ -91,7 +95,11 @@ const CartPage = () => {
   // }
 
   if (!state?.userPrivyId) {
-    return <div className="text-white">Please log in to view your cart.</div>;
+    return (
+      <div className="text-white text-center">
+        Please log in to view your cart.
+      </div>
+    );
   }
 
   if (isLoading) {

@@ -4,6 +4,7 @@ import { buyNfts } from "@/utils/helper";
 import { usePrivy } from "@privy-io/react-auth";
 import { useState } from "react";
 import Loader from "./Loader";
+import toast from "react-hot-toast";
 
 const BuyNowBtn = ({
   buyItems,
@@ -26,11 +27,15 @@ const BuyNowBtn = ({
         login();
         return;
       }
-      await ensureWalletConnection();
+
+      const alreadyConnected = await ensureWalletConnection();
+      if (!alreadyConnected) {
+        return;
+      }
       await buyNfts(buyItems.rate, buyItems.imageUrls);
     } catch (error) {
       console.error("Error minting NFT:", error);
-      alert("Failed to mint NFT. Check the console for details.");
+      toast.error("Failed to mint NFT.");
     } finally {
       setLoading(false);
     }
