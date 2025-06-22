@@ -57,32 +57,32 @@ export const connectToContract = async (contractKey: string) => {
   }
 };
 
-export const getWalletAddress = async (): Promise<string | null> => {
-  if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
-    try {
-      const accounts: string[] = await window.ethereum.request({
-        method: "eth_accounts",
-      });
+// export const getWalletAddress = async (): Promise<string | null> => {
+//   if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
+//     try {
+//       const accounts: string[] = await window.ethereum.request({
+//         method: "eth_accounts",
+//       });
 
-      if (accounts.length > 0) {
-        return accounts[0];
-      } else {
-        console.warn("No wallet connected");
-        return null;
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error("Error getting wallet address:", error.message);
-      } else {
-        console.error("Unknown error occurred while getting wallet address.");
-      }
-      return null;
-    }
-  } else {
-    console.warn("MetaMask not installed");
-    return null;
-  }
-};
+//       if (accounts.length > 0) {
+//         return accounts[0];
+//       } else {
+//         console.warn("No wallet connected");
+//         return null;
+//       }
+//     } catch (error) {
+//       if (error instanceof Error) {
+//         console.error("Error getting wallet address:", error.message);
+//       } else {
+//         console.error("Unknown error occurred while getting wallet address.");
+//       }
+//       return null;
+//     }
+//   } else {
+//     console.warn("MetaMask not installed");
+//     return null;
+//   }
+// };
 
 export const getLastDayOfCurrentMonth = () => {
   const now = new Date();
@@ -111,10 +111,8 @@ export const buyNfts = async (rate: number, imageUrls: string[]) => {
   console.log("Cost in FORTO:", cost.toString());
 
   // 2) give the ticket contract permission to pull that many FORTO
-  const approveTx = await tokenContract.approve(
-    "0x188003513f2EEfEB5Bcf0cdBaD50367C1Dcc8dDB",
-    cost
-  );
+  const fortoTicketContractAdd = CONTRACTS["FORTO_TICKET"].address;
+  const approveTx = await tokenContract.approve(fortoTicketContractAdd, cost);
   await approveTx.wait();
   console.log("Approved FORTO:", cost.toString());
 
