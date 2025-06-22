@@ -29,8 +29,9 @@ const NftContentSection = () => {
     <div className="flex flex-col gap-4 sm:gap-6">
       <h2 className="text-3xl font-bold font-josef tracking-tight">
         {state.selectedNft?.title}
-        <span className="text-brand-br1"></span>
-        {state.selectedNft?.price} FORTO
+        <span className="text-brand-br1">
+          {" " + state.selectedNft?.price} FORTO
+        </span>
       </h2>
       <p className="text-link text-sm leading-relaxed">
         Every ticket you buy enters you into a decade-long sweepstakes. Stay
@@ -68,7 +69,9 @@ const NftContentSection = () => {
             buyItems={{
               rate: state.selectedNft.price,
               count: ticketCount,
-              imageUrls: Array(ticketCount).fill(state.selectedNft.imageUrl),
+              imageUrls: Array(Number(ticketCount)).fill(
+                state.selectedNft.imageUrl
+              ),
             }}
           />
         )}
