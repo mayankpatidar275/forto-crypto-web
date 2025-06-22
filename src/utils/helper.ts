@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
 import { RPC, CONTRACTS } from "../utils/constants";
+import toast from "react-hot-toast";
 
 export const connectToContract = async (contractKey: string) => {
   if (!CONTRACTS[contractKey]) {
@@ -120,5 +121,5 @@ export const buyNfts = async (rate: number, imageUrls: string[]) => {
   const mintTx = await ticketContract.mintNFT(numberOfTickets, imageUrls);
   await mintTx.wait();
 
-  alert(`Successfully minted ${numberOfTickets} NFT(s)!`);
+  toast.success(`Successfully minted ${numberOfTickets} NFT(s)!`);
 };

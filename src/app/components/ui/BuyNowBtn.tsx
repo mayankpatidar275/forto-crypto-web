@@ -21,7 +21,7 @@ const BuyNowBtn = ({
     try {
       setLoading(true);
       if (!ready) {
-        alert("Authenticator is not ready");
+        toast.error("Authenticator is not ready");
       }
       if (!authenticated) {
         login();

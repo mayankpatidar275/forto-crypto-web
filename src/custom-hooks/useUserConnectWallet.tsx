@@ -1,5 +1,6 @@
 import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { useCallback } from "react";
+import toast from "react-hot-toast";
 
 export function useUserConnectWallet() {
   const { ready, connectWallet } = usePrivy();
@@ -7,7 +8,7 @@ export function useUserConnectWallet() {
 
   const ensureWalletConnection = useCallback(async (): Promise<boolean> => {
     if (!ready) {
-      alert("Authenticator is not ready");
+      toast.error("Authenticator is not ready");
       return false;
     }
 

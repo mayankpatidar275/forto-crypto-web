@@ -21,7 +21,7 @@ const AddToCartBtn = ({ ticketCount }: { ticketCount: string }) => {
 
   const handleAddToCartClick = async () => {
     if (!ready) {
-      alert("Authenticator is not ready");
+      toast.error("Authenticator is not ready");
     }
     if (!authenticated) {
       login();
@@ -29,7 +29,7 @@ const AddToCartBtn = ({ ticketCount }: { ticketCount: string }) => {
     }
 
     if (!state.selectedNft) {
-      alert("Please select an NFT first");
+      toast.error("Please select an NFT first");
       return;
     }
 
@@ -47,7 +47,7 @@ const AddToCartBtn = ({ ticketCount }: { ticketCount: string }) => {
           },
         });
       } else {
-        alert("Something is missing. Failed to add to cart");
+        toast.error("Failed to add to cart");
       }
     } catch (error) {
       console.error("Failed to add NFT to cart:", error);

@@ -24,7 +24,7 @@ const CartPage = () => {
     try {
       // setLoading(true);
       if (!ready) {
-        alert("Wallet is not ready. Please wait...");
+        toast.error("Wallet is not ready. Please wait...");
         return;
       }
 
@@ -43,7 +43,7 @@ const CartPage = () => {
       const price = nfts?.data?.[0]?.price;
 
       if (!price) {
-        alert("Price is unavailable.");
+        toast.error("Price is unavailable.");
         return;
       }
 
