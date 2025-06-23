@@ -18,17 +18,13 @@ const Providers = ({
           config={{
             // Display email and wallet as login methods
             loginMethods: ["email"],
-
             // Customize Privy's appearance in your app
             appearance: {
               theme: "light",
               accentColor: "#facc15",
+              walletList: ["metamask", "coinbase_wallet"],
               // walletChainType: "ethereum-only",
               // logo: "",
-            },
-            // Create embedded wallets for users who don't have a wallet
-            embeddedWallets: {
-              // createOnLogin: "users-without-wallets",
             },
           }}
         >

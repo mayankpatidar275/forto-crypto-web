@@ -13,10 +13,7 @@ export function useUserConnectWallet() {
     }
 
     if (!wallets[0]) {
-      connectWallet({
-        walletChainType: "ethereum-only",
-        walletList: ["metamask", "coinbase_wallet"],
-      });
+      connectWallet();
       return false;
     }
 
