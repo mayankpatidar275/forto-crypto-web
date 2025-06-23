@@ -25,9 +25,9 @@ export const connectToContract = async (contractKey: string) => {
     let provider;
     if (typeof window !== "undefined" && window.ethereum) {
       provider = new ethers.BrowserProvider(window.ethereum);
-      await provider.send("eth_requestAccounts", []); // Request access to MetaMask
+      await provider.send("eth_requestAccounts", []);
     } else {
-      console.warn("🟡 MetaMask not detected. Using Infura RPC.");
+      console.warn("🟡 MetaMask not detected. Using Base Mainnet RPC.");
       provider = new ethers.JsonRpcProvider(RPC);
     }
 
@@ -35,13 +35,12 @@ export const connectToContract = async (contractKey: string) => {
     const network = await provider.getNetwork();
     console.log("Connected to network:", network.chainId);
 
-    // Ensure user is on Sepolia
-    if (network.chainId !== BigInt(11155111)) {
-      console.warn("⚠️ Please switch to the Sepolia testnet (11155111)");
+    // Ensure user is on Base Mainnet
+    if (network.chainId !== BigInt(8453)) {
+      console.warn("⚠️ Please switch to the Base Mainnet (8453)");
       return null;
     }
 
-    // Check if contract exists
     const contractCode = await provider.getCode(contractAddress);
     if (contractCode === "0x") {
       console.error(`❌ No contract found at: ${contractAddress}`);

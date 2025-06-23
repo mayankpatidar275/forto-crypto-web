@@ -9,7 +9,7 @@ export const RPC = process.env.NEXT_PUBLIC_RPC;
 
 export const CONTRACTS: Record<string, ContractInfo> = {
   FORTO_TICKET: {
-    address: process.env.NEXT_FORTO_TICKET_ADD || "",
+    address: process.env.NEXT_PUBLIC_FORTO_TICKET_ADD || "",
     // BASE MAINNET:
     // address: "0x98e00301Ab710f58a1Ef02F8bb7Fa57476CD6785",
     // Sepolia testnet
@@ -1126,7 +1126,7 @@ export const CONTRACTS: Record<string, ContractInfo> = {
     ],
   },
   FORTO_TOKEN: {
-    address: process.env.NEXT_FORTO_TOKEN_ADD || "",
+    address: process.env.NEXT_PUBLIC_FORTO_TOKEN_ADD || "",
     // BASE MAINNET:
     // address: "0xf79060c1A525EE3095104a074179c8c18a1F5290",
     // Sepolia testnet
