@@ -1,11 +1,11 @@
 "use client";
 
 // import { usePrivy } from "@privy-io/react-auth";
-import Header from "./Header";
 import Footer from "./Footer";
 // import Loader from "../ui/Loader";
 import { usePathname } from "next/navigation";
 import { Toaster } from "react-hot-toast";
+import ConnectBtn from "../ui/ConnectBtn";
 
 export default function AppWrapper({
   children,
@@ -23,10 +23,11 @@ export default function AppWrapper({
   return (
     <>
       <Toaster position="bottom-right" />
-      <div className="glow-top"></div>
+      <ConnectBtn />
+      {/* <div className="glow-top"></div>
       <div className="scan-line"></div>
       <Header />
-      <main className="flex-grow">{children}</main>
+      <main className="flex-grow">{children}</main> */}
       <Footer />
     </>
   );
