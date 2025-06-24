@@ -13,28 +13,26 @@ const Providers = ({
 }>) => {
   return (
     <ReactQueryClientProvider>
-      <ThirdwebProvider>
-        <ContextProvider>
-          <PrivyProvider
-            appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ""}
-            clientId={process.env.NEXT_PUBLIC_PRIVY_CLIENT_ID || ""}
-            config={{
-              // Display email and wallet as login methods
-              loginMethods: ["email"],
-              // Customize Privy's appearance in your app
-              appearance: {
-                theme: "light",
-                accentColor: "#facc15",
-                walletList: ["metamask", "coinbase_wallet"],
-                // walletChainType: "ethereum-only",
-                // logo: "",
-              },
-            }}
-          >
-            {children}
-          </PrivyProvider>
-        </ContextProvider>
-      </ThirdwebProvider>
+      <ContextProvider>
+        <PrivyProvider
+          appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ""}
+          clientId={process.env.NEXT_PUBLIC_PRIVY_CLIENT_ID || ""}
+          config={{
+            // Display email and wallet as login methods
+            loginMethods: ["email"],
+            // Customize Privy's appearance in your app
+            appearance: {
+              theme: "light",
+              accentColor: "#facc15",
+              walletList: ["metamask", "coinbase_wallet"],
+              // walletChainType: "ethereum-only",
+              // logo: "",
+            },
+          }}
+        >
+          <ThirdwebProvider>{children}</ThirdwebProvider>
+        </PrivyProvider>
+      </ContextProvider>
     </ReactQueryClientProvider>
   );
 };
