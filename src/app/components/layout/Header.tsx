@@ -1,18 +1,16 @@
 "use client";
 
-import Link from "next/link";
-import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { WhiteLogo } from "@/app/assets/index";
+import { usePrivy } from "@privy-io/react-auth";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { WhiteLogo } from "@/app/assets/index";
+import { Menu, X } from "lucide-react";
 import Image from "next/image";
-import { usePrivy } from "@privy-io/react-auth";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import CartBtn from "../ui/CartBtn";
 import ConnectBtn from "../ui/ConnectBtn";
 import LoginUser from "../ui/LoginUser";
-import { ConnectButton } from "thirdweb/react";
-import CartBtn from "../ui/CartBtn";
-import { client } from "@/lib/client";
 
 const navLinks = [
   // { href: "/", label: "Home" },
@@ -51,7 +49,6 @@ export default function Header() {
     <header className="sticky top-0 z-30">
       {/* Shadow that appears on scroll */}
       <div className="shadow-navbar" aria-hidden="true"></div>
-      <ConnectButton client={client} />
 
       <div className="mx-auto px-4 sm:px-4 lg:px-8 py-4 z-50 relative">
         <div className="flex items-center justify-between h-16">
