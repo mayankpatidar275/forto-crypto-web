@@ -16,6 +16,7 @@ const ConnectBtn = () => {
         client={client}
         appMetadata={{ name: "Forto", url: "https://fortotoken.com" }}
         showAllWallets={false}
+        connectButton={{ className: "btn-primary", label: "Connect" }}
       />
     </div>
   );
