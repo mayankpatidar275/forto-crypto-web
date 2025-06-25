@@ -1,18 +1,18 @@
 import { client } from "@/lib/client";
 import React from "react";
 import { ConnectButton } from "thirdweb/react";
-// import { createWallet } from "thirdweb/wallets";
+import { createWallet } from "thirdweb/wallets";
 
-// const wallets = [
-//   createWallet("io.metamask"),
-//   createWallet("com.coinbase.wallet"),
-// ];
+const wallets = [
+  createWallet("io.metamask"),
+  createWallet("com.coinbase.wallet"),
+];
 
 const ConnectBtn = () => {
   return (
     <div>
       <ConnectButton
-        // wallets={wallets}
+        wallets={wallets}
         client={client}
         appMetadata={{ name: "Forto", url: "https://fortotoken.com" }}
         showAllWallets={false}

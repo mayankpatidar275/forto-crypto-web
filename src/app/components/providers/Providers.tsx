@@ -1,6 +1,6 @@
 "use client";
 
-// import { PrivyProvider } from "@privy-io/react-auth";
+import { PrivyProvider } from "@privy-io/react-auth";
 import React from "react";
 import { ReactQueryClientProvider } from "./ReactQueryClientProvider";
 import { ContextProvider } from "./ContextProvider";
@@ -14,7 +14,7 @@ const Providers = ({
   return (
     <ReactQueryClientProvider>
       <ContextProvider>
-        {/* <PrivyProvider
+        <PrivyProvider
           appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ""}
           clientId={process.env.NEXT_PUBLIC_PRIVY_CLIENT_ID || ""}
           config={{
@@ -29,9 +29,9 @@ const Providers = ({
               // logo: "",
             },
           }}
-        > */}
-        <ThirdwebProvider>{children}</ThirdwebProvider>
-        {/* </PrivyProvider> */}
+        >
+          <ThirdwebProvider>{children}</ThirdwebProvider>
+        </PrivyProvider>
       </ContextProvider>
     </ReactQueryClientProvider>
   );

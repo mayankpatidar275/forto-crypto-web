@@ -5,7 +5,7 @@ import Footer from "./Footer";
 // import Loader from "../ui/Loader";
 import { usePathname } from "next/navigation";
 import { Toaster } from "react-hot-toast";
-import ConnectBtn from "../ui/ConnectBtn";
+import Header from "./Header";
 
 export default function AppWrapper({
   children,
@@ -23,11 +23,10 @@ export default function AppWrapper({
   return (
     <>
       <Toaster position="bottom-right" />
-      <ConnectBtn />
-      {/* <div className="glow-top"></div>
+      <div className="glow-top"></div>
       <div className="scan-line"></div>
       <Header />
-      <main className="flex-grow">{children}</main> */}
+      <main className="flex-grow">{children}</main>
       <Footer />
     </>
   );
