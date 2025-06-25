@@ -1,28 +1,56 @@
 import { client } from "@/lib/client";
-import React from "react";
-import { ConnectButton } from "thirdweb/react";
+import {
+  useActiveAccount,
+  useActiveWalletConnectionStatus,
+  useConnectModal,
+  useWalletDetailsModal,
+} from "thirdweb/react";
 import { createWallet } from "thirdweb/wallets";
 
-const wallets = [
-  createWallet("io.metamask"),
-  createWallet("com.coinbase.wallet"),
-];
+export default function ConnectBtn() {
+  const { connect, isConnecting } = useConnectModal();
+  const account = useActiveAccount();
+  const status = useActiveWalletConnectionStatus();
+  const detailsModal = useWalletDetailsModal();
 
-const ConnectBtn = () => {
+  const wallets = [
+    createWallet("io.metamask"),
+    createWallet("com.coinbase.wallet"),
+  ];
+
+  const handleClick = async () => {
+    if (status === "connected") {
+      detailsModal.open({ client, theme: "dark" });
+    } else {
+      await connect({
+        client,
+        wallets,
+        appMetadata: {
+          name: "Forto",
+          url: "https://fortotoken.com",
+        },
+        title: "Connect Wallet",
+        showAllWallets: false,
+        showThirdwebBranding: false,
+        size: "compact",
+      });
+    }
+  };
+
   return (
-    <div>
-      <ConnectButton
-        wallets={wallets}
-        client={client}
-        appMetadata={{ name: "Forto", url: "https://fortotoken.com" }}
-        showAllWallets={false}
-        connectButton={{ className: "btn-primary", label: "Connect" }}
-      />
-    </div>
+    <button
+      className="btn-primary"
+      onClick={handleClick}
+      disabled={isConnecting || status === "connecting"}
+    >
+      {account
+        ? `${account.address.slice(0, 4)}...${account.address.slice(-2)}`
+        : isConnecting || status === "connecting"
+        ? "Connecting..."
+        : "Connect"}
+    </button>
   );
-};
-
-export default ConnectBtn;
+}
 
 // import { useUserConnectWallet } from "@/custom-hooks/useUserConnectWallet";
 // import { useWallets } from "@privy-io/react-auth";
