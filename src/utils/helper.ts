@@ -1,8 +1,17 @@
+import { client } from "@/lib/client";
+import { ethers6Adapter } from "thirdweb/adapters/ethers6";
+import { CONTRACTS } from "../utils/constants";
 import { ethers } from "ethers";
-import { RPC, CONTRACTS } from "../utils/constants";
 import toast from "react-hot-toast";
 
-export const connectToContract = async (contractKey: string) => {
+// Chain ID check
+const EXPECTED_CHAIN_ID = 8453;
+
+export const connectToContract = async (
+  contractKey: string,
+  account: any,
+  chain: any
+) => {
   if (!CONTRACTS[contractKey]) {
     console.error(`❌ Invalid contract key: ${contractKey}`);
     return null;
@@ -12,50 +21,169 @@ export const connectToContract = async (contractKey: string) => {
   const contractAbi = CONTRACTS[contractKey].abi;
 
   if (!contractAbi || !contractAddress) {
-    console.error(
-      "Contract ABI or Contract address not available",
-      contractAbi,
-      contractAddress,
-      contractKey
-    );
+    console.error("Contract ABI or address missing");
+    return null;
+  }
+
+  if (!account) {
+    console.warn("No wallet connected");
+    return null;
+  }
+
+  if (!chain || chain.id !== EXPECTED_CHAIN_ID) {
+    console.log("chain: ", chain);
+    console.warn("⚠️ Please switch to Base Mainnet");
     return null;
   }
 
   try {
-    let provider;
-    if (typeof window !== "undefined" && window.ethereum) {
-      provider = new ethers.BrowserProvider(window.ethereum);
-      await provider.send("eth_requestAccounts", []);
-    } else {
-      console.warn("🟡 MetaMask not detected. Using Base Mainnet RPC.");
-      provider = new ethers.JsonRpcProvider(RPC);
-    }
-
-    const signer = await provider.getSigner();
-    const network = await provider.getNetwork();
-    console.log("Connected to network:", network.chainId);
-
-    // Ensure user is on Base Mainnet
-    if (network.chainId !== BigInt(8453)) {
-      console.warn("⚠️ Please switch to the Base Mainnet (8453)");
-      return null;
-    }
-
-    const contractCode = await provider.getCode(contractAddress);
-    if (contractCode === "0x") {
-      console.error(`❌ No contract found at: ${contractAddress}`);
-      return null;
-    }
-
-    console.log(`✅ Contract ${contractKey} detected at: ${contractAddress}`);
+    // 1. Get ethers-compatible signer from thirdweb account
+    // 2. Create an ethers.js contract instance using the signer
+    const signer = ethers6Adapter.signer.toEthers({
+      client,
+      chain,
+      account,
+    });
 
     const contract = new ethers.Contract(contractAddress, contractAbi, signer);
+
     return contract;
   } catch (error) {
-    console.error("Error connecting to contract:", error);
+    console.error("Error creating contract instance:", error);
     return null;
   }
 };
+
+export const buyNfts = async (
+  rate: number,
+  imageUrls: string[],
+  account: any,
+  chain: any
+) => {
+  const numberOfTickets = imageUrls.length;
+  if (!numberOfTickets) {
+    console.log("Number of Tickets is required");
+    return;
+  }
+
+  const ticketContract = await connectToContract(
+    "FORTO_TICKET",
+    account,
+    chain
+  );
+  const tokenContract = await connectToContract("FORTO_TOKEN", account, chain);
+  if (!ticketContract || !tokenContract) {
+    throw new Error("Unable to connect to contracts");
+  }
+
+  const totalForto = BigInt(numberOfTickets) * BigInt(rate);
+  const cost = ethers.parseUnits(totalForto.toString(), 18);
+
+  // Approve tokens
+  const fortoTicketAddress = CONTRACTS["FORTO_TICKET"].address;
+  const approveTx = await tokenContract.approve(fortoTicketAddress, cost);
+  await approveTx.wait();
+
+  console.log("Approved:", cost.toString());
+
+  // Mint NFTs
+  const mintTx = await ticketContract.mintNFT(numberOfTickets, imageUrls);
+  await mintTx.wait();
+
+  toast.success(`Successfully minted ${numberOfTickets} NFT(s)!`);
+};
+
+// import { ethers } from "ethers";
+// import { RPC, CONTRACTS } from "../utils/constants";
+// import toast from "react-hot-toast";
+
+// export const connectToContract = async (contractKey: string) => {
+//   if (!CONTRACTS[contractKey]) {
+//     console.error(`❌ Invalid contract key: ${contractKey}`);
+//     return null;
+//   }
+
+//   const contractAddress = CONTRACTS[contractKey].address;
+//   const contractAbi = CONTRACTS[contractKey].abi;
+
+//   if (!contractAbi || !contractAddress) {
+//     console.error(
+//       "Contract ABI or Contract address not available",
+//       contractAbi,
+//       contractAddress,
+//       contractKey
+//     );
+//     return null;
+//   }
+
+//   try {
+//     let provider;
+//     if (typeof window !== "undefined" && window.ethereum) {
+//       provider = new ethers.BrowserProvider(window.ethereum);
+//       await provider.send("eth_requestAccounts", []);
+//     } else {
+//       console.warn("🟡 MetaMask not detected. Using Base Mainnet RPC.");
+//       provider = new ethers.JsonRpcProvider(RPC);
+//     }
+
+//     const signer = await provider.getSigner();
+//     const network = await provider.getNetwork();
+//     console.log("Connected to network:", network.chainId);
+
+//     // Ensure user is on Base Mainnet
+//     if (network.chainId !== BigInt(8453)) {
+//       console.warn("⚠️ Please switch to the Base Mainnet (8453)");
+//       return null;
+//     }
+
+//     const contractCode = await provider.getCode(contractAddress);
+//     if (contractCode === "0x") {
+//       console.error(`❌ No contract found at: ${contractAddress}`);
+//       return null;
+//     }
+
+//     console.log(`✅ Contract ${contractKey} detected at: ${contractAddress}`);
+
+//     const contract = new ethers.Contract(contractAddress, contractAbi, signer);
+//     return contract;
+//   } catch (error) {
+//     console.error("Error connecting to contract:", error);
+//     return null;
+//   }
+// };
+
+// export const buyNfts = async (rate: number, imageUrls: string[]) => {
+//   const numberOfTickets = imageUrls.length;
+//   if (!numberOfTickets) {
+//     console.log("Number of Tickets is required: ", numberOfTickets);
+//     return;
+//   }
+//   // Connect to the ticket and token contracts
+//   const ticketContract = await connectToContract("FORTO_TICKET");
+//   const tokenContract = await connectToContract("FORTO_TOKEN");
+//   if (!ticketContract || !tokenContract) {
+//     throw new Error("Unable to connect to contracts");
+//   }
+//   console.log("calculating forto cost...");
+
+//   // 1) figure out how many FORTO we need, scaled to 18 decimals
+//   const totalForto = BigInt(numberOfTickets) * BigInt(rate);
+//   const cost = ethers.parseUnits(totalForto.toString(), 18);
+
+//   console.log("Cost in FORTO:", cost.toString());
+
+//   // 2) give the ticket contract permission to pull that many FORTO
+//   const fortoTicketContractAdd = CONTRACTS["FORTO_TICKET"].address;
+//   const approveTx = await tokenContract.approve(fortoTicketContractAdd, cost);
+//   await approveTx.wait();
+//   console.log("Approved FORTO:", cost.toString());
+
+//   // 3) now mint — the contract will internally transferFrom() your tokens
+//   const mintTx = await ticketContract.mintNFT(numberOfTickets, imageUrls);
+//   await mintTx.wait();
+
+//   toast.success(`Successfully minted ${numberOfTickets} NFT(s)!`);
+// };
 
 // export const getWalletAddress = async (): Promise<string | null> => {
 //   if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
@@ -88,37 +216,4 @@ export const getLastDayOfCurrentMonth = () => {
   const now = new Date();
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0); // Day 0 of next month = last day of current
   return lastDay.toISOString();
-};
-
-export const buyNfts = async (rate: number, imageUrls: string[]) => {
-  const numberOfTickets = imageUrls.length;
-  if (!numberOfTickets) {
-    console.log("Number of Tickets is required: ", numberOfTickets);
-    return;
-  }
-  // Connect to the ticket and token contracts
-  const ticketContract = await connectToContract("FORTO_TICKET");
-  const tokenContract = await connectToContract("FORTO_TOKEN");
-  if (!ticketContract || !tokenContract) {
-    throw new Error("Unable to connect to contracts");
-  }
-  console.log("calculating forto cost...");
-
-  // 1) figure out how many FORTO we need, scaled to 18 decimals
-  const totalForto = BigInt(numberOfTickets) * BigInt(rate);
-  const cost = ethers.parseUnits(totalForto.toString(), 18);
-
-  console.log("Cost in FORTO:", cost.toString());
-
-  // 2) give the ticket contract permission to pull that many FORTO
-  const fortoTicketContractAdd = CONTRACTS["FORTO_TICKET"].address;
-  const approveTx = await tokenContract.approve(fortoTicketContractAdd, cost);
-  await approveTx.wait();
-  console.log("Approved FORTO:", cost.toString());
-
-  // 3) now mint — the contract will internally transferFrom() your tokens
-  const mintTx = await ticketContract.mintNFT(numberOfTickets, imageUrls);
-  await mintTx.wait();
-
-  toast.success(`Successfully minted ${numberOfTickets} NFT(s)!`);
 };

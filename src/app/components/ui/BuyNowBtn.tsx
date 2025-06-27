@@ -5,6 +5,12 @@ import { usePrivy } from "@privy-io/react-auth";
 import { useState } from "react";
 import Loader from "./Loader";
 import toast from "react-hot-toast";
+import { getContract } from "thirdweb";
+import { base } from "thirdweb/chains";
+import { client } from "@/lib/client";
+// import { useReadContract } from "thirdweb/react";
+import { useActiveAccount } from "thirdweb/react";
+// import { claimTo } from "thirdweb/extensions/erc20";
 
 const BuyNowBtn = ({
   buyItems,
@@ -17,6 +23,26 @@ const BuyNowBtn = ({
   const { login } = useUserLogin();
   const { ensureWalletConnection } = useUserConnectWallet();
 
+  const contract = getContract({
+    address: "0x98e00301Ab710f58a1Ef02F8bb7Fa57476CD6785",
+    chain: base,
+    client: client,
+  });
+
+  // const { data } = useReadContract(balanceOf, {
+  //   contract,
+  //   owner: "0x...",
+  //   tokenId: 0n,
+  // });
+
+  console.log("contract: ", contract);
+  // const transaction = claimTo({
+  //   contract,
+  //   quantity: "1",
+  //   to: "0x...",
+  // });
+  // const { mutateAsync: claimNft } = useSendTransaction();
+  const account = useActiveAccount();
   const handleBuyClick = async () => {
     try {
       setLoading(true);
@@ -32,7 +58,7 @@ const BuyNowBtn = ({
       if (!alreadyConnected) {
         return;
       }
-      await buyNfts(buyItems.rate, buyItems.imageUrls);
+      await buyNfts(buyItems.rate, buyItems.imageUrls, account, contract.chain);
     } catch (error) {
       console.error("Error minting NFT:", error);
       toast.error("Failed to mint NFT.");
@@ -42,6 +68,7 @@ const BuyNowBtn = ({
   };
   return (
     <div className="h-12 w-62">
+      {/* <button onClick={() => claimNft(transaction)}>Claim</button> */}
       {ready ? (
         <button
           onClick={handleBuyClick}
