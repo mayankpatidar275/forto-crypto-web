@@ -11,6 +11,10 @@ import { usePrivy } from "@privy-io/react-auth";
 import CartItemCard from "../components/ui/CartItemCard";
 import Loader from "../components/ui/Loader";
 import toast from "react-hot-toast";
+import { useActiveAccount } from "thirdweb/react";
+import { getContract } from "thirdweb";
+import { base } from "thirdweb/chains";
+import { client } from "@/lib/client";
 
 const CartPage = () => {
   const { authenticated, ready } = usePrivy();
@@ -19,6 +23,13 @@ const CartPage = () => {
   const { data: nfts } = useNfts();
   const { login } = useUserLogin();
   const { ensureWalletConnection } = useUserConnectWallet();
+  const account = useActiveAccount();
+
+  const contract = getContract({
+    address: "0x98e00301Ab710f58a1Ef02F8bb7Fa57476CD6785",
+    chain: base,
+    client: client,
+  });
 
   const handleBuyClick = async () => {
     try {
@@ -47,7 +58,8 @@ const CartPage = () => {
         return;
       }
 
-      await buyNfts(price, imageUrls);
+      // await buyNfts(price, imageUrls);
+      await buyNfts(price, imageUrls, account, contract.chain);
     } catch (error) {
       console.error("Error minting NFT:", error);
       toast.error("Failed to mint NFT.");
