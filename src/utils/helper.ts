@@ -62,35 +62,104 @@ export const buyNfts = async (
 ) => {
   const numberOfTickets = imageUrls.length;
   if (!numberOfTickets) {
-    console.log("Number of Tickets is required");
+    toast.error("No items selected.");
     return;
   }
 
-  const ticketContract = await connectToContract(
-    "FORTO_TICKET",
-    account,
-    chain
-  );
-  const tokenContract = await connectToContract("FORTO_TOKEN", account, chain);
-  if (!ticketContract || !tokenContract) {
-    throw new Error("Unable to connect to contracts");
+  const TIMEOUT_MS = 60000;
+
+  try {
+    toast.loading("Connecting to contracts...");
+    const ticketContract = await connectToContract(
+      "FORTO_TICKET",
+      account,
+      chain
+    );
+    const tokenContract = await connectToContract(
+      "FORTO_TOKEN",
+      account,
+      chain
+    );
+    toast.dismiss();
+
+    if (!ticketContract || !tokenContract) {
+      throw new Error("Contract connection failed.");
+    }
+
+    const totalForto = BigInt(numberOfTickets) * BigInt(rate);
+    const cost = ethers.parseUnits(totalForto.toString(), 18);
+    const fortoTicketAddress = CONTRACTS["FORTO_TICKET"].address;
+
+    // Approve
+    toast.loading("Requesting token approval...");
+    const approveTx = await withTimeout(
+      tokenContract.approve(fortoTicketAddress, cost),
+      TIMEOUT_MS,
+      "Token approval timed out"
+    );
+    toast.dismiss();
+    toast.success("Tokens approved");
+
+    toast.loading("Waiting for approval confirmation...");
+    await withTimeout(
+      approveTx.wait(),
+      TIMEOUT_MS,
+      "Approval confirmation timed out"
+    );
+    toast.dismiss();
+
+    // Mint
+    toast.loading("Minting NFT(s)...");
+    const mintTx = await withTimeout(
+      ticketContract.mintNFT(numberOfTickets, imageUrls),
+      TIMEOUT_MS,
+      "Mint transaction timed out"
+    );
+    toast.dismiss();
+    toast.success("Mint transaction sent");
+
+    toast.loading("Waiting for mint confirmation...");
+    await withTimeout(mintTx.wait(), TIMEOUT_MS, "Mint confirmation timed out");
+    toast.dismiss();
+
+    toast.success(`Successfully minted ${numberOfTickets} NFT(s)!`);
+  } catch (error) {
+    handleTxError(error);
+    throw error;
   }
+};
 
-  const totalForto = BigInt(numberOfTickets) * BigInt(rate);
-  const cost = ethers.parseUnits(totalForto.toString(), 18);
+const withTimeout = async <T>(
+  promise: Promise<T>,
+  timeoutMs: number,
+  errorMsg = "Operation timed out"
+): Promise<T> => {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) =>
+      setTimeout(() => reject(new Error(errorMsg)), timeoutMs)
+    ),
+  ]);
+};
 
-  // Approve tokens
-  const fortoTicketAddress = CONTRACTS["FORTO_TICKET"].address;
-  const approveTx = await tokenContract.approve(fortoTicketAddress, cost);
-  await approveTx.wait();
+export const handleTxError = (error: any) => {
+  console.error("❌ NFT Minting Error:", error);
 
-  console.log("Approved:", cost.toString());
+  toast.dismiss();
 
-  // Mint NFTs
-  const mintTx = await ticketContract.mintNFT(numberOfTickets, imageUrls);
-  await mintTx.wait();
+  const rawMessage = error?.message || "";
 
-  toast.success(`Successfully minted ${numberOfTickets} NFT(s)!`);
+  if (error?.code === 4001 || rawMessage.includes("User denied")) {
+    toast.error("Transaction cancelled by user.");
+  } else if (rawMessage.includes("timeout")) {
+    toast.error("⏱️ Transaction timed out. Please try again.");
+  } else if (rawMessage.includes("chain") || rawMessage.includes("network")) {
+    toast.error("⚠️ You're connected to the wrong network.");
+  } else {
+    // Optional: shorten long internal errors
+    const shortMsg = rawMessage.slice(0, 100);
+    toast.error(shortMsg || "Something went wrong.");
+  }
 };
 
 // import { ethers } from "ethers";
