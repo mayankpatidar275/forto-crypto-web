@@ -4,7 +4,6 @@ import { CONTRACTS } from "../utils/constants";
 import { ethers } from "ethers";
 import toast from "react-hot-toast";
 
-// Chain ID check
 const EXPECTED_CHAIN_ID = 8453;
 
 export const connectToContract = async (
@@ -12,44 +11,16 @@ export const connectToContract = async (
   account: any,
   chain: any
 ) => {
-  if (!CONTRACTS[contractKey]) {
-    console.error(`❌ Invalid contract key: ${contractKey}`);
+  if (!CONTRACTS[contractKey]) return null;
+  const { address, abi } = CONTRACTS[contractKey];
+  if (!address || !abi || !account || chain?.id !== EXPECTED_CHAIN_ID)
     return null;
-  }
-
-  const contractAddress = CONTRACTS[contractKey].address;
-  const contractAbi = CONTRACTS[contractKey].abi;
-
-  if (!contractAbi || !contractAddress) {
-    console.error("Contract ABI or address missing");
-    return null;
-  }
-
-  if (!account) {
-    console.warn("No wallet connected");
-    return null;
-  }
-
-  if (!chain || chain.id !== EXPECTED_CHAIN_ID) {
-    console.log("chain: ", chain);
-    console.warn("⚠️ Please switch to Base Mainnet");
-    return null;
-  }
 
   try {
-    // 1. Get ethers-compatible signer from thirdweb account
-    // 2. Create an ethers.js contract instance using the signer
-    const signer = ethers6Adapter.signer.toEthers({
-      client,
-      chain,
-      account,
-    });
-
-    const contract = new ethers.Contract(contractAddress, contractAbi, signer);
-
-    return contract;
+    const signer = ethers6Adapter.signer.toEthers({ client, chain, account });
+    return new ethers.Contract(address, abi, signer);
   } catch (error) {
-    console.error("Error creating contract instance:", error);
+    console.error("❌ Contract connection error:", error);
     return null;
   }
 };
@@ -61,15 +32,13 @@ export const buyNfts = async (
   chain: any
 ) => {
   const numberOfTickets = imageUrls.length;
-  if (!numberOfTickets) {
-    toast.error("No items selected.");
-    return;
-  }
+  if (!numberOfTickets) return toast.error("No items selected.");
 
   const TIMEOUT_MS = 60000;
+  const fortoTicketAddress = CONTRACTS["FORTO_TICKET"].address;
 
   try {
-    toast.loading("Connecting to contracts...");
+    const connectingToast = toast.loading("Connecting to contracts...");
     const ticketContract = await connectToContract(
       "FORTO_TICKET",
       account,
@@ -80,53 +49,54 @@ export const buyNfts = async (
       account,
       chain
     );
-    toast.dismiss();
+    toast.dismiss(connectingToast);
 
-    if (!ticketContract || !tokenContract) {
+    if (!ticketContract || !tokenContract)
       throw new Error("Contract connection failed.");
-    }
 
     const totalForto = BigInt(numberOfTickets) * BigInt(rate);
     const cost = ethers.parseUnits(totalForto.toString(), 18);
-    const fortoTicketAddress = CONTRACTS["FORTO_TICKET"].address;
 
-    // Approve
-    toast.loading("Requesting token approval...");
+    // Step 1: Approve
+    const approveToast = toast.loading(
+      "Please approve token spending in wallet..."
+    );
     const approveTx = await withTimeout(
       tokenContract.approve(fortoTicketAddress, cost),
       TIMEOUT_MS,
       "Token approval timed out"
     );
-    toast.dismiss();
-    toast.success("Tokens approved");
+    toast.dismiss(approveToast);
 
-    toast.loading("Waiting for approval confirmation...");
-    await withTimeout(
-      approveTx.wait(),
-      TIMEOUT_MS,
-      "Approval confirmation timed out"
-    );
-    toast.dismiss();
+    const confirmingApprovalToast = toast.loading("Confirming approval...");
+    await waitForConfirmation(approveTx, TIMEOUT_MS);
+    toast.dismiss(confirmingApprovalToast);
 
-    // Mint
-    toast.loading("Minting NFT(s)...");
+    // Step 2: Mint
+    const mintToast = toast.loading("Please confirm mint in wallet...");
     const mintTx = await withTimeout(
       ticketContract.mintNFT(numberOfTickets, imageUrls),
       TIMEOUT_MS,
       "Mint transaction timed out"
     );
-    toast.dismiss();
-    toast.success("Mint transaction sent");
+    toast.dismiss(mintToast);
 
-    toast.loading("Waiting for mint confirmation...");
-    await withTimeout(mintTx.wait(), TIMEOUT_MS, "Mint confirmation timed out");
-    toast.dismiss();
+    const confirmMintToast = toast.loading("Waiting for mint confirmation...");
+    await waitForConfirmation(mintTx, TIMEOUT_MS);
+    toast.dismiss(confirmMintToast);
 
-    toast.success(`Successfully minted ${numberOfTickets} NFT(s)!`);
+    toast.success(`✅ Successfully minted ${numberOfTickets} NFT(s)!`);
   } catch (error) {
+    toast.dismiss();
     handleTxError(error);
     throw error;
   }
+};
+
+const waitForConfirmation = async (tx: any, timeout: number) => {
+  // iOS Safari quirk fix: wait briefly before calling wait()
+  await new Promise((res) => setTimeout(res, 1200));
+  return withTimeout(tx.wait(), timeout, "Transaction confirmation timed out");
 };
 
 const withTimeout = async <T>(
@@ -143,22 +113,22 @@ const withTimeout = async <T>(
 };
 
 export const handleTxError = (error: any) => {
-  console.error("❌ NFT Minting Error:", error);
+  console.error("NFT Minting Error:", error);
 
-  toast.dismiss();
+  const message = error?.message || "";
 
-  const rawMessage = error?.message || "";
-
-  if (error?.code === 4001 || rawMessage.includes("User denied")) {
-    toast.error("Transaction cancelled by user.");
-  } else if (rawMessage.includes("timeout")) {
+  if (error?.code === 4001 || /User denied/i.test(message)) {
+    toast.error("Transaction was cancelled by the user.");
+  } else if (/timeout/i.test(message)) {
     toast.error("⏱️ Transaction timed out. Please try again.");
-  } else if (rawMessage.includes("chain") || rawMessage.includes("network")) {
-    toast.error("⚠️ You're connected to the wrong network.");
+  } else if (/chain|network/i.test(message)) {
+    toast.error("⚠️ Please connect to the Base Mainnet network.");
   } else {
-    // Optional: shorten long internal errors
-    const shortMsg = rawMessage.slice(0, 100);
-    toast.error(shortMsg || "Something went wrong.");
+    toast.error(
+      message.length > 100
+        ? message.slice(0, 100) + "..."
+        : message || "Something went wrong."
+    );
   }
 };
 
