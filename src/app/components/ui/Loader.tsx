@@ -9,7 +9,7 @@ function Loader({
 }) {
   return (
     <div className={`${className}`} role="status" aria-label="Loading content">
-      <Loader2 className="animate-spin text-link dark:text-link" size={size} />
+      <Loader2 className="animate-spin text-link" size={size} />
     </div>
   );
 }

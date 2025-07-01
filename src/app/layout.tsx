@@ -31,8 +31,8 @@ export default function RootLayout({
           <AppWrapper>
             <ThemeProvider
               attribute="class"
-              defaultTheme="dark"
-              forcedTheme="dark"
+              defaultTheme="light"
+              forcedTheme="light"
               enableSystem={false}
             >
               <RootProvider search={{ enabled: false }}>

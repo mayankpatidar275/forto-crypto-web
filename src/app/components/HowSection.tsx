@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Heading2 from "./ui/Heading2";
 import Para1 from "./ui/Para1";
 
@@ -18,7 +19,11 @@ const HowSection = () => {
             winners, with Mid prizes equal to 4× each Micro prize). Winners
             receive FORTO directly, NFTs stay tradable (new owners inherit draw
             entries), and you can stake any leftover FORTO for APY. Dive into
-            the details on our How It Works page!
+            the details on our{" "}
+            <Link className="underline" href={"/docs/tokenomics"}>
+              Tokenomics
+            </Link>{" "}
+            page!
           </Para1>
           {/* <Para1>
             Every month, you&#39;ll have the chance to win a share of the prize

@@ -1,6 +1,5 @@
 @import "tailwindcss";
-@import "tailwindcss";
-@import "fumadocs-ui/css/neutral.css";
+@import "fumadocs-ui/css/ocean.css";
 @import "fumadocs-ui/css/preset.css";
 
 :root {
@@ -13,7 +12,20 @@
   --brand-br1: #ff793f;
   --brand-br2: #cc6133;
   --border: #404040;
+  /* --color-fd-background: hsl(0, 100%, 64%); */
 }
+
+/* [data-theme='dark'] {
+  --background: #05070b;
+  --foreground: #ffffff;
+  --background-a: #05070b;
+  --background-b1: #38261d;
+  --background-b2: #38281d80;
+  --background-b3: #38261d40;
+  --brand-br1: #ff793f;
+  --brand-br2: #cc6133;
+  --border: #404040;
+} */
 
 @theme {
   --color-link: #d9d9d9;
@@ -33,6 +45,12 @@ body {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+}
+
+.docs {
+  background-color: #fff;
+  min-height: 100vh;
+  color: var(--background);
 }
 
 .cp-x {
