@@ -37,8 +37,10 @@ export const buyNfts = async (
   const TIMEOUT_MS = 60000;
   const fortoTicketAddress = CONTRACTS["FORTO_TICKET"].address;
 
+  let toastId: string | undefined;
+
   try {
-    const connectingToast = toast.loading("Connecting to contracts...");
+    toastId = toast.loading("Connecting to contracts...");
     const ticketContract = await connectToContract(
       "FORTO_TICKET",
       account,
@@ -49,7 +51,7 @@ export const buyNfts = async (
       account,
       chain
     );
-    toast.dismiss(connectingToast);
+    toast.dismiss(toastId);
 
     if (!ticketContract || !tokenContract)
       throw new Error("Contract connection failed.");
@@ -57,37 +59,35 @@ export const buyNfts = async (
     const totalForto = BigInt(numberOfTickets) * BigInt(rate);
     const cost = ethers.parseUnits(totalForto.toString(), 18);
 
-    // Step 1: Approve
-    const approveToast = toast.loading(
-      "Please approve token spending in wallet..."
-    );
+    // 1️⃣ Approve Token
+    toastId = toast.loading("Please approve token spending in wallet...");
     const approveTx = await withTimeout(
       tokenContract.approve(fortoTicketAddress, cost),
       TIMEOUT_MS,
       "Token approval timed out"
     );
-    toast.dismiss(approveToast);
+    toast.dismiss(toastId);
 
-    const confirmingApprovalToast = toast.loading("Confirming approval...");
+    toastId = toast.loading("Waiting for approval confirmation...");
     await waitForConfirmation(approveTx, TIMEOUT_MS);
-    toast.dismiss(confirmingApprovalToast);
+    toast.dismiss(toastId);
 
-    // Step 2: Mint
-    const mintToast = toast.loading("Please confirm mint in wallet...");
+    // 2️⃣ Mint NFT
+    toastId = toast.loading("Please confirm mint in wallet...");
     const mintTx = await withTimeout(
       ticketContract.mintNFT(numberOfTickets, imageUrls),
       TIMEOUT_MS,
       "Mint transaction timed out"
     );
-    toast.dismiss(mintToast);
+    toast.dismiss(toastId);
 
-    const confirmMintToast = toast.loading("Waiting for mint confirmation...");
+    toastId = toast.loading("Waiting for mint confirmation...");
     await waitForConfirmation(mintTx, TIMEOUT_MS);
-    toast.dismiss(confirmMintToast);
+    toast.dismiss(toastId);
 
-    toast.success(`✅ Successfully minted ${numberOfTickets} NFT(s)!`);
+    toast.success(`Successfully minted ${numberOfTickets} NFT(s)!`);
   } catch (error) {
-    toast.dismiss();
+    toast.dismiss(toastId);
     handleTxError(error);
     throw error;
   }
@@ -95,6 +95,7 @@ export const buyNfts = async (
 
 const waitForConfirmation = async (tx: any, timeout: number) => {
   // iOS Safari quirk fix: wait briefly before calling wait()
+  // Fix for iOS popup returning issues
   await new Promise((res) => setTimeout(res, 1200));
   return withTimeout(tx.wait(), timeout, "Transaction confirmation timed out");
 };
@@ -117,19 +118,21 @@ export const handleTxError = (error: any) => {
 
   const message = error?.message || "";
 
-  if (error?.code === 4001 || /User denied/i.test(message)) {
-    toast.error("Transaction was cancelled by the user.");
-  } else if (/timeout/i.test(message)) {
-    toast.error("⏱️ Transaction timed out. Please try again.");
-  } else if (/chain|network/i.test(message)) {
-    toast.error("⚠️ Please connect to the Base Mainnet network.");
-  } else {
-    toast.error(
-      message.length > 100
-        ? message.slice(0, 100) + "..."
-        : message || "Something went wrong."
-    );
-  }
+  setTimeout(() => {
+    if (error?.code === 4001 || /User denied/i.test(message)) {
+      toast.error("Transaction cancelled by user.");
+    } else if (/timeout/i.test(message)) {
+      toast.error("⏱️ Transaction timed out. Please try again.");
+    } else if (/chain|network/i.test(message)) {
+      toast.error("⚠️ You're connected to the wrong network.");
+    } else {
+      toast.error(
+        message.length > 100
+          ? message.slice(0, 100) + "..."
+          : message || "Something went wrong."
+      );
+    }
+  }, 300); // Allow iOS context to recover
 };
 
 // import { ethers } from "ethers";
