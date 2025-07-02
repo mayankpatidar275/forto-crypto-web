@@ -5,6 +5,7 @@ import Providers from "./components/providers/Providers";
 import AppWrapper from "./components/layout/AppWrapper";
 import { RootProvider } from "fumadocs-ui/provider";
 import { ThemeProvider } from "next-themes";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const roboto = Roboto({
   weight: "400",
@@ -42,6 +43,12 @@ export default function RootLayout({
           </AppWrapper>
         </Providers>
       </body>
+      {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID &&
+        process.env.NODE_ENV === "production" && (
+          <GoogleAnalytics
+            gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID!}
+          />
+        )}
     </html>
   );
 }
