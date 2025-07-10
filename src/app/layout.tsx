@@ -3,13 +3,14 @@ import { Roboto } from "next/font/google";
 import "./globals.css";
 import Providers from "./components/providers/Providers";
 import AppWrapper from "./components/layout/AppWrapper";
-import { RootProvider } from "fumadocs-ui/provider";
-import { ThemeProvider } from "next-themes";
+// import { ThemeProvider } from "next-themes";
 import { GoogleAnalytics } from "@next/third-parties/google";
 
+// TODO: OPTI: If you're using multiple weights later (e.g., 400, 700), preload them here together.
 const roboto = Roboto({
   weight: "400",
   subsets: ["latin"],
+  display: "swap", // for better rendering
 });
 
 export const metadata: Metadata = {
@@ -30,16 +31,14 @@ export default function RootLayout({
       >
         <Providers>
           <AppWrapper>
-            <ThemeProvider
+            {/* <ThemeProvider
               attribute="class"
               defaultTheme="light"
               forcedTheme="light"
               enableSystem={false}
-            >
-              <RootProvider search={{ enabled: false }}>
-                {children}
-              </RootProvider>
-            </ThemeProvider>
+            > */}
+            {children}
+            {/* </ThemeProvider> */}
           </AppWrapper>
         </Providers>
       </body>

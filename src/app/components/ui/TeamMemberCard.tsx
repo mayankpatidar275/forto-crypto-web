@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import Para from "./Para";
 import Para1 from "./Para1";
 
@@ -19,11 +20,16 @@ const TeamMemberCard: React.FC<TeamMember> = ({
 }) => {
   return (
     <div className="flex flex-col gap-2 items-center justify-center p-6 rounded-xl bg-background-b3 text-center">
-      <img
-        src={imageUrl}
-        alt={name}
-        className="w-16 h-16 rounded-full object-cover grayscale mb-4"
-      />
+      <div className="relative w-16 h-16 mb-4">
+        <Image
+          src={imageUrl}
+          alt={name}
+          fill
+          className="rounded-full object-cover grayscale"
+          sizes="64px"
+          priority={false}
+        />
+      </div>
       <h5 className="text-2xl font-bold text-white mb-2">{name}</h5>
       <Para1>{role}</Para1>
       <Para className="italic">{quote}</Para>

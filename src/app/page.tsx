@@ -1,5 +1,6 @@
 "use client";
 import { useRef } from "react";
+// TODO: OPTI: lazy load if possible
 import ContactSection from "./components/ContactSection";
 import GetNowSection from "./components/GetNowSection";
 import HeroSection from "./components/HeroSection";

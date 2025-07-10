@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import Para1 from "./Para1";
 
 interface BlogCardProps {
@@ -23,12 +24,16 @@ const BlogCard: React.FC<BlogCardProps> = ({
       className="bg-background-b3 border border-black rounded-[15px] p-6 hover:shadow-lg transition-shadow duration-300 flex flex-col h-full"
     >
       <div className="flex flex-col items-center w-full mb-5">
-        <img
-          src={image}
-          alt={title}
-          className="h-[180px] w-auto object-cover rounded-md"
-          loading="lazy"
-        />
+        <div className="relative h-[180px] w-full">
+          <Image
+            src={image}
+            alt={title}
+            fill
+            className="object-cover rounded-md"
+            sizes="(max-width: 768px) 100vw, 400px"
+            priority={false}
+          />
+        </div>
       </div>
       <div className="text-sm font-semibold text-link italic mb-2">
         {category}
