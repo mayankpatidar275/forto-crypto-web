@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
     domains: [
       "cdn.prod.website-files.com",
       "forto-assets.s3.ap-south-1.amazonaws.com",
+      "randomuser.me",
     ],
   },
   eslint: {
