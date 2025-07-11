@@ -152,6 +152,27 @@ body {
   }
 }
 
+.wheel {
+  transition-timing-function: cubic-bezier(0.17, 0.67, 0.12, 0.99);
+}
+
+.wheel-segment {
+  transform-origin: center;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-bounce {
+  animation: bounce 1s infinite;
+}
 @keyframes scan {
   from {
     transform: translateY(-100%);
