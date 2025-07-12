@@ -1,9 +1,9 @@
 import { Coins, PartyPopper, Users } from "lucide-react";
 import CountDown from "./ui/CountDown";
 import Heading2 from "./ui/Heading2";
-import Label2 from "./ui/Label2";
 import SolutionCard from "./ui/SolutionCard";
 import StatCard2 from "./ui/StatCard2";
+import GetYourTicketBtn from "./GetYourTicketBtn";
 
 const solutions = [
   {
@@ -47,7 +47,7 @@ const stats = [
   },
 ];
 
-function NextDrawCounterSection({ scrollToBuy }: { scrollToBuy: () => void }) {
+function NextDrawCounterSection() {
   return (
     <section className="cp-x cp-y flex justify-center">
       <div className="max-w-6xl flex flex-col justify-center items-center">
@@ -81,9 +81,7 @@ function NextDrawCounterSection({ scrollToBuy }: { scrollToBuy: () => void }) {
             ))}
           </div>
         </div>
-        <div onClick={scrollToBuy} className="mt-8">
-          <Label2 text="Get Your Ticket" />
-        </div>
+        <GetYourTicketBtn />
       </div>
     </section>
   );

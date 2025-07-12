@@ -33,7 +33,7 @@ const GetNowSection = () => {
     return <div className="cp-x cp-y text-center">Something went wrong!</div>;
 
   return (
-    <section className="cp-x cp-y flex justify-center">
+    <section className="cp-x cp-y flex justify-center" id="get-now">
       <div className="max-w-6xl w-full">
         <div className="block-heading px-6 text-center flex flex-col items-center">
           <Heading2>Get your unique NFT ticket now</Heading2>
