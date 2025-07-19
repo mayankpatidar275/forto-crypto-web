@@ -53,6 +53,7 @@ const GetNowSection = () => {
           </div> */}
         </div>
         <div className="flex flex-wrap justify-center gap-8 px-4 mt-8">
+          {/* TODO: handle if nfts not there */}
           {nfts.data.map((nft: NFTWithType) => (
             <div key={nft.id} className="w-36">
               <Link
