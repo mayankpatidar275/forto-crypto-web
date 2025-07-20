@@ -115,16 +115,15 @@ const CenterButton = styled.button`
 
 const Pointer = styled.div`
   position: absolute;
-  top: -10px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 50%;
+  right: 0;
+  transform: translate(0, -50%);
   width: 0;
   height: 0;
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
-  border-top: 40px solid #e74c3c;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-right: 25px solid #e74c3c;
   z-index: 5;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 `;
 
 const Popup = styled.div`
@@ -166,7 +165,7 @@ const Popup = styled.div`
 `;
 
 const colors = [
-  "#e74c3c",
+  // "#e74c3c",
   "#3498db",
   "#2ecc71",
   "#f1c40f",
@@ -201,7 +200,7 @@ export const SpinCard: React.FC<SpinCardProps> = ({
   size = 400,
   spinDuration = 6000,
   onSpinEnd,
-  buttonText = "SPIN",
+  // buttonText = "SPIN",
   className = "",
 }) => {
   const [spinning, setSpinning] = useState(false);
@@ -210,17 +209,17 @@ export const SpinCard: React.FC<SpinCardProps> = ({
   const [winner, setWinner] = useState<string | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  const darkenColor = (color: string, amount: number): string => {
-    let r = parseInt(color.slice(1, 3), 16);
-    let g = parseInt(color.slice(3, 5), 16);
-    let b = parseInt(color.slice(5, 7), 16);
+  // const darkenColor = (color: string, amount: number): string => {
+  //   let r = parseInt(color.slice(1, 3), 16);
+  //   let g = parseInt(color.slice(3, 5), 16);
+  //   let b = parseInt(color.slice(5, 7), 16);
 
-    r = Math.max(0, r - amount);
-    g = Math.max(0, g - amount);
-    b = Math.max(0, b - amount);
+  //   r = Math.max(0, r - amount);
+  //   g = Math.max(0, g - amount);
+  //   b = Math.max(0, b - amount);
 
-    return `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1)}`;
-  };
+  //   return `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1)}`;
+  // };
 
   const drawWheel = () => {
     const canvas = canvasRef.current;
