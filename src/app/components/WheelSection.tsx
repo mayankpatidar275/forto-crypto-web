@@ -1,71 +1,27 @@
 "use client";
 
 import React from "react";
+import { SpinCard } from "./ui/SpinCard";
 // import SpinTheWheelCard from "./ui/SpinTheWheelCard";
-import SpinCard from "./ui/SpinCard";
 
 const WheelSection = () => {
-  // const handleSpinFinish = (winner: string) => {
-  //   console.log("Winner:", winner);
-  //   // Add your logic here
-  // };
+  const prizes = [
+    "Free Coffee",
+    "Prize Draw",
+    "Sweets",
+    "Gift Card",
+    "Bonus Day Off",
+    "Tech Gadget",
+  ];
   return (
     <section className="cp-x cp-y flex justify-center">
       {/* <SpinTheWheelCard></SpinTheWheelCard> */}
       <SpinCard
-        title="Prize Wheel"
-        subtitle="Spin for your chance to win"
-        segments={[
-          "Coffee",
-          "10% Off",
-          "Dessert",
-          "20% Off",
-          "Free Meal",
-          "10% Off",
-          "Dessert",
-          "20% Off",
-          "Free Meal",
-        ]}
-        segColors={[
-          "#FF6384",
-          "#36A2EB",
-          "#FFCE56",
-          "#4BC0C0",
-          "#9966FF",
-          "#36A2EB",
-          "#FFCE56",
-          "#4BC0C0",
-          "#9966FF",
-        ]}
-        isOnlyOnce={false}
-        className="mx-auto"
-      />{" "}
-      <SpinCard
-        title="Prize Wheel"
-        subtitle="Spin to win amazing rewards"
-        segments={[
-          "Coffee",
-          "10% Off",
-          "Dessert",
-          "20% Off",
-          "Free Meal",
-          "item",
-          "one",
-          "two",
-        ]}
-        segColors={[
-          "#FF6384",
-          "#36A2EB",
-          "#FFCE56",
-          "#4BC0C0",
-          "#9966FF",
-          "#FFCE56",
-          "#4BC0C0",
-          "#9966FF",
-        ]}
-        winningSegment="Free Meal" // Uncomment to target specific prize
-        isOnlyOnce={false}
-        className="mx-auto"
+        items={prizes}
+        size={500}
+        spinDuration={5000}
+        onSpinEnd={(winner) => console.log("Winner:", winner)}
+        buttonText="Spin to Win!"
       />
     </section>
   );
