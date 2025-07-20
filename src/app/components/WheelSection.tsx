@@ -5,23 +5,40 @@ import React from "react";
 import SpinCard from "./ui/SpinCard";
 
 const WheelSection = () => {
-  const handleSpinFinish = (winner: string) => {
-    console.log("Winner:", winner);
-    // Add your logic here
-  };
+  // const handleSpinFinish = (winner: string) => {
+  //   console.log("Winner:", winner);
+  //   // Add your logic here
+  // };
   return (
     <section className="cp-x cp-y flex justify-center">
       {/* <SpinTheWheelCard></SpinTheWheelCard> */}
       <SpinCard
-        segments={["Prize 1", "Prize 2", "Prize 3", "Prize 4", "Prize 5"]}
-        segColors={["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"]}
-        onFinished={handleSpinFinish}
-        primaryColor="bg-indigo-600"
-        contrastColor="text-white"
-        buttonText="Spin Now!"
+        title="Prize Wheel"
+        subtitle="Spin for your chance to win"
+        segments={[
+          "Coffee",
+          "10% Off",
+          "Dessert",
+          "20% Off",
+          "Free Meal",
+          "10% Off",
+          "Dessert",
+          "20% Off",
+          "Free Meal",
+        ]}
+        segColors={[
+          "#FF6384",
+          "#36A2EB",
+          "#FFCE56",
+          "#4BC0C0",
+          "#9966FF",
+          "#36A2EB",
+          "#FFCE56",
+          "#4BC0C0",
+          "#9966FF",
+        ]}
         isOnlyOnce={false}
-        size={250}
-        className="w-full max-w-md"
+        className="mx-auto"
       />
     </section>
   );
