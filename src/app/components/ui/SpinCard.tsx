@@ -1,5 +1,131 @@
 import React, { useRef, useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+// Animations
+const popin = keyframes`
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+`;
+
+const float = keyframes`
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+`;
+
+// Styled Components
+const Card = styled.div`
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s ease;
+`;
+
+const Header = styled.div`
+  text-align: center;
+  margin-bottom: 1.5rem;
+  width: 100%;
+`;
+
+const Title = styled.h2`
+  color: #2c3e50;
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+`;
+
+const Subtitle = styled.p`
+  color: #7f8c8d;
+  margin: 0.5rem 0 0;
+  font-size: 1rem;
+`;
+
+const WheelContainer = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 1/1;
+  margin: 1.5rem 0;
+`;
+
+const WheelCanvas = styled.canvas`
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 8px solid #f1c40f;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+`;
+
+const CenterButton = styled.button`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translate(-50%, -50%) scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  &:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+    transform: translate(-50%, -50%);
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    width: 70%;
+    height: 70%;
+    border-radius: 50%;
+    border: 2px dashed white;
+    animation: ${float} 3s ease-in-out infinite;
+  }
+`;
+
+const Pointer = styled.div`
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 40px solid #e74c3c;
+  z-index: 5;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+`;
 
 const Popup = styled.div`
   position: fixed;
@@ -7,97 +133,75 @@ const Popup = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   background: white;
-  color: #006400;
-  padding: 1rem 2rem;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  color: #27ae60;
+  padding: 2rem 3rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   text-align: center;
   z-index: 1000;
-  animation: popin 1s ease-out;
+  animation: ${popin} 0.5s ease-out;
+  border: 4px solid #2ecc71;
+  max-width: 90%;
 
-  @keyframes popin {
-    0% {
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(0.5);
-    }
-    100% {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
-    }
-  }
-`;
-
-const WheelContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-`;
-
-const SpinButton = styled.button`
-  padding: 1rem 2rem;
-  background-color: #282c34;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: #61dafb;
+  h2 {
+    margin: 0;
+    font-size: 2rem;
+    color: #27ae60;
   }
 
-  &:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+  h3 {
+    margin: 1rem 0 0;
+    font-size: 1.5rem;
+    color: #2c3e50;
+    font-weight: 700;
+  }
+
+  &::before {
+    content: "🎉";
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+    animation: ${float} 2s ease-in-out infinite;
   }
 `;
 
 const colors = [
-  "#CC4629",
-  "#CC9A29",
-  "#B2CC29",
-  "#5ECC29",
-  "#29CC46",
-  "#29CC99",
-  "#2985CC",
-  "#293FCC",
-  "#4629CC",
-  "#9929CC",
-  "#CC2981",
-  "#CC2929",
-  "#CC5929",
-  "#CC9529",
-  "#B2CC29",
-  "#66CC29",
-  "#29CC5F",
-  "#29CC91",
-  "#298ECC",
-  "#4A29CC",
-  "#8429CC",
-  "#CC298F",
-  "#CC294F",
+  "#e74c3c",
+  "#3498db",
+  "#2ecc71",
+  "#f1c40f",
+  "#9b59b6",
+  "#1abc9c",
+  "#d35400",
+  "#34495e",
+  "#e67e22",
+  "#16a085",
+  "#c0392b",
+  "#2980b9",
+  "#27ae60",
+  "#f39c12",
+  "#8e44ad",
 ];
 
 interface SpinCardProps {
   items: string[];
+  title?: string;
+  subtitle?: string;
   size?: number;
   spinDuration?: number;
   onSpinEnd?: (winner: string) => void;
-  showConfetti?: boolean;
   buttonText?: string;
   className?: string;
 }
 
 export const SpinCard: React.FC<SpinCardProps> = ({
   items,
+  title = "Spin to Win!",
+  subtitle = "Try your luck and see what you get",
   size = 400,
   spinDuration = 6000,
   onSpinEnd,
-  // showConfetti = true,
-  buttonText = "Spin",
+  buttonText = "SPIN",
   className = "",
 }) => {
   const [spinning, setSpinning] = useState(false);
@@ -125,11 +229,19 @@ export const SpinCard: React.FC<SpinCardProps> = ({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const radius = size / 2;
+    // Set canvas dimensions based on container size
+    const containerSize = Math.min(
+      canvas.parentElement?.clientWidth || size,
+      size
+    );
+    canvas.width = containerSize;
+    canvas.height = containerSize;
+
+    const radius = containerSize / 2;
     const sliceAngle = (2 * Math.PI) / items.length;
 
     // Clear and setup
-    ctx.clearRect(0, 0, size, size);
+    ctx.clearRect(0, 0, containerSize, containerSize);
     ctx.translate(radius, radius);
     ctx.rotate(-rotation * (Math.PI / 180));
 
@@ -143,9 +255,14 @@ export const SpinCard: React.FC<SpinCardProps> = ({
       ctx.arc(0, 0, radius, startAngle, endAngle);
       ctx.closePath();
 
-      const color = darkenColor(colors[i % colors.length], 30);
+      const color = colors[i % colors.length];
       ctx.fillStyle = color;
       ctx.fill();
+
+      // Add border between segments
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
+      ctx.lineWidth = 2;
+      ctx.stroke();
 
       // Draw text
       ctx.save();
@@ -153,31 +270,21 @@ export const SpinCard: React.FC<SpinCardProps> = ({
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillStyle = "white";
-      ctx.font = `bold ${Math.max(12, size / 25)}px Arial`;
-      ctx.shadowColor = "rgba(0, 0, 0, 0.7)";
+      ctx.font = `bold ${Math.max(14, containerSize / 20)}px Arial`;
+      ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
       ctx.shadowOffsetX = 1;
       ctx.shadowOffsetY = 1;
-      ctx.shadowBlur = 3;
-      ctx.fillText(item, radius * 0.5, 0);
+      ctx.shadowBlur = 2;
+
+      // Adjust text position based on segment size
+      const textRadius = radius * 0.6;
+      ctx.fillText(item, textRadius, 0);
       ctx.restore();
     });
 
     // Reset transformations
     ctx.rotate(rotation * (Math.PI / 180));
     ctx.translate(-radius, -radius);
-
-    // Draw pointer
-    ctx.save();
-    ctx.translate(size, size / 2);
-    ctx.beginPath();
-    ctx.moveTo(-20, -10);
-    ctx.lineTo(0, -10);
-    ctx.lineTo(0, 10);
-    ctx.lineTo(-20, 10);
-    ctx.closePath();
-    ctx.fillStyle = "red";
-    ctx.fill();
-    ctx.restore();
   };
 
   const startSpin = () => {
@@ -221,19 +328,21 @@ export const SpinCard: React.FC<SpinCardProps> = ({
     setWinner(winner);
     setShowPopup(true);
     onSpinEnd?.(winner);
-
-    // if (showConfetti) {
-    //   confetti({
-    //     particleCount: 100,
-    //     spread: 70,
-    //     origin: { y: 0.6 },
-    //   });
-    // }
   };
 
   useEffect(() => {
     drawWheel();
   }, [items, rotation, size]);
+
+  useEffect(() => {
+    // Handle window resize
+    const handleResize = () => {
+      drawWheel();
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     if (showPopup) {
@@ -243,22 +352,33 @@ export const SpinCard: React.FC<SpinCardProps> = ({
   }, [showPopup]);
 
   return (
-    <WheelContainer className={className}>
-      <canvas
-        ref={canvasRef}
-        width={size}
-        height={size}
-        style={{ borderRadius: "50%", border: "2px solid black" }}
-      />
-      <SpinButton onClick={startSpin} disabled={spinning || items.length === 0}>
-        {buttonText}
-      </SpinButton>
+    <Card className={className}>
+      <Header>
+        <Title>{title}</Title>
+        <Subtitle>{subtitle}</Subtitle>
+      </Header>
+
+      <WheelContainer>
+        <Pointer />
+        <WheelCanvas
+          ref={canvasRef}
+          style={{ width: "100%", height: "100%" }}
+        />
+        <CenterButton
+          onClick={startSpin}
+          disabled={spinning || items.length === 0}
+        >
+          Spin
+          {/* {buttonText} */}
+        </CenterButton>
+      </WheelContainer>
+
       {showPopup && winner && (
         <Popup>
           <h2>Congratulations!</h2>
-          <h3>{winner}</h3>
+          <h3>You won: {winner}</h3>
         </Popup>
       )}
-    </WheelContainer>
+    </Card>
   );
 };
