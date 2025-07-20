@@ -7,6 +7,7 @@ interface SpinCardProps {
   subtitle?: string;
   segments: string[];
   segColors: string[];
+  winningSegment?: string;
   onFinished?: (segment: string) => void;
   primaryColor?: string;
   contrastColor?: string;
@@ -20,6 +21,7 @@ const SpinCard: React.FC<SpinCardProps> = ({
   subtitle = "Try your luck to win exciting prizes",
   segments,
   segColors,
+  winningSegment,
   onFinished,
   primaryColor = "bg-indigo-600",
   contrastColor = "text-white",
@@ -47,6 +49,7 @@ const SpinCard: React.FC<SpinCardProps> = ({
   const maxSpeedRef = useRef(Math.PI / segments.length);
   const framesRef = useRef(0);
   const spinStartRef = useRef(0);
+  const currentSegmentRef = useRef("");
 
   // Calculate dimensions
   const dimension = wheelSize * 2;
@@ -75,7 +78,7 @@ const SpinCard: React.FC<SpinCardProps> = ({
       if (!containerRef.current) return;
       const containerWidth = containerRef.current.offsetWidth;
       const newSize = Math.min(
-        280, // max size (looks good on wide screens)
+        280, // max size
         Math.max(200, containerWidth * 0.8) // responsive but not too small
       );
       setWheelSize(newSize);
@@ -166,11 +169,22 @@ const SpinCard: React.FC<SpinCardProps> = ({
     ctx.font = `bold ${wheelSize / 10}px sans-serif`;
     ctx.textAlign = "center";
     ctx.fillText(buttonText, center, center + 3);
-  }, [segments, segColors, wheelSize, buttonText, primaryColor, contrastColor]);
+
+    // Update current segment
+    currentSegmentRef.current = getCurrentSegment(angleCurrentRef.current);
+  }, [
+    segments,
+    segColors,
+    wheelSize,
+    buttonText,
+    primaryColor,
+    contrastColor,
+    getCurrentSegment,
+  ]);
 
   // Draw needle
   const drawNeedle = useCallback(() => {
-    if (!canvasContextRef.current) return;
+    if (!canvasContextRef.current || showCelebration) return;
 
     const ctx = canvasContextRef.current;
     ctx.fillStyle = "#e53e3e";
@@ -180,9 +194,9 @@ const SpinCard: React.FC<SpinCardProps> = ({
     ctx.lineTo(center, 0);
     ctx.closePath();
     ctx.fill();
-  }, [wheelSize]);
+  }, [wheelSize, showCelebration]);
 
-  // Animation tick
+  // Animation tick - Fixed to match original library logic
   const onTimerTick = useCallback(() => {
     if (!canvasContextRef.current) return;
 
@@ -195,13 +209,34 @@ const SpinCard: React.FC<SpinCardProps> = ({
     let finished = false;
 
     if (duration < upTime) {
+      // Acceleration phase
       progress = duration / upTime;
       angleDeltaRef.current =
         maxSpeedRef.current * Math.sin((progress * Math.PI) / 2);
     } else {
-      progress = duration / downTime;
-      angleDeltaRef.current =
-        maxSpeedRef.current * Math.sin((progress * Math.PI) / 2 + Math.PI / 2);
+      // Deceleration phase
+      if (winningSegment) {
+        if (
+          currentSegmentRef.current === winningSegment &&
+          framesRef.current > segments.length
+        ) {
+          progress = duration / upTime;
+          angleDeltaRef.current =
+            maxSpeedRef.current *
+            Math.sin((progress * Math.PI) / 2 + Math.PI / 2);
+          progress = 1;
+        } else {
+          progress = duration / downTime;
+          angleDeltaRef.current =
+            maxSpeedRef.current *
+            Math.sin((progress * Math.PI) / 2 + Math.PI / 2);
+        }
+      } else {
+        progress = duration / downTime;
+        angleDeltaRef.current =
+          maxSpeedRef.current *
+          Math.sin((progress * Math.PI) / 2 + Math.PI / 2);
+      }
       if (progress >= 1) finished = true;
     }
 
@@ -210,7 +245,7 @@ const SpinCard: React.FC<SpinCardProps> = ({
       angleCurrentRef.current -= Math.PI * 2;
 
     if (finished) {
-      const finalSegment = getCurrentSegment(angleCurrentRef.current);
+      const finalSegment = currentSegmentRef.current;
       setIsFinished(true);
       setIsSpinning(false);
       setWinner(finalSegment);
@@ -218,8 +253,9 @@ const SpinCard: React.FC<SpinCardProps> = ({
       if (onFinished) onFinished(finalSegment);
       clearInterval(timerHandleRef.current);
       timerHandleRef.current = 0;
+      angleDeltaRef.current = 0;
     }
-  }, [drawWheel, drawNeedle, getCurrentSegment, onFinished]);
+  }, [drawWheel, drawNeedle, winningSegment, segments.length, onFinished]);
 
   // Handle spin
   const handleSpin = useCallback(() => {
@@ -292,10 +328,12 @@ const SpinCard: React.FC<SpinCardProps> = ({
           onClick={handleSpin}
         />
 
-        {/* Needle pointer */}
-        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <div className="w-0 h-0 border-l-8 border-r-8 border-b-12 border-l-transparent border-r-transparent border-b-red-500" />
-        </div>
+        {/* Needle pointer - Hidden during celebration */}
+        {!showCelebration && (
+          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <div className="w-0 h-0 border-l-8 border-r-8 border-b-12 border-l-transparent border-r-transparent border-b-red-500" />
+          </div>
+        )}
 
         {/* Celebration Overlay */}
         {showCelebration && (

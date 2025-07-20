@@ -39,6 +39,33 @@ const WheelSection = () => {
         ]}
         isOnlyOnce={false}
         className="mx-auto"
+      />{" "}
+      <SpinCard
+        title="Prize Wheel"
+        subtitle="Spin to win amazing rewards"
+        segments={[
+          "Coffee",
+          "10% Off",
+          "Dessert",
+          "20% Off",
+          "Free Meal",
+          "item",
+          "one",
+          "two",
+        ]}
+        segColors={[
+          "#FF6384",
+          "#36A2EB",
+          "#FFCE56",
+          "#4BC0C0",
+          "#9966FF",
+          "#FFCE56",
+          "#4BC0C0",
+          "#9966FF",
+        ]}
+        winningSegment="Free Meal" // Uncomment to target specific prize
+        isOnlyOnce={false}
+        className="mx-auto"
       />
     </section>
   );
