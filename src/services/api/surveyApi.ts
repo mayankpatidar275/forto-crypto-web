@@ -18,7 +18,7 @@ export async function mintFreeNft({
   image?: string | null;
 }) {
   // now `image` is guaranteed to be that URL if the caller passed `undefined` or omitted it
-  return post(`/api/mintFreeNFT`, {
+  return post(`/api/v1/mintFreeNFT`, {
     address,
     image,
   });
