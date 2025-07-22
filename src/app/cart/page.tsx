@@ -8,13 +8,18 @@ import { CartItemType } from "@/types/cart";
 import { NFTWithType } from "@/types/nft";
 import { buyNfts } from "@/utils/helper";
 import { usePrivy } from "@privy-io/react-auth";
-import CartItemCard from "../components/ui/CartItemCard";
+import CartItemCard, { CartItemCardProps } from "../components/ui/CartItemCard";
 import Loader from "../components/ui/Loader";
 import toast from "react-hot-toast";
 import { useActiveAccount } from "thirdweb/react";
 import { getContract } from "thirdweb";
 import { base } from "thirdweb/chains";
 import { client } from "@/lib/client";
+import { EmptyState } from "../components/ui/EmptyState";
+import { ErrorState } from "../components/ui/ErrorState";
+import { TotalCostCard } from "../components/ui/TotalCostCard";
+
+const CONTRACT_ADDRESS = "0x98e00301Ab710f58a1Ef02F8bb7Fa57476CD6785";
 
 const CartPage = () => {
   const { authenticated, ready } = usePrivy();
@@ -26,92 +31,50 @@ const CartPage = () => {
   const account = useActiveAccount();
 
   const contract = getContract({
-    address: "0x98e00301Ab710f58a1Ef02F8bb7Fa57476CD6785",
+    address: CONTRACT_ADDRESS,
     chain: base,
-    client: client,
+    client,
   });
 
   const handleBuyClick = async () => {
+    if (!ready) {
+      toast.error("Wallet is not ready. Please wait...");
+      return;
+    }
+
+    if (!authenticated) {
+      login();
+      return;
+    }
+
+    const connected = await ensureWalletConnection();
+    if (!connected) return;
+
     try {
-      // setLoading(true);
-      if (!ready) {
-        toast.error("Wallet is not ready. Please wait...");
+      const imageUrls = getImageUrls(myCart?.data?.items, nfts?.data);
+
+      if (imageUrls.length === 0) {
+        toast.error("No NFTs found in your cart.");
         return;
       }
-
-      if (!authenticated) {
-        login();
-        return;
-      }
-
-      const alreadyConnected = await ensureWalletConnection();
-      if (!alreadyConnected) {
-        return;
-      }
-
-      const imageUrls = getImageUrls();
 
       const price = nfts?.data?.[0]?.price;
 
       if (!price) {
-        toast.error("Price is unavailable.");
+        toast.error("NFT price is unavailable.");
         return;
       }
 
-      // await buyNfts(price, imageUrls);
       await buyNfts(price, imageUrls, account, contract.chain);
-    } catch (error) {
-      console.error("Error minting NFT:", error);
+    } catch (err) {
+      console.error("Error minting NFT:", err);
       toast.error("Failed to mint NFT.");
-    } finally {
-      // setLoading(false);
     }
   };
 
-  function getImageUrls(): string[] {
-    if (!myCart?.data?.items || !nfts?.data) return [];
-
-    const urls: string[] = [];
-
-    for (const item of myCart.data.items) {
-      const matchingNft = nfts.data.find(
-        (nft: NFTWithType) => nft.id === item.nftId
-      );
-      if (matchingNft?.imageUrl) {
-        const repeatedUrls = Array(item.quantity).fill(matchingNft.imageUrl);
-        urls.push(...repeatedUrls);
-      }
-    }
-
-    return urls;
-  }
-
-  function findTotalCost(): number {
-    if (!myCart?.data?.items || !nfts?.data) return 0;
-
-    return myCart.data.items.reduce((total: number, item: CartItemType) => {
-      const matchingNft = nfts.data.find(
-        (nft: NFTWithType) => nft.id === item.nftId
-      );
-      const price = matchingNft?.price || 0;
-      return total + price * item.quantity;
-    }, 0);
-  }
-
-  // function findTotalTickets() {
-  //   if (!myCart?.data?.items) return 0;
-
-  //   return myCart.data.items.reduce((total: number, item: CartItemType) => {
-  //     return total + item.quantity;
-  //   }, 0);
-  // }
-
+  // Handle states: not logged in / loading / error
   if (!state?.userPrivyId) {
-    return (
-      <div className="text-white text-center">
-        Please log in to view your cart.
-      </div>
-    );
+    return <EmptyState message="Please log in to view your cart." />;
   }
 
   if (isLoading) {
@@ -120,44 +83,52 @@ const CartPage = () => {
 
   if (error || !myCart?.success) {
     return (
-      <div className="text-red-500">
-        Failed to load your cart. Please try again later.
-      </div>
+      <ErrorState message="Failed to load your cart. Please try again later." />
     );
   }
 
-  const totalCost = findTotalCost();
+  const items = myCart.data.items;
+  const totalCost = findTotalCost(items, nfts?.data);
 
   return (
     <section className="relative cp-x cp-y justify-center">
       <div className="flex flex-col gap-8">
-        {myCart.data.items.length === 0 ? (
-          <div className="text-white text-center">Your cart is empty.</div>
+        {items.length === 0 ? (
+          <EmptyState message="Your cart is empty." />
         ) : (
-          myCart.data.items.map((item: CartItemType) => (
+          items.map((item: CartItemCardProps) => (
             <CartItemCard key={item.id} {...item} />
           ))
         )}
       </div>
 
-      {/* Fixed total cost card */}
-      <div className="fixed bottom-0 right-0 left-0 sm:bottom-6 flex justify-between gap-4 sm:right-6 sm:left-1/2 md:left-2/3 sm:border-2 border-brand-br2 sm:w-auto sm:min-w-[260px] bg-background rounded-lg p-4 shadow-xl text-white z-100">
-        <div>
-          <div className="text-sm font-medium text-link">Total Cost</div>
-          <div className="text-2xl font-bold text-link">
-            {totalCost.toFixed(2)} FORTO
-          </div>
-        </div>
-
-        <button
-          onClick={handleBuyClick}
-          className="bg-background-b1 font-semibold text-lg cursor-pointer text-heading hover:bg-brand-br1 text-center rounded-[15px] px-7 py-2.5 leading-[1.4] transition-[background-color,transform, scale] duration-400 ease-[cubic-bezier(.25,.46,.45,.94)] hover:scale-[0.93]"
-        >
-          Buy
-        </button>
-      </div>
+      <TotalCostCard total={totalCost} onBuy={handleBuyClick} />
     </section>
   );
 };
 
 export default CartPage;
+
+export function findMatchingNft(nfts: NFTWithType[] = [], nftId: string) {
+  return nfts.find((nft) => nft.id === nftId);
+}
+
+export function getImageUrls(
+  items: CartItemType[] = [],
+  nfts: NFTWithType[] = []
+) {
+  return items.flatMap((item) => {
+    const nft = findMatchingNft(nfts, item.nftId);
+    return nft?.imageUrl ? Array(item.quantity).fill(nft.imageUrl) : [];
+  });
+}
+
+export function findTotalCost(
+  items: CartItemType[] = [],
+  nfts: NFTWithType[] = []
+) {
+  return items.reduce((total, item) => {
+    const nft = findMatchingNft(nfts, item.nftId);
+    return total + (nft?.price || 0) * item.quantity;
+  }, 0);
+}
