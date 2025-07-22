@@ -12,7 +12,10 @@ export default function Home() {
     <div className="scroll-smooth">
       <HeroSection />
       <NextDrawCounterSection />
-      <GetNowSection />
+      <GetNowSection
+        category="Italian Brainrot"
+        heading="Get your unique NFT ticket now"
+      />
       <WinnersSection />
       <HowSection />
       <VisionSection />

@@ -1,3 +1,3 @@
 export const ErrorState = ({ message }: { message: string }) => (
-  <div className="text-red-500 text-center">{message}</div>
+  <div className="text-white text-center">{message}</div>
 );

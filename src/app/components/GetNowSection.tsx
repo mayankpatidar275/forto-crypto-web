@@ -1,19 +1,24 @@
 "use client";
 
 import Heading2 from "./ui/Heading2";
+import NFTCardLink from "./ui/NFTCardLink";
 import Loader from "./ui/Loader";
 import { NFTWithType, SelectedNftType } from "@/types/nft";
-
-import { useNfts } from "@/custom-hooks/queries";
-import { SELECT_NFT } from "@/utils/constants";
 import { useAppContext } from "@/custom-hooks/useAppContext";
+import { SELECT_NFT } from "@/utils/constants";
 import { ErrorState } from "./ui/ErrorState";
 import { EmptyState } from "./ui/EmptyState";
-import NFTCardLink from "./ui/NFTCardLink";
+import { useNftsByCategory } from "@/custom-hooks/queries";
 
-const GetNowSection = () => {
-  const { data: nfts, isLoading, error } = useNfts();
+interface GetNowSectionProps {
+  category: string;
+  heading: string;
+}
+
+const GetNowSection = ({ category, heading }: GetNowSectionProps) => {
   const { dispatch } = useAppContext();
+
+  const { data: nfts, isLoading, error } = useNftsByCategory(category);
 
   const handleNftClick = (nft: SelectedNftType) => {
     dispatch({ actionType: SELECT_NFT, value: nft });
@@ -31,7 +36,7 @@ const GetNowSection = () => {
 
   if (!nfts?.data || nfts.data.length === 0) {
     return (
-      <EmptyState message="No NFTs available right now. Check back soon!" />
+      <EmptyState message="No NFTs available in this category. Check back soon!" />
     );
   }
 
@@ -39,7 +44,7 @@ const GetNowSection = () => {
     <section className="cp-x cp-y flex justify-center" id="get-now">
       <div className="max-w-6xl w-full">
         <div className="block-heading px-6 text-center flex flex-col items-center">
-          <Heading2>Get your unique NFT ticket now</Heading2>
+          <Heading2>{heading}</Heading2>
         </div>
 
         <div className="flex flex-wrap justify-center gap-8 px-4 mt-8">
