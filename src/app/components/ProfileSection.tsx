@@ -1,22 +1,28 @@
+import Image from "next/image";
 import React from "react";
 
 const user = {
   name: "Mayank Patidar",
   email: "mayank@example.com",
-  avatar: "/default-avatar.png",
+  avatar: "https://randomuser.me/api/portraits/men/32.jpg",
 };
 
 const ProfileSection = () => {
   return (
-    <div className="bg-white shadow-md rounded-2xl p-6 flex items-center space-x-6">
-      <img
-        src={user.avatar}
-        alt="User Avatar"
-        className="w-20 h-20 rounded-full object-cover border"
-      />
+    <div className="flex gap-4 items-center bg-background-b3 rounded-xl shadow-sm p-6 w-full hover:shadow-md transition">
+      <div className="relative w-12 h-12">
+        <Image
+          src={user.avatar}
+          alt={`avatar`}
+          fill
+          className="rounded-full object-cover"
+          sizes="48px"
+          priority={false}
+        />
+      </div>
       <div>
-        <h2 className="text-xl font-semibold">{user.name}</h2>
-        <p className="text-gray-500">{user.email}</p>
+        <p className="font-medium text-white">{user.name}</p>
+        <p className="text-sm text-link opacity-70">{user.email}</p>
       </div>
     </div>
   );

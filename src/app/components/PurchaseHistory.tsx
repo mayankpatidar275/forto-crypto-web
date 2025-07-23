@@ -1,24 +1,39 @@
 import React from "react";
+import { EmptyState } from "./ui/EmptyState";
+import PurchaseHistoryItemCard from "./ui/PurchaseHistoryItemCard";
 
 const purchases = [
-  { id: 1, item: "Forto Ticket #1234", date: "2025-07-18", price: "$10" },
-  { id: 2, item: "Tokenomics Access", date: "2025-07-15", price: "$20" },
+  {
+    id: "1",
+    item: "Crocodildo Penisini",
+    date: "2025-07-18",
+    price: "$100",
+    image:
+      "https://forto-assets.s3.ap-south-1.amazonaws.com/nfts/italian-brainrot/02_Bobritto+Bandito.jpg",
+  },
+  {
+    id: "2",
+    item: "Boombardilo Krokodilo",
+    date: "2025-07-15",
+    price: "$100",
+    image:
+      "https://forto-assets.s3.ap-south-1.amazonaws.com/nfts/italian-brainrot/02_Bobritto+Bandito.jpg",
+  },
 ];
 
 const PurchaseHistory = () => {
   return (
-    <div className="bg-white shadow-md rounded-2xl p-6">
-      <h3 className="text-lg font-semibold mb-4">Purchase History</h3>
-      <ul className="divide-y divide-gray-200">
-        {purchases.map((purchase) => (
-          <li key={purchase.id} className="py-3 flex justify-between">
-            <span>{purchase.item}</span>
-            <span className="text-sm text-gray-500">
-              {purchase.date} - {purchase.price}
-            </span>
-          </li>
-        ))}
-      </ul>
+    <div className="bg-background-b3 shadow-md rounded-xl p-6">
+      <h3 className="text-xl font-semibold mb-6">Purchase History</h3>
+      <div className="flex flex-col gap-8">
+        {purchases.length === 0 ? (
+          <EmptyState message="Your cart is empty." />
+        ) : (
+          purchases.map((item) => (
+            <PurchaseHistoryItemCard key={item.id} {...item} />
+          ))
+        )}
+      </div>
     </div>
   );
 };
