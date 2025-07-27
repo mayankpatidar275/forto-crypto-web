@@ -2,9 +2,10 @@
 
 import { PrivyProvider } from "@privy-io/react-auth";
 import React from "react";
-import { ReactQueryClientProvider } from "./ReactQueryClientProvider";
-import { ContextProvider } from "./ContextProvider";
 import { ThirdwebProvider } from "thirdweb/react";
+import { ContextProvider } from "./ContextProvider";
+import { ReactQueryClientProvider } from "./ReactQueryClientProvider";
+import { SolanaProvider } from "./SolanaProvider";
 
 const Providers = ({
   children,
@@ -30,7 +31,9 @@ const Providers = ({
             },
           }}
         >
-          <ThirdwebProvider>{children}</ThirdwebProvider>
+          <ThirdwebProvider>
+            <SolanaProvider>{children}</SolanaProvider>
+          </ThirdwebProvider>
         </PrivyProvider>
       </ContextProvider>
     </ReactQueryClientProvider>
