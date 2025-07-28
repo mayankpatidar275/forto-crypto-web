@@ -5,7 +5,7 @@ import React from "react";
 import { ThirdwebProvider } from "thirdweb/react";
 import { ContextProvider } from "./ContextProvider";
 import { ReactQueryClientProvider } from "./ReactQueryClientProvider";
-import { SolanaProvider } from "./SolanaProvider";
+import SolanaProvider from "./SolanaProvider";
 
 const Providers = ({
   children,
