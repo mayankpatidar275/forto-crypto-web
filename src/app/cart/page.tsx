@@ -109,24 +109,18 @@ const CartPage = () => {
 
 export default CartPage;
 
-export function findMatchingNft(nfts: NFTWithType[] = [], nftId: string) {
+function findMatchingNft(nfts: NFTWithType[] = [], nftId: string) {
   return nfts.find((nft) => nft.id === nftId);
 }
 
-export function getImageUrls(
-  items: CartItemType[] = [],
-  nfts: NFTWithType[] = []
-) {
+function getImageUrls(items: CartItemType[] = [], nfts: NFTWithType[] = []) {
   return items.flatMap((item) => {
     const nft = findMatchingNft(nfts, item.nftId);
     return nft?.imageUrl ? Array(item.quantity).fill(nft.imageUrl) : [];
   });
 }
 
-export function findTotalCost(
-  items: CartItemType[] = [],
-  nfts: NFTWithType[] = []
-) {
+function findTotalCost(items: CartItemType[] = [], nfts: NFTWithType[] = []) {
   return items.reduce((total, item) => {
     const nft = findMatchingNft(nfts, item.nftId);
     return total + (nft?.price || 0) * item.quantity;
