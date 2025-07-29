@@ -5,7 +5,7 @@ import { handleResponse } from "./response";
 export async function get(url: string, options: RequestInit = {}) {
   const response = await fetch(url, {
     method: "GET",
-    // credentials: "include", // Default credentials can be overridden by options
+    credentials: "include", // Default credentials can be overridden by options
     ...options,
   });
   return handleResponse(response, url);
@@ -18,7 +18,7 @@ export async function post(
 ) {
   const response = await fetch(url, {
     method: "POST",
-    // credentials: "include",
+    credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
     ...options,

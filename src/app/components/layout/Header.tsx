@@ -9,8 +9,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import CartBtn from "../ui/CartBtn";
-import ConnectBtn from "../ui/ConnectBtn";
+// import ConnectBtn from "../ui/ConnectBtn";
 import LoginUser from "../ui/LoginUser";
+import dynamic from "next/dynamic";
+const WalletMultiButton = dynamic(
+  () =>
+    import("@solana/wallet-adapter-react-ui").then(
+      (mod) => mod.WalletMultiButton
+    ),
+  { ssr: false }
+);
 
 const navLinks = [
   // { href: "/", label: "Home" },
@@ -92,9 +100,11 @@ export default function Header() {
             ))}
           </nav>
 
-          <div className="flex gap-3 sm:gap-6">
+          <div className="flex gap-1 sm:gap-4">
             {/* Right buttons */}
-            <ConnectBtn />
+            {/* <ConnectBtn /> */}
+            <WalletMultiButton className="btn-primary" />
+
             <LoginUser />
             {authenticated && <CartBtn />}
           </div>
