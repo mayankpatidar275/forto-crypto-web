@@ -17,10 +17,10 @@ import {
 import { clusterApiUrl } from "@solana/web3.js";
 import "@solana/wallet-adapter-react-ui/styles.css";
 // import { WalletMultiButton } from "../wallet-connection/WalletMultiButton";
-// import {
-//   PhantomWalletAdapter,
-//   SolflareWalletAdapter,
-// } from "@solana/wallet-adapter-wallets";
+import {
+  PhantomWalletAdapter,
+  SolflareWalletAdapter,
+} from "@solana/wallet-adapter-wallets";
 
 interface SolanaProviderProps {
   children: ReactNode;
@@ -47,8 +47,8 @@ export const SolanaProvider: FC<SolanaProviderProps> = ({ children }) => {
        * instantiate its legacy wallet adapter here. Common legacy adapters can be found
        * in the npm package `@solana/wallet-adapter-wallets`.
        */
-      // new PhantomWalletAdapter(),
-      // new SolflareWalletAdapter(),
+      new PhantomWalletAdapter(),
+      new SolflareWalletAdapter(),
       // new UnsafeBurnerWalletAdapter(),
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
