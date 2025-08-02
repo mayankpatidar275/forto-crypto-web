@@ -104,7 +104,7 @@ export default function Header() {
             {/* Right buttons */}
             {/* <ConnectBtn /> */}
             <WalletMultiButton className="btn-primary" />
-
+            {/* <button onClick={}>Button</button> */}
             <LoginUser />
             {authenticated && <CartBtn />}
           </div>
