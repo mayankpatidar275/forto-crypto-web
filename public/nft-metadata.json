@@ -1,0 +1,16 @@
+{
+  "name": "La Vacca Saturnita",
+  "symbol": "FORTO",
+  "description": "This is a test NFT on Solana Devnet.",
+  "image": "https://forto-assets.s3.ap-south-1.amazonaws.com/nfts/italian-brainrot/04_La+Vacca+Saturno+Saturnita.jpg",
+  "attributes": [{ "trait_type": "Type", "value": "Brainrot" }],
+  "properties": {
+    "files": [
+      {
+        "uri": "https://forto-assets.s3.ap-south-1.amazonaws.com/nfts/italian-brainrot/04_La+Vacca+Saturno+Saturnita.jpg",
+        "type": "image/jpg"
+      }
+    ],
+    "category": "image"
+  }
+}
