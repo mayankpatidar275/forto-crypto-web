@@ -35,7 +35,9 @@ export const SolanaProvider: FC<SolanaProviderProps> = ({ children }) => {
 
   const wallets = useMemo(
     () => {
+      if (typeof window === "undefined") return []; // Avoid running on the server
       const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+      console.log("is ios: ");
       return isIOS
         ? [
             /**
