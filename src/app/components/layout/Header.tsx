@@ -10,8 +10,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import CartBtn from "../ui/CartBtn";
 // import ConnectBtn from "../ui/ConnectBtn";
-import LoginUser from "../ui/LoginUser";
 import dynamic from "next/dynamic";
+import LoginUser from "../ui/LoginUser";
 const WalletMultiButton = dynamic(
   () =>
     import("@solana/wallet-adapter-react-ui").then(

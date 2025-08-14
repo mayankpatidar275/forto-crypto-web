@@ -1,54 +1,48 @@
 "use client";
 
+import { useBuyNft } from "@/custom-hooks/mutations";
 import { useCart, useNfts } from "@/custom-hooks/queries";
 import { useAppContext } from "@/custom-hooks/useAppContext";
-import { useUserConnectWallet } from "@/custom-hooks/useUserConnectWallet";
 import { useUserLogin } from "@/custom-hooks/useUserLogin";
 import { CartItemType } from "@/types/cart";
 import { NFTWithType } from "@/types/nft";
-import { buyNfts } from "@/utils/helper";
+import { payNftFeeWithUser } from "@/utils/payNftFeeFrontend";
 import { usePrivy } from "@privy-io/react-auth";
-import CartItemCard, { CartItemCardProps } from "../components/ui/CartItemCard";
-import Loader from "../components/ui/Loader";
 import toast from "react-hot-toast";
-import { useActiveAccount } from "thirdweb/react";
-import { getContract } from "thirdweb";
-import { base } from "thirdweb/chains";
-import { client } from "@/lib/client";
+import CartItemCard, { CartItemCardProps } from "../components/ui/CartItemCard";
 import { EmptyState } from "../components/ui/EmptyState";
 import { ErrorState } from "../components/ui/ErrorState";
+import Loader from "../components/ui/Loader";
 import { TotalCostCard } from "../components/ui/TotalCostCard";
-
-const CONTRACT_ADDRESS = "0x98e00301Ab710f58a1Ef02F8bb7Fa57476CD6785";
+import { Connection } from "@solana/web3.js";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 const CartPage = () => {
-  const { authenticated, ready } = usePrivy();
+  const { authenticated } = usePrivy();
   const { state } = useAppContext();
   const { data: myCart, isLoading, error } = useCart(state?.userPrivyId);
   const { data: nfts } = useNfts();
+  const buyNftMutation = useBuyNft();
   const { login } = useUserLogin();
-  const { ensureWalletConnection } = useUserConnectWallet();
-  const account = useActiveAccount();
 
-  const contract = getContract({
-    address: CONTRACT_ADDRESS,
-    chain: base,
-    client,
-  });
+  const connection = new Connection(
+    "https://api.devnet.solana.com",
+    "confirmed"
+  );
+
+  const wallet = useWallet();
 
   const handleBuyClick = async () => {
-    if (!ready) {
-      toast.error("Wallet is not ready. Please wait...");
-      return;
-    }
+    // TODO: check if wallet is ready
 
     if (!authenticated) {
       login();
       return;
     }
 
-    const connected = await ensureWalletConnection();
-    if (!connected) return;
+    if (!wallet.connected || !wallet.publicKey) {
+      throw new Error("Connect wallet first");
+    }
 
     try {
       const imageUrls = getImageUrls(myCart?.data?.items, nfts?.data);
@@ -58,14 +52,18 @@ const CartPage = () => {
         return;
       }
 
-      const price = nfts?.data?.[0]?.price;
+      const sig = await payNftFeeWithUser({
+        connection,
+        wallet: wallet, // AnchorWallet
+        eventName: "test-9",
+      });
 
-      if (!price) {
-        toast.error("NFT price is unavailable.");
-        return;
-      }
-
-      await buyNfts(price, imageUrls, account, contract.chain);
+      await buyNftMutation.mutateAsync({
+        userPublicAddress: String(wallet.publicKey),
+        nftName: "My NFT",
+        description: "NFT desc",
+        eventName: "test-9",
+      });
     } catch (err) {
       console.error("Error minting NFT:", err);
       toast.error("Failed to mint NFT.");

@@ -10,7 +10,13 @@
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {
+    "@coral-xyz/anchor": "^0.31.1",
     "@metaplex-foundation/js": "^0.20.1",
+    "@metaplex-foundation/mpl-token-metadata": "^3.4.0",
+    "@metaplex-foundation/umi": "^1.2.0",
+    "@metaplex-foundation/umi-bundle-defaults": "^1.2.0",
+    "@metaplex-foundation/umi-signer-wallet-adapters": "^1.2.0",
+    "@metaplex-foundation/umi-uploader-irys": "^1.2.0",
     "@next/third-parties": "^15.3.4",
     "@prisma/client": "^6.8.2",
     "@prisma/extension-accelerate": "^2.0.1",
@@ -20,7 +26,7 @@
     "@solana/wallet-adapter-react": "^0.15.39",
     "@solana/wallet-adapter-react-ui": "^0.9.39",
     "@solana/wallet-adapter-wallets": "^0.19.37",
-    "@solana/web3.js": "^1.98.2",
+    "@solana/web3.js": "^1.98.4",
     "@tanstack/react-query": "^5.80.3",
     "@types/mdx": "^2.0.13",
     "clsx": "^2.1.1",

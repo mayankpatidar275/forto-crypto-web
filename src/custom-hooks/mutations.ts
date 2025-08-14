@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { mintFreeNft, submitSurvey } from "../services/api/surveyApi";
 import { storeUser } from "@/services/api/usersApi";
 import { addToCart, removeFromCart } from "@/services/api/cartApi";
+import { buyNft } from "@/services/api/nftApi";
 
 // Generalized mutation function
 function useMutationWithSuccessMessage<TVariables>(
@@ -54,3 +55,7 @@ export const useRemoveFromCart = () =>
     "Removed from cart successfully",
     ["cart"]
   );
+
+// Cart mutations
+export const useBuyNft = () =>
+  useMutationWithSuccessMessage(buyNft, "NFT bought!", ["buy"]);

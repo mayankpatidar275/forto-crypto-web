@@ -1,0 +1,1488 @@
+{
+  "address": "9X4gRxALY6ELg86XvkR7GjJS9P2tpKdu9pa5zy78YZJ1",
+  "metadata": {
+    "name": "forto_unified",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "create_monthly_event",
+      "docs": ["Create a monthly event with fixed parameters"],
+      "discriminator": [71, 116, 27, 170, 36, 29, 78, 210],
+      "accounts": [
+        {
+          "name": "event",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [109, 111, 110, 116, 104, 108, 121]
+              },
+              {
+                "kind": "arg",
+                "path": "year"
+              },
+              {
+                "kind": "arg",
+                "path": "month"
+              }
+            ]
+          }
+        },
+        {
+          "name": "creator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "year",
+          "type": "u16"
+        },
+        {
+          "name": "month",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "create_special_event",
+      "docs": ["Create a special event with custom parameters"],
+      "discriminator": [242, 201, 186, 147, 116, 5, 103, 150],
+      "accounts": [
+        {
+          "name": "event",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [101, 118, 101, 110, 116]
+              },
+              {
+                "kind": "arg",
+                "path": "name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "creator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "start_ts",
+          "type": "i64"
+        },
+        {
+          "name": "end_ts",
+          "type": "i64"
+        },
+        {
+          "name": "num_draws",
+          "type": "u64"
+        },
+        {
+          "name": "prize_percentages",
+          "type": {
+            "vec": "u64"
+          }
+        },
+        {
+          "name": "completed_draws",
+          "type": "u64"
+        },
+        {
+          "name": "nft_price_tokens",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "get_all_prize_distributions",
+      "discriminator": [118, 103, 146, 136, 199, 101, 78, 6],
+      "accounts": [
+        {
+          "name": "sweepstakes"
+        }
+      ],
+      "args": [],
+      "returns": {
+        "vec": {
+          "defined": {
+            "name": "PrizeDistribution"
+          }
+        }
+      }
+    },
+    {
+      "name": "get_eligible_nfts",
+      "discriminator": [161, 175, 221, 14, 66, 188, 192, 43],
+      "accounts": [
+        {
+          "name": "event"
+        }
+      ],
+      "args": [],
+      "returns": {
+        "vec": {
+          "defined": {
+            "name": "TokenOwner"
+          }
+        }
+      }
+    },
+    {
+      "name": "get_prize_distribution",
+      "discriminator": [90, 239, 109, 201, 137, 91, 61, 140],
+      "accounts": [
+        {
+          "name": "sweepstakes"
+        }
+      ],
+      "args": [
+        {
+          "name": "draw_number",
+          "type": "u64"
+        }
+      ],
+      "returns": {
+        "option": {
+          "defined": {
+            "name": "PrizeDistribution"
+          }
+        }
+      }
+    },
+    {
+      "name": "get_prize_pool_status",
+      "discriminator": [79, 41, 228, 104, 49, 252, 100, 143],
+      "accounts": [
+        {
+          "name": "sweepstakes"
+        }
+      ],
+      "args": [],
+      "returns": {
+        "defined": {
+          "name": "PrizePoolStatus"
+        }
+      }
+    },
+    {
+      "name": "get_vault_balance",
+      "docs": ["Get the current balance of the event vault token account"],
+      "discriminator": [42, 94, 16, 2, 169, 162, 12, 134],
+      "accounts": [
+        {
+          "name": "event"
+        },
+        {
+          "name": "forto_mint"
+        },
+        {
+          "name": "event_vault_token_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "event_vault_authority"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
+                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
+                  245, 133, 126, 255, 0, 169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "forto_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          "name": "event_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [118, 97, 117, 108, 116]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [],
+      "returns": "u64"
+    },
+    {
+      "name": "get_winners",
+      "discriminator": [35, 189, 233, 152, 232, 214, 72, 172],
+      "accounts": [
+        {
+          "name": "sweepstakes"
+        }
+      ],
+      "args": [],
+      "returns": {
+        "vec": {
+          "defined": {
+            "name": "WinnerInfo"
+          }
+        }
+      }
+    },
+    {
+      "name": "get_winners_by_draw",
+      "discriminator": [222, 28, 23, 184, 247, 182, 160, 203],
+      "accounts": [
+        {
+          "name": "sweepstakes"
+        }
+      ],
+      "args": [
+        {
+          "name": "draw_number",
+          "type": "u64"
+        }
+      ],
+      "returns": {
+        "vec": {
+          "defined": {
+            "name": "WinnerInfo"
+          }
+        }
+      }
+    },
+    {
+      "name": "get_winners_by_tier",
+      "discriminator": [208, 101, 61, 136, 139, 156, 73, 78],
+      "accounts": [
+        {
+          "name": "sweepstakes"
+        }
+      ],
+      "args": [
+        {
+          "name": "tier",
+          "type": "u8"
+        }
+      ],
+      "returns": {
+        "vec": {
+          "defined": {
+            "name": "WinnerInfo"
+          }
+        }
+      }
+    },
+    {
+      "name": "initiate_draws_and_distribute",
+      "docs": ["Initiate draws for an event and distribute prizes immediately"],
+      "discriminator": [19, 129, 227, 36, 248, 58, 187, 165],
+      "accounts": [
+        {
+          "name": "sweepstakes",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [115, 119, 101, 101, 112, 115, 116, 97, 107, 101, 115]
+              },
+              {
+                "kind": "arg",
+                "path": "event_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "event"
+        },
+        {
+          "name": "forto_mint"
+        },
+        {
+          "name": "event_vault_token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "event_vault_authority"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
+                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
+                  245, 133, 126, 255, 0, 169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "forto_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          "name": "event_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [118, 97, 117, 108, 116]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              }
+            ]
+          }
+        },
+        {
+          "name": "creator",
+          "writable": true,
+          "signer": true,
+          "relations": ["event"]
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "event_name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "pay_nft_fee",
+      "docs": ["User pays NFT registration fee (called by user)"],
+      "discriminator": [30, 117, 213, 201, 239, 214, 190, 223],
+      "accounts": [
+        {
+          "name": "event",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [101, 118, 101, 110, 116]
+              },
+              {
+                "kind": "arg",
+                "path": "event_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "forto_mint",
+          "writable": true
+        },
+        {
+          "name": "user_token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "user"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
+                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
+                  245, 133, 126, 255, 0, 169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "forto_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          "name": "event_vault_token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "event_vault_authority"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
+                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
+                  245, 133, 126, 255, 0, 169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "forto_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          "name": "event_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [118, 97, 117, 108, 116]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              }
+            ]
+          }
+        },
+        {
+          "name": "operational_wallet"
+        },
+        {
+          "name": "operational_token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "operational_wallet"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
+                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
+                  245, 133, 126, 255, 0, 169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "forto_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "event_name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "pay_nft_fee_monthly",
+      "docs": [
+        "User pays NFT registration fee for monthly event (called by user)"
+      ],
+      "discriminator": [47, 125, 80, 33, 190, 98, 71, 246],
+      "accounts": [
+        {
+          "name": "event",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [109, 111, 110, 116, 104, 108, 121]
+              },
+              {
+                "kind": "arg",
+                "path": "year"
+              },
+              {
+                "kind": "arg",
+                "path": "month"
+              }
+            ]
+          }
+        },
+        {
+          "name": "forto_mint",
+          "writable": true
+        },
+        {
+          "name": "user_token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "user"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
+                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
+                  245, 133, 126, 255, 0, 169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "forto_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          "name": "event_vault_token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "event_vault_authority"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
+                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
+                  245, 133, 126, 255, 0, 169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "forto_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          "name": "event_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [118, 97, 117, 108, 116]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              }
+            ]
+          }
+        },
+        {
+          "name": "operational_wallet"
+        },
+        {
+          "name": "operational_token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "operational_wallet"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
+                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
+                  245, 133, 126, 255, 0, 169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "forto_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "year",
+          "type": "u16"
+        },
+        {
+          "name": "month",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "register_nft",
+      "docs": [
+        "Register NFT - automatically determines monthly event from mint timestamp (admin only)"
+      ],
+      "discriminator": [98, 152, 103, 223, 88, 129, 227, 114],
+      "accounts": [
+        {
+          "name": "event",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [109, 111, 110, 116, 104, 108, 121]
+              },
+              {
+                "kind": "arg",
+                "path": "year"
+              },
+              {
+                "kind": "arg",
+                "path": "month"
+              }
+            ]
+          }
+        },
+        {
+          "name": "creator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "token_id",
+          "type": "u64"
+        },
+        {
+          "name": "owner",
+          "type": "pubkey"
+        },
+        {
+          "name": "mint_ts",
+          "type": "i64"
+        },
+        {
+          "name": "year",
+          "type": "u16"
+        },
+        {
+          "name": "month",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "register_nft_to_specific_event",
+      "docs": [
+        "Register NFT to a specific existing event (admin only, no fee collection)"
+      ],
+      "discriminator": [171, 133, 64, 186, 133, 248, 215, 124],
+      "accounts": [
+        {
+          "name": "event",
+          "writable": true
+        },
+        {
+          "name": "creator",
+          "signer": true,
+          "relations": ["event"]
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "token_id",
+          "type": "u64"
+        },
+        {
+          "name": "owner",
+          "type": "pubkey"
+        },
+        {
+          "name": "mint_ts",
+          "type": "i64"
+        },
+        {
+          "name": "event_name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "update_completed_draws",
+      "docs": ["Update completed draws count (called after sweepstakes draw)"],
+      "discriminator": [19, 26, 18, 7, 77, 75, 127, 221],
+      "accounts": [
+        {
+          "name": "event",
+          "writable": true
+        },
+        {
+          "name": "creator",
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "withdraw_remaining_funds",
+      "docs": [
+        "Withdraw remaining funds from event vault (only after all draws completed)"
+      ],
+      "discriminator": [37, 75, 244, 129, 60, 98, 134, 150],
+      "accounts": [
+        {
+          "name": "event"
+        },
+        {
+          "name": "forto_mint"
+        },
+        {
+          "name": "event_vault_token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "event_vault_authority"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
+                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
+                  245, 133, 126, 255, 0, 169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "forto_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          "name": "event_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [118, 97, 117, 108, 116]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              }
+            ]
+          }
+        },
+        {
+          "name": "winner_token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "winner"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
+                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
+                  245, 133, 126, 255, 0, 169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "forto_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          "name": "winner"
+        },
+        {
+          "name": "creator",
+          "signer": true,
+          "relations": ["event"]
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Event",
+      "discriminator": [125, 192, 125, 158, 9, 115, 152, 233]
+    },
+    {
+      "name": "Sweepstakes",
+      "discriminator": [242, 26, 184, 226, 155, 120, 58, 109]
+    }
+  ],
+  "events": [
+    {
+      "name": "NftFeePaid",
+      "discriminator": [74, 68, 161, 2, 248, 67, 129, 173]
+    },
+    {
+      "name": "PrizeClaimed",
+      "discriminator": [213, 150, 192, 76, 199, 33, 212, 38]
+    },
+    {
+      "name": "PrizeDistributed",
+      "discriminator": [179, 47, 32, 60, 218, 107, 61, 198]
+    },
+    {
+      "name": "WinnersSelected",
+      "discriminator": [28, 151, 185, 12, 70, 199, 73, 58]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "InvalidTimeWindow",
+      "msg": "Invalid event time window"
+    },
+    {
+      "code": 6001,
+      "name": "OutOfWindow",
+      "msg": "NFT mint timestamp out of event window"
+    },
+    {
+      "code": 6002,
+      "name": "InvalidPrizePercentages",
+      "msg": "Prize percentages length must equal number of draws"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidPrizeSum",
+      "msg": "Prize percentages must sum to 100"
+    },
+    {
+      "code": 6004,
+      "name": "InvalidDrawCount",
+      "msg": "Draw count cannot exceed MAX_DRAWS"
+    },
+    {
+      "code": 6005,
+      "name": "InvalidCompletedDraws",
+      "msg": "Completed draws cannot exceed total draws"
+    },
+    {
+      "code": 6006,
+      "name": "EventDrawsCompleted",
+      "msg": "All event draws have already been completed"
+    },
+    {
+      "code": 6007,
+      "name": "TooManyNfts",
+      "msg": "Too many NFTs registered"
+    },
+    {
+      "code": 6008,
+      "name": "Unauthorized",
+      "msg": "Unauthorized"
+    },
+    {
+      "code": 6009,
+      "name": "InvalidMonth",
+      "msg": "Invalid month"
+    },
+    {
+      "code": 6010,
+      "name": "InvalidDate",
+      "msg": "Invalid date"
+    },
+    {
+      "code": 6011,
+      "name": "InvalidTimestamp",
+      "msg": "Invalid timestamp"
+    },
+    {
+      "code": 6012,
+      "name": "EventNameMismatch",
+      "msg": "Event name does not match"
+    },
+    {
+      "code": 6013,
+      "name": "InsufficientFunds",
+      "msg": "Insufficient funds in vault"
+    },
+    {
+      "code": 6014,
+      "name": "EventDrawsNotCompleted",
+      "msg": "Event draws not completed yet"
+    },
+    {
+      "code": 6015,
+      "name": "NoEligibleNfts",
+      "msg": "No eligible NFTs found"
+    },
+    {
+      "code": 6016,
+      "name": "InvalidDrawIndex",
+      "msg": "Invalid draw index"
+    },
+    {
+      "code": 6017,
+      "name": "InsufficientPrizePool",
+      "msg": "Insufficient prize pool remaining for this draw"
+    },
+    {
+      "code": 6018,
+      "name": "DrawNotFound",
+      "msg": "Draw not found"
+    },
+    {
+      "code": 6019,
+      "name": "WinnerAccountNotFound",
+      "msg": "Winner account not found in remaining accounts"
+    },
+    {
+      "code": 6020,
+      "name": "InsufficientVaultBalance",
+      "msg": "Insufficient balance in event vault"
+    },
+    {
+      "code": 6021,
+      "name": "InvalidTokenMint",
+      "msg": "Invalid token mint - must be FORTO token"
+    }
+  ],
+  "types": [
+    {
+      "name": "Event",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "start_ts",
+            "type": "i64"
+          },
+          {
+            "name": "end_ts",
+            "type": "i64"
+          },
+          {
+            "name": "num_draws",
+            "type": "u64"
+          },
+          {
+            "name": "prize_percentages",
+            "type": {
+              "vec": "u64"
+            }
+          },
+          {
+            "name": "completed_draws",
+            "type": "u64"
+          },
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "event_type",
+            "type": {
+              "defined": {
+                "name": "EventType"
+              }
+            }
+          },
+          {
+            "name": "nfts",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "TokenOwner"
+                }
+              }
+            }
+          },
+          {
+            "name": "nft_price_tokens",
+            "type": "u64"
+          },
+          {
+            "name": "total_prize_pool",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "EventType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Monthly"
+          },
+          {
+            "name": "Special"
+          }
+        ]
+      }
+    },
+    {
+      "name": "NftFeePaid",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "event_name",
+            "type": "string"
+          },
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PrizeClaimed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "event_id",
+            "type": "string"
+          },
+          {
+            "name": "winner",
+            "type": "pubkey"
+          },
+          {
+            "name": "token_id",
+            "type": "u64"
+          },
+          {
+            "name": "tier",
+            "type": "u8"
+          },
+          {
+            "name": "draw_number",
+            "type": "u64"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PrizeDistributed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "event_id",
+            "type": "string"
+          },
+          {
+            "name": "draw_number",
+            "type": "u64"
+          },
+          {
+            "name": "distribution",
+            "type": {
+              "defined": {
+                "name": "PrizeDistribution"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "PrizeDistribution",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "draw_number",
+            "type": "u64"
+          },
+          {
+            "name": "total_allocated",
+            "type": "u64"
+          },
+          {
+            "name": "tier_prizes",
+            "type": {
+              "vec": "u64"
+            }
+          },
+          {
+            "name": "tier_percentages",
+            "type": {
+              "vec": "u64"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "PrizePoolStatus",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "total_prize_pool",
+            "type": "u64"
+          },
+          {
+            "name": "total_allocated",
+            "type": "u64"
+          },
+          {
+            "name": "remaining_prize_pool",
+            "type": "u64"
+          },
+          {
+            "name": "allocation_percentage",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Sweepstakes",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "event_id",
+            "type": "string"
+          },
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "tier_counts",
+            "type": {
+              "vec": "u64"
+            }
+          },
+          {
+            "name": "eligible_nfts",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "TokenOwner"
+                }
+              }
+            }
+          },
+          {
+            "name": "winners",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "WinnerInfo"
+                }
+              }
+            }
+          },
+          {
+            "name": "prize_distributions",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "PrizeDistribution"
+                }
+              }
+            }
+          },
+          {
+            "name": "total_prize_pool",
+            "type": "u64"
+          },
+          {
+            "name": "total_allocated",
+            "type": "u64"
+          },
+          {
+            "name": "remaining_prize_pool",
+            "type": "u64"
+          },
+          {
+            "name": "total_distributed",
+            "type": "u64"
+          },
+          {
+            "name": "_reserved",
+            "type": {
+              "array": ["u64", 3]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "TokenOwner",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "token_id",
+            "type": "u64"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "WinnerInfo",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "token_id",
+            "type": "u64"
+          },
+          {
+            "name": "tier",
+            "type": "u8"
+          },
+          {
+            "name": "draw_number",
+            "type": "u64"
+          },
+          {
+            "name": "prize_claimed",
+            "type": "bool"
+          },
+          {
+            "name": "prize_amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "WinnersSelected",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "event_id",
+            "type": "string"
+          },
+          {
+            "name": "winners",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "WinnerInfo"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
