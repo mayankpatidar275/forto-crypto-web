@@ -19,6 +19,7 @@ export async function buyNft(body: {
   nftName: string;
   description: string;
   eventName: string;
+  imageUrls: string[];
 }) {
   return post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/mintNft`, body);
 }

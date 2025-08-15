@@ -63,6 +63,7 @@ const CartPage = () => {
         nftName: "My NFT",
         description: "NFT desc",
         eventName: "test-9",
+        imageUrls: imageUrls,
       });
     } catch (err) {
       console.error("Error minting NFT:", err);
