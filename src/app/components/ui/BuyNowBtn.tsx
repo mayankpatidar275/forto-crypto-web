@@ -1,14 +1,12 @@
-import { useUserConnectWallet } from "@/custom-hooks/useUserConnectWallet";
 import { useUserLogin } from "@/custom-hooks/useUserLogin";
-import { buyNfts } from "@/utils/helper";
 import { usePrivy } from "@privy-io/react-auth";
 import { useState } from "react";
-import Loader from "./Loader";
 import toast from "react-hot-toast";
-import { getContract } from "thirdweb";
-import { base } from "thirdweb/chains";
-import { client } from "@/lib/client";
-import { useActiveAccount } from "thirdweb/react";
+import Loader from "./Loader";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { payNftFeeWithUser } from "@/utils/payNftFeeFrontend";
+import { Connection } from "@solana/web3.js";
+import { useBuyNft } from "@/custom-hooks/mutations";
 
 const BuyNowBtn = ({
   buyItems,
@@ -18,27 +16,45 @@ const BuyNowBtn = ({
   const { ready, authenticated } = usePrivy();
   const [loading, setLoading] = useState(false);
   const { login } = useUserLogin();
-  const { ensureWalletConnection } = useUserConnectWallet();
-  const contract = getContract({
-    address: "0x98e00301Ab710f58a1Ef02F8bb7Fa57476CD6785",
-    chain: base,
-    client: client,
-  });
-
-  const account = useActiveAccount();
+  const wallet = useWallet();
+  const buyNftMutation = useBuyNft();
+  const connection = new Connection(
+    "https://api.devnet.solana.com",
+    "confirmed"
+  );
+  const imageUrls = buyItems.imageUrls;
 
   const handleBuyClick = async () => {
+    // TODO: check if wallet is ready
     if (!ready) return toast.error("Authenticator not ready");
     if (!authenticated) return login();
-
+    if (!wallet.connected || !wallet.publicKey) {
+      throw new Error("Connect wallet first");
+    }
     try {
       setLoading(true);
-      const connected = await ensureWalletConnection();
-      if (!connected) return;
 
-      await buyNfts(buyItems.rate, buyItems.imageUrls, account, contract.chain);
-    } catch (e) {
-      console.error(e);
+      if (imageUrls.length === 0) {
+        toast.error("No NFTs selected to mint.");
+        return;
+      }
+
+      const sig = await payNftFeeWithUser({
+        connection,
+        wallet: wallet, // AnchorWallet
+        eventName: "test-9",
+      });
+
+      await buyNftMutation.mutateAsync({
+        userPublicAddress: String(wallet.publicKey),
+        nftName: "My NFT",
+        description: "NFT desc",
+        eventName: "test-9",
+        imageUrls: imageUrls,
+      });
+    } catch (err) {
+      console.error("Error minting NFT:", err);
+      toast.error("Failed to mint NFT.");
     } finally {
       setTimeout(() => setLoading(false), 400);
     }
