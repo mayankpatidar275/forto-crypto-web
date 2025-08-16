@@ -16,6 +16,7 @@ import Loader from "../components/ui/Loader";
 import { TotalCostCard } from "../components/ui/TotalCostCard";
 import { Connection } from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
+import * as anchor from "@coral-xyz/anchor";
 
 const CartPage = () => {
   const { authenticated } = usePrivy();
@@ -52,9 +53,9 @@ const CartPage = () => {
         return;
       }
 
-      const sig = await payNftFeeWithUser({
+      await payNftFeeWithUser({
         connection,
-        wallet: wallet, // AnchorWallet
+        wallet: wallet as unknown as anchor.Wallet, // AnchorWallet
         eventName: "test-9",
       });
 

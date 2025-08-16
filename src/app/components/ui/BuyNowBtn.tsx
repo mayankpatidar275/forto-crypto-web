@@ -4,6 +4,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import Loader from "./Loader";
 import { useWallet } from "@solana/wallet-adapter-react";
+import * as anchor from "@coral-xyz/anchor";
 import { payNftFeeWithUser } from "@/utils/payNftFeeFrontend";
 import { Connection } from "@solana/web3.js";
 import { useBuyNft } from "@/custom-hooks/mutations";
@@ -39,9 +40,9 @@ const BuyNowBtn = ({
         return;
       }
 
-      const sig = await payNftFeeWithUser({
+      await payNftFeeWithUser({
         connection,
-        wallet: wallet, // AnchorWallet
+        wallet: wallet as unknown as anchor.Wallet, // AnchorWallet
         eventName: "test-9",
       });
 
