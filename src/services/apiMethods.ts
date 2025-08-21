@@ -49,6 +49,9 @@ export async function put(
   const response = await fetch(url, {
     method: "PUT",
     credentials: "include",
+    // When using credentials: "include" in your fetch request, browsers enforce stricter CORS policies
+    // You cannot use origin: "*" with credentials - you must specify exact origins
+    // The browser will be not receiving the proper Access-Control-Allow-Origin header
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
     ...options,
