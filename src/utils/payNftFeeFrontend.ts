@@ -11,7 +11,7 @@ import idl from "../lib/forto_unified.json"; // <-- make sure path is correct
 
 // Constants from your script
 const PROGRAM_ID = new PublicKey(
-  "9X4gRxALY6ELg86XvkR7GjJS9P2tpKdu9pa5zy78YZJ1"
+  "8hHzJohfwgAABsuQiuBLCUBR3kyhhwPBfwXfJzKUXgD6"
 );
 const FORTO_MINT = new PublicKey("Zr6HoFuVNLxLRRJhNRQhkY8LQzUHzVRLgd8HWfqjDk2");
 

@@ -56,14 +56,14 @@ const CartPage = () => {
       await payNftFeeWithUser({
         connection,
         wallet: wallet as unknown as anchor.Wallet, // AnchorWallet
-        eventName: "test-9",
+        eventName: "test-3",
       });
 
       await buyNftMutation.mutateAsync({
         userPublicAddress: String(wallet.publicKey),
         nftName: "My NFT",
         description: "NFT desc",
-        eventName: "test-9",
+        eventName: "test-3",
         imageUrls: imageUrls,
       });
     } catch (err) {

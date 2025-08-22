@@ -1,5 +1,5 @@
 {
-  "address": "9X4gRxALY6ELg86XvkR7GjJS9P2tpKdu9pa5zy78YZJ1",
+  "address": "8hHzJohfwgAABsuQiuBLCUBR3kyhhwPBfwXfJzKUXgD6",
   "metadata": {
     "name": "forto_unified",
     "version": "0.1.0",
@@ -7,6 +7,129 @@
     "description": "Created with Anchor"
   },
   "instructions": [
+    {
+      "name": "consume_solana_randomness_and_draw",
+      "docs": ["Consume Solana VRF randomness and execute draws"],
+      "discriminator": [88, 68, 21, 227, 3, 61, 11, 214],
+      "accounts": [
+        {
+          "name": "creator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "event",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [101, 118, 101, 110, 116]
+              },
+              {
+                "kind": "arg",
+                "path": "event_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vrf_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [86, 82, 70, 95, 83, 84, 65, 84, 69]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              }
+            ]
+          }
+        },
+        {
+          "name": "sweepstakes",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [115, 119, 101, 101, 112, 115, 116, 97, 107, 101, 115]
+              },
+              {
+                "kind": "arg",
+                "path": "event_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "forto_mint"
+        },
+        {
+          "name": "event_vault_token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "event_vault_authority"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
+                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
+                  245, 133, 126, 255, 0, 169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "forto_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          "name": "event_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [118, 97, 117, 108, 116]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "event_name",
+          "type": "string"
+        }
+      ]
+    },
     {
       "name": "create_monthly_event",
       "docs": ["Create a monthly event with fixed parameters"],
@@ -317,6 +440,59 @@
           }
         }
       }
+    },
+    {
+      "name": "init_solana_vrf",
+      "docs": ["Initialize Solana VRF state for an event"],
+      "discriminator": [229, 36, 39, 94, 49, 37, 47, 87],
+      "accounts": [
+        {
+          "name": "creator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "event",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [101, 118, 101, 110, 116]
+              },
+              {
+                "kind": "arg",
+                "path": "event_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vrf_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [86, 82, 70, 95, 83, 84, 65, 84, 69]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "event_name",
+          "type": "string"
+        }
+      ]
     },
     {
       "name": "initiate_draws_and_distribute",
@@ -865,6 +1041,59 @@
       ]
     },
     {
+      "name": "request_solana_randomness",
+      "docs": ["Request randomness using Solana's native VRF (SlotHashes)"],
+      "discriminator": [109, 104, 25, 25, 189, 142, 218, 224],
+      "accounts": [
+        {
+          "name": "creator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "event",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [101, 118, 101, 110, 116]
+              },
+              {
+                "kind": "arg",
+                "path": "event_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vrf_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [86, 82, 70, 95, 83, 84, 65, 84, 69]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "event_name",
+          "type": "string"
+        },
+        {
+          "name": "draw_number",
+          "type": "u64"
+        }
+      ]
+    },
+    {
       "name": "update_completed_draws",
       "docs": ["Update completed draws count (called after sweepstakes draw)"],
       "discriminator": [19, 26, 18, 7, 77, 75, 127, 221],
@@ -999,6 +1228,10 @@
       "discriminator": [125, 192, 125, 158, 9, 115, 152, 233]
     },
     {
+      "name": "SolanaVrfState",
+      "discriminator": [234, 30, 65, 138, 196, 62, 35, 200]
+    },
+    {
       "name": "Sweepstakes",
       "discriminator": [242, 26, 184, 226, 155, 120, 58, 109]
     }
@@ -1131,6 +1364,36 @@
       "code": 6021,
       "name": "InvalidTokenMint",
       "msg": "Invalid token mint - must be FORTO token"
+    },
+    {
+      "code": 6022,
+      "name": "InvalidVrfAuthorityError",
+      "msg": "VRF authority mismatch"
+    },
+    {
+      "code": 6023,
+      "name": "VrfRandomnessNotAvailable",
+      "msg": "VRF randomness not yet available"
+    },
+    {
+      "code": 6024,
+      "name": "VrfRandomnessAlreadyProcessed",
+      "msg": "VRF randomness already processed"
+    },
+    {
+      "code": 6025,
+      "name": "VrfRandomnessNotRequested",
+      "msg": "VRF randomness not requested"
+    },
+    {
+      "code": 6026,
+      "name": "InvalidSlotHashesSysvar",
+      "msg": "Invalid SlotHashes sysvar"
+    },
+    {
+      "code": 6027,
+      "name": "SlotHashNotFound",
+      "msg": "Slot hash not found"
     }
   ],
   "types": [
@@ -1335,6 +1598,52 @@
           },
           {
             "name": "allocation_percentage",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SolanaVrfState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "event_name",
+            "type": "string"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "request_slot",
+            "type": "u64"
+          },
+          {
+            "name": "randomness_seed",
+            "type": {
+              "array": ["u8", 32]
+            }
+          },
+          {
+            "name": "randomness_requested",
+            "type": "bool"
+          },
+          {
+            "name": "randomness_fulfilled",
+            "type": "bool"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "draw_number",
             "type": "u64"
           }
         ]
