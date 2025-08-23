@@ -43,14 +43,14 @@ const BuyNowBtn = ({
       await payNftFeeWithUser({
         connection,
         wallet: wallet as unknown as anchor.Wallet, // AnchorWallet
-        eventName: "test-3",
+        eventName: "test-5",
       });
 
       await buyNftMutation.mutateAsync({
         userPublicAddress: String(wallet.publicKey),
         nftName: "My NFT",
         description: "NFT desc",
-        eventName: "test-3",
+        eventName: "test-5",
         imageUrls: imageUrls,
       });
     } catch (err) {
