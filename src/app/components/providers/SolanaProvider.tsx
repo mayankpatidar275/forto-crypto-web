@@ -56,7 +56,7 @@ export const SolanaProvider: FC<SolanaProviderProps> = ({ children }) => {
             new SolflareWalletAdapter(),
             // new UnsafeBurnerWalletAdapter(),
           ]
-        : [];
+        : [new PhantomWalletAdapter(), new SolflareWalletAdapter()];
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [network]
