@@ -17,9 +17,10 @@ import { TotalCostCard } from "../components/ui/TotalCostCard";
 import { Connection } from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
 import * as anchor from "@coral-xyz/anchor";
+import { useEffect } from "react";
 
 const CartPage = () => {
-  const { authenticated } = usePrivy();
+  const { authenticated, ready } = usePrivy();
   const { state } = useAppContext();
   const { data: myCart, isLoading, error } = useCart(state?.userPrivyId);
   const { data: nfts } = useNfts();
@@ -35,14 +36,13 @@ const CartPage = () => {
 
   const handleBuyClick = async () => {
     // TODO: check if wallet is ready
-
+    if (!ready) return toast.error("Authenticator not ready! Please try again");
     if (!authenticated) {
       login();
       return;
     }
-
     if (!wallet.connected || !wallet.publicKey) {
-      throw new Error("Connect wallet first");
+      return toast.error("Please connect your wallet first");
     }
 
     try {
@@ -71,6 +71,11 @@ const CartPage = () => {
       toast.error("Failed to mint NFT.");
     }
   };
+
+  useEffect(() => {
+    if (buyNftMutation.isPending)
+      toast.loading("Minting might take few minutes. Please wait!");
+  }, [buyNftMutation.isPending]);
 
   // Handle states: not logged in / loading / error
   if (!state?.userPrivyId) {
@@ -101,7 +106,6 @@ const CartPage = () => {
           ))
         )}
       </div>
-
       <TotalCostCard total={totalCost} onBuy={handleBuyClick} />
     </section>
   );

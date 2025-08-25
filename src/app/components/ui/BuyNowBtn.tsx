@@ -1,6 +1,6 @@
 import { useUserLogin } from "@/custom-hooks/useUserLogin";
 import { usePrivy } from "@privy-io/react-auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Loader from "./Loader";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -30,7 +30,7 @@ const BuyNowBtn = ({
     if (!ready) return toast.error("Authenticator not ready");
     if (!authenticated) return login();
     if (!wallet.connected || !wallet.publicKey) {
-      throw new Error("Connect wallet first");
+      return toast.error("Please connect your wallet first");
     }
     try {
       setLoading(true);
@@ -60,6 +60,11 @@ const BuyNowBtn = ({
       setTimeout(() => setLoading(false), 400);
     }
   };
+
+  useEffect(() => {
+    if (buyNftMutation.isPending)
+      toast.loading("Minting might take few minutes. Please wait!");
+  }, [buyNftMutation.isPending]);
 
   return (
     <div className="h-12 w-62">
