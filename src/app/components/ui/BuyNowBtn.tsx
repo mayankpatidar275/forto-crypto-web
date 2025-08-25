@@ -1,6 +1,5 @@
 import { useUserLogin } from "@/custom-hooks/useUserLogin";
 import { usePrivy } from "@privy-io/react-auth";
-import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Loader from "./Loader";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -8,6 +7,7 @@ import * as anchor from "@coral-xyz/anchor";
 import { payNftFeeWithUser } from "@/utils/payNftFeeFrontend";
 import { Connection } from "@solana/web3.js";
 import { useBuyNft } from "@/custom-hooks/mutations";
+import { useState } from "react";
 
 const BuyNowBtn = ({
   buyItems,
@@ -15,10 +15,11 @@ const BuyNowBtn = ({
   buyItems: { count: string; imageUrls: string[]; rate: number };
 }) => {
   const { ready, authenticated } = usePrivy();
-  const [loading, setLoading] = useState(false);
   const { login } = useUserLogin();
   const wallet = useWallet();
   const buyNftMutation = useBuyNft();
+  const [loading, setLoading] = useState(false);
+
   const connection = new Connection(
     "https://api.devnet.solana.com",
     "confirmed"
@@ -32,39 +33,43 @@ const BuyNowBtn = ({
     if (!wallet.connected || !wallet.publicKey) {
       return toast.error("Please connect your wallet first");
     }
+    if (imageUrls.length === 0) {
+      return toast.error("No NFTs selected to mint.");
+    }
+
+    setLoading(true);
+
     try {
-      setLoading(true);
+      await toast.promise(
+        (async () => {
+          await payNftFeeWithUser({
+            connection,
+            wallet: wallet as unknown as anchor.Wallet,
+            eventName: "test-5",
+          });
 
-      if (imageUrls.length === 0) {
-        toast.error("No NFTs selected to mint.");
-        return;
-      }
-
-      await payNftFeeWithUser({
-        connection,
-        wallet: wallet as unknown as anchor.Wallet, // AnchorWallet
-        eventName: "test-5",
-      });
-
-      await buyNftMutation.mutateAsync({
-        userPublicAddress: String(wallet.publicKey),
-        nftName: "My NFT",
-        description: "NFT desc",
-        eventName: "test-5",
-        imageUrls: imageUrls,
-      });
+          await buyNftMutation.mutateAsync({
+            userPublicAddress: String(wallet.publicKey),
+            nftName: "My NFT",
+            description: "NFT desc",
+            eventName: "test-5",
+            imageUrls,
+          });
+        })(),
+        {
+          loading: "Minting might take a few minutes. Please wait...",
+          success: "NFT minted successfully! 🎉",
+          error: "Failed to mint NFT.",
+        },
+        { id: "buy-now-toast" }
+      );
     } catch (err) {
       console.error("Error minting NFT:", err);
-      toast.error("Failed to mint NFT.");
+      toast.error("Something went wrong while minting.");
     } finally {
-      setTimeout(() => setLoading(false), 400);
+      setLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (buyNftMutation.isPending)
-      toast.loading("Minting might take few minutes. Please wait!");
-  }, [buyNftMutation.isPending]);
 
   return (
     <div className="h-12 w-62">

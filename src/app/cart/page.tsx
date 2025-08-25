@@ -17,7 +17,6 @@ import { TotalCostCard } from "../components/ui/TotalCostCard";
 import { Connection } from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
 import * as anchor from "@coral-xyz/anchor";
-import { useEffect } from "react";
 
 const CartPage = () => {
   const { authenticated, ready } = usePrivy();
@@ -42,40 +41,45 @@ const CartPage = () => {
       return;
     }
     if (!wallet.connected || !wallet.publicKey) {
-      return toast.error("Please connect your wallet first");
+      return toast.error("Please connect your wallet first.");
+    }
+
+    const imageUrls = getImageUrls(myCart?.data?.items, nfts?.data);
+    if (!imageUrls?.length) {
+      return toast.error("No NFTs found in your cart.");
     }
 
     try {
-      const imageUrls = getImageUrls(myCart?.data?.items, nfts?.data);
+      // Use toast.promise to manage loading, success, and error
+      await toast.promise(
+        (async () => {
+          await payNftFeeWithUser({
+            connection,
+            wallet: wallet as unknown as anchor.Wallet,
+            eventName: "test-5",
+          });
 
-      if (imageUrls.length === 0) {
-        toast.error("No NFTs found in your cart.");
-        return;
-      }
-
-      await payNftFeeWithUser({
-        connection,
-        wallet: wallet as unknown as anchor.Wallet, // AnchorWallet
-        eventName: "test-5",
-      });
-
-      await buyNftMutation.mutateAsync({
-        userPublicAddress: String(wallet.publicKey),
-        nftName: "My NFT",
-        description: "NFT desc",
-        eventName: "test-5",
-        imageUrls: imageUrls,
-      });
+          await buyNftMutation.mutateAsync({
+            userPublicAddress: String(wallet.publicKey),
+            nftName: "My NFT",
+            description: "NFT desc",
+            eventName: "test-5",
+            imageUrls,
+          });
+        })(),
+        {
+          loading: "Minting might take a few minutes. Please wait...",
+          success: "NFT minted successfully! 🎉",
+          error: "Failed to mint NFT.",
+        },
+        { id: "mint-nft-toast" } // ensures no duplicate toasts
+      );
     } catch (err) {
       console.error("Error minting NFT:", err);
-      toast.error("Failed to mint NFT.");
+      // toast.promise already shows error, but in case:
+      toast.error("Something went wrong while minting.");
     }
   };
-
-  useEffect(() => {
-    if (buyNftMutation.isPending)
-      toast.loading("Minting might take few minutes. Please wait!");
-  }, [buyNftMutation.isPending]);
 
   // Handle states: not logged in / loading / error
   if (!state?.userPrivyId) {
