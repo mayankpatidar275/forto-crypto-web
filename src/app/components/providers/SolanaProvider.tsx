@@ -1,22 +1,14 @@
 "use client";
-// TODO: Some packages (like @keystonehq/sdk, qrcode.react, react-qr-reader) expect React 16 or 17. Might be fine for now if we are not using those wallets now.
 import React, { FC, ReactNode, useMemo } from "react";
 import {
   ConnectionProvider,
   WalletProvider,
 } from "@solana/wallet-adapter-react";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
-import // PhantomWalletAdapter,
-// SolflareWalletAdapter,
-// UnsafeBurnerWalletAdapter,
-"@solana/wallet-adapter-wallets";
-import {
-  // WalletDisconnectButton,
-  WalletModalProvider,
-} from "@solana/wallet-adapter-react-ui";
+import "@solana/wallet-adapter-wallets";
+import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import { clusterApiUrl } from "@solana/web3.js";
 import "@solana/wallet-adapter-react-ui/styles.css";
-// import { WalletMultiButton } from "../wallet-connection/WalletMultiButton";
 import {
   PhantomWalletAdapter,
   SolflareWalletAdapter,
@@ -65,77 +57,10 @@ export const SolanaProvider: FC<SolanaProviderProps> = ({ children }) => {
   return (
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
-        <WalletModalProvider>
-          {/* <WalletMultiButton /> */}
-          {/* <WalletMultiButton /> */}
-
-          {/* <WalletDisconnectButton /> */}
-          {children}
-        </WalletModalProvider>
+        <WalletModalProvider>{children}</WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
   );
 };
-// "use client";
 
-// import React, { FC, ReactNode, useMemo } from "react";
-// import dynamic from "next/dynamic";
-// import {
-//   ConnectionProvider,
-//   WalletProvider,
-// } from "@solana/wallet-adapter-react";
-// import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
-// import { UnsafeBurnerWalletAdapter } from "@solana/wallet-adapter-wallets";
-// import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
-// import { clusterApiUrl } from "@solana/web3.js";
-// import "@solana/wallet-adapter-react-ui/styles.css";
-
-// // Dynamically import buttons to avoid hydration issues
-// const WalletMultiButton = dynamic(
-//   () =>
-//     import("@solana/wallet-adapter-react-ui").then(
-//       (mod) => mod.WalletMultiButton
-//     ),
-//   { ssr: false }
-// );
-
-// const WalletDisconnectButton = dynamic(
-//   () =>
-//     import("@solana/wallet-adapter-react-ui").then(
-//       (mod) => mod.WalletDisconnectButton
-//     ),
-//   { ssr: false }
-// );
-
-// interface SolanaProviderProps {
-//   children: ReactNode;
-// }
-
-// const SolanaProviderInner: FC<SolanaProviderProps> = ({ children }) => {
-//   const network = WalletAdapterNetwork.Devnet;
-
-//   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
-
-//   const wallets = useMemo(() => [new UnsafeBurnerWalletAdapter()], [network]);
-
-//   return (
-//     <ConnectionProvider endpoint={endpoint}>
-//       <WalletProvider wallets={wallets} autoConnect>
-//         <WalletModalProvider>
-//           <div className="flex gap-4 mb-4">
-//             <WalletMultiButton />
-//             <WalletDisconnectButton />
-//           </div>
-//           {children}
-//         </WalletModalProvider>
-//       </WalletProvider>
-//     </ConnectionProvider>
-//   );
-// };
-
-// // Wrap everything in dynamic import with SSR disabled
-// const SolanaProvider = dynamic(() => Promise.resolve(SolanaProviderInner), {
-//   ssr: false,
-// });
-
-// export default SolanaProvider;
+// TODO: Some packages (like @keystonehq/sdk, qrcode.react, react-qr-reader) expect React 16 or 17. Might be fine for now if we are not using those wallets now.

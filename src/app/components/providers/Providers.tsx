@@ -2,7 +2,6 @@
 
 import { PrivyProvider } from "@privy-io/react-auth";
 import React from "react";
-import { ThirdwebProvider } from "thirdweb/react";
 import { ContextProvider } from "./ContextProvider";
 import { ReactQueryClientProvider } from "./ReactQueryClientProvider";
 import { SolanaProvider } from "./SolanaProvider";
@@ -31,9 +30,7 @@ const Providers = ({
             },
           }}
         >
-          <ThirdwebProvider>
-            <SolanaProvider>{children}</SolanaProvider>
-          </ThirdwebProvider>
+          <SolanaProvider>{children}</SolanaProvider>
         </PrivyProvider>
       </ContextProvider>
     </ReactQueryClientProvider>
