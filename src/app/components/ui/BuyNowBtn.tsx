@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import Loader from "./Loader";
 import { useWallet } from "@solana/wallet-adapter-react";
 import * as anchor from "@coral-xyz/anchor";
-import { payNftFeeWithUser } from "@/utils/payNftFeeFrontend";
+import { payNftFeeTx } from "@/utils/payNftFeeFrontend"; // <-- new helper
 import { Connection } from "@solana/web3.js";
 import { useBuyNft } from "@/custom-hooks/mutations";
 import { useState } from "react";
@@ -40,13 +40,26 @@ const BuyNowBtn = ({
     setLoading(true);
 
     try {
+      // ✅ STEP 1: Build transaction and request wallet signature immediately
+      const tx = await payNftFeeTx({
+        connection,
+        wallet: wallet as unknown as anchor.Wallet,
+        eventName: "test-5",
+      });
+
+      // wallet.signTransaction MUST be called synchronously from click
+      if (!wallet.signTransaction) {
+        toast.error("Your wallet does not support signing transactions.");
+        return;
+      }
+
+      const signedTx = await wallet.signTransaction(tx);
+
+      // ✅ STEP 2: Continue async flow (send tx + backend mutation)
       await toast.promise(
         (async () => {
-          await payNftFeeWithUser({
-            connection,
-            wallet: wallet as unknown as anchor.Wallet,
-            eventName: "test-5",
-          });
+          const sig = await connection.sendRawTransaction(signedTx.serialize());
+          await connection.confirmTransaction(sig, "confirmed");
 
           await buyNftMutation.mutateAsync({
             userPublicAddress: String(wallet.publicKey),

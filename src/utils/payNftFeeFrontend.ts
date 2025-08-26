@@ -1,4 +1,3 @@
-// payNftFeeFrontend.ts
 import * as anchor from "@coral-xyz/anchor";
 import { AnchorProvider, Program } from "@coral-xyz/anchor";
 import {
@@ -6,10 +5,9 @@ import {
   getAssociatedTokenAddress,
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
-import { PublicKey, SystemProgram } from "@solana/web3.js";
-import idl from "../lib/forto_unified.json"; // <-- make sure path is correct
+import { PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
+import idl from "../lib/forto_unified.json";
 
-// Constants from your script
 const PROGRAM_ID = new PublicKey(
   "8hHzJohfwgAABsuQiuBLCUBR3kyhhwPBfwXfJzKUXgD6"
 );
@@ -19,7 +17,6 @@ const OPERATIONAL_WALLET = new PublicKey(
   "85KjyTxfJTrDG9Zn48HaHDFPqQwdML4ShvZQTJ9a97L5"
 );
 
-// Derive PDAs similar to your script
 function getEventPda(eventName: string) {
   return PublicKey.findProgramAddressSync(
     [Buffer.from("event"), Buffer.from(eventName)],
@@ -34,20 +31,18 @@ function getEventVaultAuthorityPda(eventPda: PublicKey) {
 }
 
 /**
- * Front-end call (user wallet required):
- * - Derives accounts
- * - Calls program.methods.payNftFee(eventName)
- * - Returns tx signature (throw on error)
+ * Build the transaction for payNftFee
+ * Caller must sign & send
  */
-export async function payNftFeeWithUser({
+export async function payNftFeeTx({
   connection,
   wallet, // Anchor-compatible wallet (e.g. from @solana/wallet-adapter)
   eventName,
 }: {
   connection: anchor.web3.Connection;
-  wallet: anchor.Wallet; // or AnchorWallet from wallet-adapter
+  wallet: anchor.Wallet;
   eventName: string;
-}): Promise<string> {
+}): Promise<Transaction> {
   const provider = new AnchorProvider(connection, wallet, {
     commitment: "confirmed",
     preflightCommitment: "confirmed",
@@ -79,7 +74,8 @@ export async function payNftFeeWithUser({
 
   // (Optional) You might want to check user balance here and show UI if insufficient.
 
-  const sig = await program.methods
+  // Build instruction
+  const ix = await program.methods
     .payNftFee(eventName)
     .accounts({
       event: eventPda,
@@ -88,14 +84,18 @@ export async function payNftFeeWithUser({
       eventVaultTokenAccount,
       eventVaultAuthority: eventVaultAuthorityPda,
       operationalWallet: OPERATIONAL_WALLET,
-      operationalTokenAccount: operationalTokenAccount,
+      operationalTokenAccount,
       user: wallet.publicKey,
       tokenProgram: TOKEN_PROGRAM_ID,
       associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
       systemProgram: SystemProgram.programId,
       rent: anchor.web3.SYSVAR_RENT_PUBKEY,
     })
-    .rpc();
+    .instruction();
 
-  return sig;
+  const tx = new Transaction().add(ix);
+  tx.feePayer = wallet.publicKey;
+  tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
+
+  return tx;
 }
