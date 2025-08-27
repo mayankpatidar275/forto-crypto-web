@@ -6,7 +6,7 @@ import { useAppContext } from "@/custom-hooks/useAppContext";
 import { useUserLogin } from "@/custom-hooks/useUserLogin";
 import { CartItemType } from "@/types/cart";
 import { NFTWithType } from "@/types/nft";
-import { payNftFeeWithUser } from "@/utils/payNftFeeFrontend";
+// import { payNftFeeWithUser } from "@/utils/payNftFeeFrontend";
 import { usePrivy } from "@privy-io/react-auth";
 import toast from "react-hot-toast";
 import CartItemCard, { CartItemCardProps } from "../components/ui/CartItemCard";
@@ -14,9 +14,9 @@ import { EmptyState } from "../components/ui/EmptyState";
 import { ErrorState } from "../components/ui/ErrorState";
 import Loader from "../components/ui/Loader";
 import { TotalCostCard } from "../components/ui/TotalCostCard";
-import { Connection } from "@solana/web3.js";
+// import { Connection } from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
-import * as anchor from "@coral-xyz/anchor";
+// import * as anchor from "@coral-xyz/anchor";
 import { useEffect } from "react";
 
 const CartPage = () => {
@@ -27,10 +27,10 @@ const CartPage = () => {
   const buyNftMutation = useBuyNft();
   const { login } = useUserLogin();
 
-  const connection = new Connection(
-    "https://api.devnet.solana.com",
-    "confirmed"
-  );
+  // const connection = new Connection(
+  //   "https://api.devnet.solana.com",
+  //   "confirmed"
+  // );
 
   const wallet = useWallet();
 
@@ -53,11 +53,11 @@ const CartPage = () => {
         return;
       }
 
-      await payNftFeeWithUser({
-        connection,
-        wallet: wallet as unknown as anchor.Wallet, // AnchorWallet
-        eventName: "test-5",
-      });
+      // await payNftFeeWithUser({
+      //   connection,
+      //   wallet: wallet as unknown as anchor.Wallet, // AnchorWallet
+      //   eventName: "test-5",
+      // });
 
       await buyNftMutation.mutateAsync({
         userPublicAddress: String(wallet.publicKey),
