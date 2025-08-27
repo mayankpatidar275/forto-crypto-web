@@ -168,7 +168,7 @@ const BuyNowBtn = ({
       );
     } catch (err) {
       console.error("Error minting NFT:", err);
-      toast.error("Something went wrong while minting.");
+      toast.error("Please use Wallet Browser!");
     } finally {
       setLoading(false);
     }
