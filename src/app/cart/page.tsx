@@ -6,7 +6,7 @@ import { useAppContext } from "@/custom-hooks/useAppContext";
 import { useUserLogin } from "@/custom-hooks/useUserLogin";
 import { CartItemType } from "@/types/cart";
 import { NFTWithType } from "@/types/nft";
-// import { payNftFeeWithUser } from "@/utils/payNftFeeFrontend";
+import { payNftFeeTx } from "@/utils/payNftFeeFrontend";
 import { usePrivy } from "@privy-io/react-auth";
 import toast from "react-hot-toast";
 import CartItemCard, { CartItemCardProps } from "../components/ui/CartItemCard";
@@ -14,10 +14,10 @@ import { EmptyState } from "../components/ui/EmptyState";
 import { ErrorState } from "../components/ui/ErrorState";
 import Loader from "../components/ui/Loader";
 import { TotalCostCard } from "../components/ui/TotalCostCard";
-// import { Connection } from "@solana/web3.js";
+import { Connection } from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
-// import * as anchor from "@coral-xyz/anchor";
-import { useEffect } from "react";
+import * as anchor from "@coral-xyz/anchor";
+import { useState } from "react";
 
 const CartPage = () => {
   const { authenticated, ready } = usePrivy();
@@ -26,11 +26,12 @@ const CartPage = () => {
   const { data: nfts } = useNfts();
   const buyNftMutation = useBuyNft();
   const { login } = useUserLogin();
+  const [loading, setLoading] = useState(false);
 
-  // const connection = new Connection(
-  //   "https://api.devnet.solana.com",
-  //   "confirmed"
-  // );
+  const connection = new Connection(
+    "https://api.devnet.solana.com",
+    "confirmed"
+  );
 
   const wallet = useWallet();
 
@@ -45,37 +46,58 @@ const CartPage = () => {
       return toast.error("Please connect your wallet first");
     }
 
-    try {
-      // Get cart items with quantities
-      const items = getCartItemsWithQuantities(myCart?.data?.items);
+    // Get cart items with quantities
+    const items = getCartItemsWithQuantities(myCart?.data?.items);
 
-      if (items.length === 0) {
-        toast.error("No NFTs found in your cart.");
+    if (items.length === 0) {
+      toast.error("No NFTs found in your cart.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // ✅ STEP 1: Build transaction and request wallet signature immediately
+      const tx = await payNftFeeTx({
+        connection,
+        wallet: wallet as unknown as anchor.Wallet,
+        eventName: "test-5",
+      });
+
+      // wallet.signTransaction MUST be called synchronously from click
+      if (!wallet.signTransaction) {
+        toast.error("Your wallet does not support signing transactions.");
         return;
       }
 
-      // await payNftFeeWithUser({
-      //   connection,
-      //   wallet: wallet as unknown as anchor.Wallet, // AnchorWallet
-      //   eventName: "test-5",
-      // });
+      const signedTx = await wallet.signTransaction(tx);
 
-      await buyNftMutation.mutateAsync({
-        userPublicAddress: String(wallet.publicKey),
-        items: items,
-        privyId: state?.userPrivyId,
-      });
+      // ✅ STEP 2: Continue async flow (send tx + backend mutation)
+      await toast.promise(
+        (async () => {
+          const sig = await connection.sendRawTransaction(signedTx.serialize());
+          await connection.confirmTransaction(sig, "confirmed");
+
+          await buyNftMutation.mutateAsync({
+            userPublicAddress: String(wallet.publicKey),
+            items: items,
+            privyId: state?.userPrivyId,
+          });
+        })(),
+        {
+          loading: "Minting might take a few minutes. Please wait...",
+          success: "NFTs minted successfully! 🎉",
+          error: "Failed to mint NFTs.",
+        },
+        { id: "cart-buy-toast" }
+      );
     } catch (err) {
       console.error("Error minting NFT:", err);
-      toast.error("Failed to mint NFT.");
+      toast.error("Please use Wallet Browser!");
+    } finally {
+      setLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (buyNftMutation.isPending) {
-      toast.loading("Minting might take few minutes. Please wait!");
-    }
-  }, [buyNftMutation.isPending]);
 
   // Handle states: not logged in / loading / error
   if (!state?.userPrivyId) {
@@ -106,7 +128,11 @@ const CartPage = () => {
           ))
         )}
       </div>
-      <TotalCostCard total={totalCost} onBuy={handleBuyClick} />
+      <TotalCostCard
+        total={totalCost}
+        onBuy={handleBuyClick}
+        loading={loading}
+      />
     </section>
   );
 };
