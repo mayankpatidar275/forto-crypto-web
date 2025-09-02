@@ -94,18 +94,20 @@ import toast from "react-hot-toast";
 import Loader from "./Loader";
 import { useWallet } from "@solana/wallet-adapter-react";
 import * as anchor from "@coral-xyz/anchor";
-import { payNftFeeTx } from "@/utils/payNftFeeFrontend"; // <-- new helper
+import { payNftFeeTx } from "@/utils/payNftFeeFrontend";
 import { Connection } from "@solana/web3.js";
 import { useBuyNft } from "@/custom-hooks/mutations";
 import { useState } from "react";
+import { useAppContext } from "@/custom-hooks/useAppContext";
 
 const BuyNowBtn = ({
   buyItems,
 }: {
-  buyItems: { count: string; imageUrls: string[]; rate: number };
+  buyItems: { nftId: string; quantity: number };
 }) => {
   const { ready, authenticated } = usePrivy();
   const { login } = useUserLogin();
+  const { state } = useAppContext();
   const wallet = useWallet();
   const buyNftMutation = useBuyNft();
   const [loading, setLoading] = useState(false);
@@ -114,7 +116,6 @@ const BuyNowBtn = ({
     "https://api.devnet.solana.com",
     "confirmed"
   );
-  const imageUrls = buyItems.imageUrls;
 
   const handleBuyClick = async () => {
     // TODO: check if wallet is ready
@@ -123,8 +124,8 @@ const BuyNowBtn = ({
     if (!wallet.connected || !wallet.publicKey) {
       return toast.error("Please connect your wallet first");
     }
-    if (imageUrls.length === 0) {
-      return toast.error("No NFTs selected to mint.");
+    if (!buyItems.nftId || buyItems.quantity <= 0) {
+      return toast.error("No valid NFT selected to mint.");
     }
 
     setLoading(true);
@@ -153,10 +154,13 @@ const BuyNowBtn = ({
 
           await buyNftMutation.mutateAsync({
             userPublicAddress: String(wallet.publicKey),
-            nftName: "My NFT",
-            description: "NFT desc",
-            eventName: "test-5",
-            imageUrls,
+            items: [
+              {
+                nftId: buyItems.nftId,
+                quantity: buyItems.quantity,
+              },
+            ],
+            privyId: state?.userPrivyId,
           });
         })(),
         {

@@ -67,11 +67,8 @@ const NftContentSection = () => {
         {state && state.selectedNft?.imageUrl && (
           <BuyNowBtn
             buyItems={{
-              rate: state.selectedNft.price,
-              count: ticketCount,
-              imageUrls: Array(Number(ticketCount)).fill(
-                state.selectedNft.imageUrl
-              ),
+              nftId: state.selectedNft.id,
+              quantity: Number(ticketCount),
             }}
           />
         )}

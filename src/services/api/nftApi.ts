@@ -16,10 +16,8 @@ export async function fetchNftsByCategory(category?: string) {
 
 export async function buyNft(body: {
   userPublicAddress: string;
-  nftName: string;
-  description: string;
-  eventName: string;
-  imageUrls: string[];
+  items: Array<{ nftId: string; quantity: number }>;
+  privyId: string;
 }) {
   return post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/mintNft`, body);
 }

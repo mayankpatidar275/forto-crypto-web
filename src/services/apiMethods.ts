@@ -13,13 +13,17 @@ export async function get(url: string, options: RequestInit = {}) {
 
 export async function post(
   url: string,
-  body: unknown,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  body: any,
   options: RequestInit = {}
 ) {
   const response = await fetch(url, {
     method: "POST",
     credentials: "include",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${body.privyId}`,
+    },
     body: JSON.stringify(body),
     ...options,
   });

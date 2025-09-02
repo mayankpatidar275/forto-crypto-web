@@ -46,9 +46,10 @@ const CartPage = () => {
     }
 
     try {
-      const imageUrls = getImageUrls(myCart?.data?.items, nfts?.data);
+      // Get cart items with quantities
+      const items = getCartItemsWithQuantities(myCart?.data?.items);
 
-      if (imageUrls.length === 0) {
+      if (items.length === 0) {
         toast.error("No NFTs found in your cart.");
         return;
       }
@@ -61,10 +62,8 @@ const CartPage = () => {
 
       await buyNftMutation.mutateAsync({
         userPublicAddress: String(wallet.publicKey),
-        nftName: "My NFT",
-        description: "NFT desc",
-        eventName: "test-5",
-        imageUrls: imageUrls,
+        items: items,
+        privyId: state?.userPrivyId,
       });
     } catch (err) {
       console.error("Error minting NFT:", err);
@@ -73,8 +72,9 @@ const CartPage = () => {
   };
 
   useEffect(() => {
-    if (buyNftMutation.isPending)
+    if (buyNftMutation.isPending) {
       toast.loading("Minting might take few minutes. Please wait!");
+    }
   }, [buyNftMutation.isPending]);
 
   // Handle states: not logged in / loading / error
@@ -117,16 +117,16 @@ function findMatchingNft(nfts: NFTWithType[] = [], nftId: string) {
   return nfts.find((nft) => nft.id === nftId);
 }
 
-function getImageUrls(items: CartItemType[] = [], nfts: NFTWithType[] = []) {
-  return items.flatMap((item) => {
-    const nft = findMatchingNft(nfts, item.nftId);
-    return nft?.imageUrl ? Array(item.quantity).fill(nft.imageUrl) : [];
-  });
-}
-
 function findTotalCost(items: CartItemType[] = [], nfts: NFTWithType[] = []) {
   return items.reduce((total, item) => {
     const nft = findMatchingNft(nfts, item.nftId);
     return total + (nft?.price || 0) * item.quantity;
   }, 0);
+}
+
+function getCartItemsWithQuantities(items: CartItemType[] = []) {
+  return items.map((item) => ({
+    nftId: item.nftId,
+    quantity: item.quantity,
+  }));
 }
