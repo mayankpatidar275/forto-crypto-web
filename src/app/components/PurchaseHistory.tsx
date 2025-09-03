@@ -31,8 +31,6 @@ const PurchaseHistory = () => {
 
   const purchases = purchaseHistory.data || [];
 
-  console.log("purchases: ", purchases);
-
   return (
     <div className="bg-background-b3 shadow-md rounded-xl p-6">
       <h3 className="text-xl font-semibold mb-6">Purchase History</h3>
@@ -40,8 +38,43 @@ const PurchaseHistory = () => {
         {purchases.length === 0 ? (
           <EmptyState message="No purchase history found." />
         ) : (
-          purchases.map((purchase: PurchaseItem) => (
-            <PurchaseHistoryItemCard key={purchase.id} purchase={purchase} />
+          purchases.map((purchase) => (
+            <div
+              key={purchase.id}
+              className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm"
+            >
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h4 className="text-lg font-semibold">
+                    Order #{purchase.id.slice(-6)}
+                  </h4>
+                  <p className="text-sm text-gray-500">
+                    Purchased on{" "}
+                    {new Date(purchase.purchasedAt).toLocaleDateString()}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="text-lg font-bold text-brand-br1">
+                    ${purchase.totalAmount} USD
+                  </p>
+                  {purchase.txHash && (
+                    <p className="text-xs text-gray-400">
+                      TX: {purchase.txHash.slice(0, 8)}...
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                {purchase.items.map((item: PurchaseItem) => (
+                  <PurchaseHistoryItemCard
+                    key={item.id}
+                    item={item}
+                    purchaseDate={purchase.purchasedAt}
+                  />
+                ))}
+              </div>
+            </div>
           ))
         )}
       </div>
