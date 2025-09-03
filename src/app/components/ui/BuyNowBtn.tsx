@@ -136,6 +136,7 @@ const BuyNowBtn = ({
         connection,
         wallet: wallet as unknown as anchor.Wallet,
         eventName: "test-5",
+        nftCount: buyItems.quantity,
       });
 
       // wallet.signTransaction MUST be called synchronously from click

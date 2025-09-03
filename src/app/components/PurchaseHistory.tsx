@@ -102,7 +102,7 @@ const PurchaseHistory = () => {
                 </div>
                 <div className="text-right">
                   <p className="text-lg font-bold text-brand-br1">
-                    ${purchase.totalAmount} USD
+                    {purchase.totalAmount} FORTO
                   </p>
                   {purchase.txHash && (
                     <p className="text-xs text-gray-400">

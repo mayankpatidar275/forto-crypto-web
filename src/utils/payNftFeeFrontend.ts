@@ -111,7 +111,7 @@ import { PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
 import idl from "../lib/forto_unified.json";
 
 const PROGRAM_ID = new PublicKey(
-  "8hHzJohfwgAABsuQiuBLCUBR3kyhhwPBfwXfJzKUXgD6"
+  "CRuuFxmVFPGeuQifFadeyxiCQDYYZqrAgRFVf4XeUEJL"
 );
 const FORTO_MINT = new PublicKey("Zr6HoFuVNLxLRRJhNRQhkY8LQzUHzVRLgd8HWfqjDk2");
 
@@ -140,10 +140,12 @@ export async function payNftFeeTx({
   connection,
   wallet, // Anchor-compatible wallet (e.g. from @solana/wallet-adapter)
   eventName,
+  nftCount,
 }: {
   connection: anchor.web3.Connection;
   wallet: anchor.Wallet;
   eventName: string;
+  nftCount: number;
 }): Promise<Transaction> {
   const provider = new AnchorProvider(connection, wallet, {
     commitment: "confirmed",
@@ -178,7 +180,7 @@ export async function payNftFeeTx({
 
   // Build instruction
   const ix = await program.methods
-    .payNftFee(eventName)
+    .payNftFee(eventName, nftCount)
     .accounts({
       event: eventPda,
       fortoMint: FORTO_MINT,

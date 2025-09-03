@@ -57,9 +57,9 @@ const PurchaseHistoryItemCard: React.FC<PurchaseItemCardProps> = ({
       <div className="text-right">
         <p className="text-sm text-link">Qty: {item.quantity}</p>
         <p className="text-md font-semibold text-brand-br1">
-          ${(item.priceAtPurchase * item.quantity).toFixed(2)}
+          {(item.priceAtPurchase * item.quantity).toFixed(2)}
         </p>
-        <p className="text-xs text-link">${item.priceAtPurchase} each</p>
+        <p className="text-xs text-link">{item.priceAtPurchase} each</p>
       </div>
     </div>
   );

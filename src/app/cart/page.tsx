@@ -49,6 +49,11 @@ const CartPage = () => {
     // Get cart items with quantities
     const items = getCartItemsWithQuantities(myCart?.data?.items);
 
+    const totalNftQuantity = items.reduce(
+      (total, item) => total + item.quantity,
+      0
+    );
+
     if (items.length === 0) {
       toast.error("No NFTs found in your cart.");
       return;
@@ -62,6 +67,7 @@ const CartPage = () => {
         connection,
         wallet: wallet as unknown as anchor.Wallet,
         eventName: "test-5",
+        nftCount: totalNftQuantity,
       });
 
       // wallet.signTransaction MUST be called synchronously from click
