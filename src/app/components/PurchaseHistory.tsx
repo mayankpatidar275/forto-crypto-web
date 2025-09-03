@@ -3,13 +3,44 @@
 // PurchaseHistory.tsx
 import React from "react";
 import { EmptyState } from "./ui/EmptyState";
-import PurchaseHistoryItemCard, {
-  PurchaseItem,
-} from "./ui/PurchaseHistoryItemCard";
+import PurchaseHistoryItemCard from "./ui/PurchaseHistoryItemCard";
 import { usePurchaseHistory } from "@/custom-hooks/queries";
 import { useAppContext } from "@/custom-hooks/useAppContext";
 import Loader from "./ui/Loader";
 import { ErrorState } from "./ui/ErrorState";
+
+// Define the type interfaces
+interface NFTType {
+  id: string;
+  name: string;
+}
+
+interface NFT {
+  id: string;
+  title: string;
+  imageUrl: string;
+  type: NFTType;
+}
+
+interface PurchaseItem {
+  id: string;
+  quantity: number;
+  priceAtPurchase: number;
+  nft: NFT;
+}
+
+interface Purchase {
+  id: string;
+  purchasedAt: string;
+  totalAmount: string;
+  txHash?: string;
+  items: PurchaseItem[];
+}
+
+interface PurchaseHistoryResponse {
+  success: boolean;
+  data: Purchase[];
+}
 
 const PurchaseHistory = () => {
   const { state } = useAppContext();
@@ -18,6 +49,19 @@ const PurchaseHistory = () => {
     isLoading,
     error,
   } = usePurchaseHistory(state?.userPrivyId);
+
+  // Type guard to check if response has the correct structure
+  const isPurchaseHistoryResponse = (
+    data: unknown
+  ): data is PurchaseHistoryResponse => {
+    return (
+      typeof data === "object" &&
+      data !== null &&
+      "success" in data &&
+      "data" in data &&
+      Array.isArray((data as PurchaseHistoryResponse).data)
+    );
+  };
 
   if (isLoading) {
     return <Loader className="mx-auto my-auto flex justify-center" />;
@@ -29,7 +73,10 @@ const PurchaseHistory = () => {
     );
   }
 
-  const purchases = purchaseHistory.data || [];
+  // Ensure the data has the correct type
+  const purchases = isPurchaseHistoryResponse(purchaseHistory)
+    ? purchaseHistory.data
+    : [];
 
   return (
     <div className="bg-background-b3 shadow-md rounded-xl p-6">
@@ -38,7 +85,7 @@ const PurchaseHistory = () => {
         {purchases.length === 0 ? (
           <EmptyState message="No purchase history found." />
         ) : (
-          purchases.map((purchase) => (
+          purchases.map((purchase: Purchase) => (
             <div
               key={purchase.id}
               className="rounded-lg p-6 bg-background shadow-sm"
