@@ -41,14 +41,14 @@ const PurchaseHistory = () => {
           purchases.map((purchase) => (
             <div
               key={purchase.id}
-              className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm"
+              className="rounded-lg p-6 bg-background shadow-sm"
             >
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h4 className="text-lg font-semibold">
                     Order #{purchase.id.slice(-6)}
                   </h4>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-link">
                     Purchased on{" "}
                     {new Date(purchase.purchasedAt).toLocaleDateString()}
                   </p>
