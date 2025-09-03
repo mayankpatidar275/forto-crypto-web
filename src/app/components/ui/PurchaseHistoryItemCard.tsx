@@ -56,7 +56,7 @@ const PurchaseHistoryItemCard: React.FC<PurchaseItemCardProps> = ({
       </div>
 
       <div className="flex flex-col gap-1 sm:gap-2">
-        <h2 className="text-xl sm:text-3xl font-bold font-josef tracking-tight">
+        <h2 className="text-xl font-bold font-josef tracking-tight">
           {firstItem.nft.title}
         </h2>
         <p className="text-link text-sm leading-relaxed">
