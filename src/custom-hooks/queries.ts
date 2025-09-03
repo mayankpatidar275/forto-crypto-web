@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchSurveyQuestions } from "../services/api/surveyApi";
-import { fetchCart } from "@/services/api/cartApi";
+import { fetchCart, fetchPurchaseHistory } from "@/services/api/cartApi";
 import {
   fetchNftById,
   fetchNfts,
@@ -39,4 +39,13 @@ export function useNfts() {
 
 export function useNftsByCategory(category: string) {
   return useCustomQuery(["nfts", category], fetchNftsByCategory, category);
+}
+
+export function usePurchaseHistory(userPrivyId: string) {
+  return useCustomQuery(
+    ["purchase"],
+    fetchPurchaseHistory,
+    userPrivyId,
+    !!userPrivyId
+  );
 }

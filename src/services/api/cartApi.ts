@@ -17,3 +17,9 @@ export async function removeFromCart(cartItemId: string) {
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/cart/cart-items/${cartItemId}`
   );
 }
+
+export async function fetchPurchaseHistory(userPrivyId?: string) {
+  return get(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/purchase?userPrivyId=${userPrivyId}`
+  );
+}
