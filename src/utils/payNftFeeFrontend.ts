@@ -180,7 +180,10 @@ export async function payNftFeeTx({
 
   // Build instruction
   const ix = await program.methods
-    .payNftFee(eventName, nftCount)
+    .payNftFees(
+      eventName, // Keep as string (from IDL)
+      new anchor.BN(nftCount) // Convert to BN for u64
+    )
     .accounts({
       event: eventPda,
       fortoMint: FORTO_MINT,

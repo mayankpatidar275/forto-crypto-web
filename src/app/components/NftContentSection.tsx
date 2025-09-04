@@ -8,7 +8,7 @@ const NftContentSection = () => {
   const [ticketCount, setTicketCount] = useState("1");
 
   // Number of FORTO tokens required per ticket
-  const FORTO_PER_TICKET = 100;
+  const FORTO_PER_TICKET = 1;
 
   const handleTicketChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
