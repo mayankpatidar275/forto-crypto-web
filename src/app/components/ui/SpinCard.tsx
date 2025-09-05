@@ -21,7 +21,7 @@ const float = keyframes`
 
 // Styled Components
 const Card = styled.div`
-  background: white;
+  background: transparent;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   padding: 2rem;
@@ -41,7 +41,7 @@ const Header = styled.div`
 `;
 
 const Title = styled.h2`
-  color: #2c3e50;
+  color: #ffffff;
   margin: 0;
   font-size: 1.8rem;
   font-weight: 700;
