@@ -135,7 +135,7 @@ const BuyNowBtn = ({
       const tx = await payNftFeeTx({
         connection,
         wallet: wallet as unknown as anchor.Wallet,
-        eventName: "test-5",
+        eventName: "test-3",
         nftCount: buyItems.quantity,
       });
 

@@ -156,6 +156,14 @@ export async function payNftFeeTx({
   const program = new Program(idl, provider);
 
   const eventPda = getEventPda(eventName);
+
+  const accountInfo = await connection.getAccountInfo(eventPda);
+  if (!accountInfo) {
+    throw new Error(
+      `Event ${eventName} not initialized yet. Run initialize first.`
+    );
+  }
+
   const eventVaultAuthorityPda = getEventVaultAuthorityPda(eventPda);
 
   // User ATA (must hold FORTO before calling)
