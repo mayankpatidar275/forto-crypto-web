@@ -35,7 +35,7 @@ const NftImagesSection = ({ nfts }: { nfts: NFTWithType[] }) => {
           <div
             key={index}
             className={`cursor-pointer border-2 rounded-md ${
-              state.selectedNft?.imageUrl === item.imageUrl
+              state.selectedNft?.id === item.id
                 ? "border-brand-br2"
                 : "border-transparent"
             }`}

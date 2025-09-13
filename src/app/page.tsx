@@ -13,7 +13,8 @@ export default function Home() {
       <HeroSection />
       <NextDrawCounterSection />
       <GetNowSection
-        category="Italian Brainrot"
+        // category="Italian Brainrot"
+        eventName="Italian-Brainrot"
         heading="Get your unique NFT ticket now"
       />
       <WinnersSection />

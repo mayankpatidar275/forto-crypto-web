@@ -5,6 +5,7 @@ import {
   fetchNftById,
   fetchNfts,
   fetchNftsByCategory,
+  fetchNftsByEventName,
 } from "@/services/api/nftApi";
 
 // Reusable query function
@@ -39,6 +40,9 @@ export function useNfts() {
 
 export function useNftsByCategory(category: string) {
   return useCustomQuery(["nfts", category], fetchNftsByCategory, category);
+}
+export function useNftsByEventName(eventName: string) {
+  return useCustomQuery(["nfts", eventName], fetchNftsByEventName, eventName);
 }
 
 export function usePurchaseHistory(userPrivyId: string) {

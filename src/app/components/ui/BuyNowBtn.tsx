@@ -99,6 +99,7 @@ import { Connection } from "@solana/web3.js";
 import { useBuyNft } from "@/custom-hooks/mutations";
 import { useState } from "react";
 import { useAppContext } from "@/custom-hooks/useAppContext";
+import { useNftById } from "@/custom-hooks/queries";
 
 const BuyNowBtn = ({
   buyItems,
@@ -111,6 +112,12 @@ const BuyNowBtn = ({
   const wallet = useWallet();
   const buyNftMutation = useBuyNft();
   const [loading, setLoading] = useState(false);
+
+  const {
+    data: nft,
+    isLoading: isLoadingNft,
+    error,
+  } = useNftById(buyItems.nftId);
 
   const connection = new Connection(
     "https://api.devnet.solana.com",
@@ -135,7 +142,7 @@ const BuyNowBtn = ({
       const tx = await payNftFeeTx({
         connection,
         wallet: wallet as unknown as anchor.Wallet,
-        eventName: "test-3",
+        eventName: nft.data.type.eventName,
         nftCount: buyItems.quantity,
       });
 
@@ -179,10 +186,14 @@ const BuyNowBtn = ({
     }
   };
 
+  if (error) {
+    return <div>Error loading NFT</div>;
+  }
+
   return (
     <div className="h-12 w-62">
       {ready &&
-        (loading ? (
+        (loading || isLoadingNft ? (
           <div className="flex gap-2 items-center h-full">
             <Loader className="text-white" />
           </div>

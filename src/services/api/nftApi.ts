@@ -13,6 +13,11 @@ export async function fetchNftsByCategory(category?: string) {
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/nfts?category=${category}`
   );
 }
+export async function fetchNftsByEventName(eventName?: string) {
+  return get(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/nfts?eventName=${eventName}`
+  );
+}
 
 export async function buyNft(body: {
   userPublicAddress: string;

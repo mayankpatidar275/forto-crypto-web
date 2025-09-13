@@ -1,24 +1,25 @@
 "use client";
 
-import Heading2 from "./ui/Heading2";
-import NFTCardLink from "./ui/NFTCardLink";
-import Loader from "./ui/Loader";
-import { NFTWithType, SelectedNftType } from "@/types/nft";
+import { useNftsByEventName } from "@/custom-hooks/queries";
 import { useAppContext } from "@/custom-hooks/useAppContext";
+import { NFTWithType, SelectedNftType } from "@/types/nft";
 import { SELECT_NFT } from "@/utils/constants";
-import { ErrorState } from "./ui/ErrorState";
 import { EmptyState } from "./ui/EmptyState";
-import { useNftsByCategory } from "@/custom-hooks/queries";
+import { ErrorState } from "./ui/ErrorState";
+import Heading2 from "./ui/Heading2";
+import Loader from "./ui/Loader";
+import NFTCardLink from "./ui/NFTCardLink";
 
 interface GetNowSectionProps {
-  category: string;
+  eventName: string;
   heading: string;
 }
 
-const GetNowSection = ({ category, heading }: GetNowSectionProps) => {
+const GetNowSection = ({ eventName, heading }: GetNowSectionProps) => {
   const { dispatch } = useAppContext();
 
-  const { data: nfts, isLoading, error } = useNftsByCategory(category);
+  // const { data: nfts, isLoading, error } = useNftsByCategory(category);
+  const { data: eventNfts, isLoading, error } = useNftsByEventName(eventName);
 
   const handleNftClick = (nft: SelectedNftType) => {
     dispatch({ actionType: SELECT_NFT, value: nft });
@@ -34,7 +35,7 @@ const GetNowSection = ({ category, heading }: GetNowSectionProps) => {
     );
   }
 
-  if (!nfts?.data || nfts.data.length === 0) {
+  if (!eventNfts?.data || eventNfts.data.length === 0) {
     return (
       <EmptyState message="No NFTs available in this category. Check back soon!" />
     );
@@ -48,7 +49,7 @@ const GetNowSection = ({ category, heading }: GetNowSectionProps) => {
         </div>
 
         <div className="flex flex-wrap justify-center gap-8 px-4 mt-8">
-          {nfts.data.map((nft: NFTWithType) => (
+          {eventNfts.data.map((nft: NFTWithType) => (
             <NFTCardLink key={nft.id} nft={nft} onClick={handleNftClick} />
           ))}
         </div>

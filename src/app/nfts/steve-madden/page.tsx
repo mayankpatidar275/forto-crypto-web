@@ -6,7 +6,7 @@ function NFTPage() {
     <div>
       <GetNowSection
         heading="Get your unique NFT ticket now"
-        category="Italian Brainrot"
+        eventName="test-3"
       />
     </div>
   );
