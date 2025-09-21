@@ -9,11 +9,13 @@ import { NFTWithType } from "@/types/nft";
 import { payNftFeeTx } from "@/utils/payNftFeeFrontend";
 import { usePrivy } from "@privy-io/react-auth";
 import toast from "react-hot-toast";
-import CartItemCard, { CartItemCardProps } from "../components/ui/CartItemCard";
-import { EmptyState } from "../components/ui/EmptyState";
-import { ErrorState } from "../components/ui/ErrorState";
-import Loader from "../components/ui/Loader";
-import { TotalCostCard } from "../components/ui/TotalCostCard";
+import CartItemCard, {
+  CartItemCardProps,
+} from "../../components/ui/CartItemCard";
+import { EmptyState } from "../../components/ui/EmptyState";
+import { ErrorState } from "../../components/ui/ErrorState";
+import Loader from "../../components/ui/Loader";
+import { TotalCostCard } from "../../components/ui/TotalCostCard";
 import { Connection } from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
 import * as anchor from "@coral-xyz/anchor";

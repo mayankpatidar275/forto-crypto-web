@@ -1,9 +1,9 @@
 "use client";
 
-import Footer from "./Footer";
+import Footer from "./BFooter";
 import { usePathname } from "next/navigation";
 import { Toaster } from "react-hot-toast";
-import Header from "./Header";
+import Header from "./BHeader";
 
 export default function AppWrapper({
   children,
@@ -19,10 +19,12 @@ export default function AppWrapper({
   return (
     <>
       <Toaster position="bottom-right" />
-      <div className="glow-top"></div>
+      <div className="glow-top-light"></div>
       <div className="scan-line"></div>
+      {/* <Header /> */}
       <Header />
       <main className="flex-grow">{children}</main>
+      {/* <Footer /> */}
       <Footer />
     </>
   );
