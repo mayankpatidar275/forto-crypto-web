@@ -1,8 +1,8 @@
 import React from "react";
-import Logout from "../components/ui/Logout";
-import ProfileSection from "../components/ProfileSection";
-import PurchaseHistory from "../components/PurchaseHistory";
-import SpinButton from "../components/ui/SpinButton";
+import Logout from "../../components/ui/Logout";
+import ProfileSection from "../../components/ProfileSection";
+import PurchaseHistory from "../../components/PurchaseHistory";
+import SpinButton from "../../components/ui/SpinButton";
 
 const MyProfilePage = () => {
   return (
