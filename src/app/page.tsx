@@ -1,7 +1,8 @@
 // TODO: OPTI: lazy load if possible
+import HeroSection from "./components-brand/HeroSection";
 import ContactSection from "./components/ContactSection";
 import GetNowSection from "./components/GetNowSection";
-import HeroSection from "./components/HeroSection";
+
 import HowSection from "./components/HowSection";
 import NextDrawCounterSection from "./components/NextDrawCounterSection";
 import VisionSection from "./components/VisionSection";
