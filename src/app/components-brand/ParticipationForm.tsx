@@ -93,6 +93,8 @@ export default function ParticipationForm() {
           value={formData.phone}
           onChange={handleChange}
           required
+          pattern="[0-9]{10}"
+          placeholder="Enter 10-digit phone number"
           className="w-full px-4 py-2 text-gray-700 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-[var(--brand-br1)]"
         />
       </div>
