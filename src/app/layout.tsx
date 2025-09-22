@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import Providers from "./components/providers/Providers";
-import AppWrapper from "./components/layout/AppWrapper";
 import { ThemeProvider } from "next-themes";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import AppWrapper from "./components-brand/layout/AppWrapper";
 
 // TODO: OPTI: If you're using multiple weights later (e.g., 400, 700), preload them here together.
 const roboto = Roboto({
