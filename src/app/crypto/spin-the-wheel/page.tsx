@@ -1,5 +1,5 @@
+import WheelSection from "@/app/components/WheelSection";
 import React from "react";
-import WheelSection from "../components/WheelSection";
 
 const SpinTheWheelPage = () => {
   return (

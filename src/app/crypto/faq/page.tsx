@@ -1,5 +1,5 @@
+import ProblemSection from "@/app/components/ProblemSection";
 import React from "react";
-import ProblemSection from "../components/ProblemSection";
 
 const FaqPage = () => {
   return (
