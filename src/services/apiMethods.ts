@@ -1,5 +1,4 @@
 import { handleResponse } from "./response";
-
 // Todo: function to get header(authorization/token) and put in the request
 
 export async function get(url: string, options: RequestInit = {}) {
@@ -22,7 +21,7 @@ export async function post(
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${body.privyId}`,
+      // Authorization: `Bearer ${body.privyId}`,
     },
     body: JSON.stringify(body),
     ...options,

@@ -88,9 +88,6 @@ export default function Header() {
 
           <div className="flex gap-1 sm:gap-4">
             <SignedOut>
-              {/* <SignInButton>
-                <button className="btn-primary">Sign In</button>
-              </SignInButton> */}
               <SignUpButton>
                 <button className="btn-primary">Sign Up</button>
               </SignUpButton>

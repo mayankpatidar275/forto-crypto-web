@@ -1,11 +1,13 @@
 // app/components/ParticipationForm.tsx
 "use client";
 
+import { useParticipate } from "@/custom-hooks/mutations";
 import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
 
 export default function ParticipationForm() {
   const { isSignedIn, user } = useUser();
+  const participateMutation = useParticipate();
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
@@ -20,7 +22,17 @@ export default function ParticipationForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isSignedIn) return;
+    if (!isSignedIn || !user?.primaryEmailAddress?.emailAddress) return;
+
+    participateMutation.mutate({
+      brandId: "88a1603d-67ec-4f95-adc5-072dcefc63fa",
+      eventId: "386e4d08-0b04-45d5-9c1c-a4b675826f4e",
+      email: user?.primaryEmailAddress?.emailAddress,
+      fullName: formData.fullName,
+      phone: formData.phone,
+      purchasedBefore: formData.shopped === "yes" ? true : false,
+    });
+
     console.log({
       fullName: formData.fullName,
       email: user?.primaryEmailAddress?.emailAddress,

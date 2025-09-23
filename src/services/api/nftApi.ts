@@ -26,3 +26,17 @@ export async function buyNft(body: {
 }) {
   return post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/mintNft`, body);
 }
+
+export async function participate(body: {
+  eventId: string;
+  brandId: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  purchasedBefore: boolean;
+}) {
+  return post(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/participate`,
+    body
+  );
+}
