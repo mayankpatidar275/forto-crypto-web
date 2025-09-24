@@ -21,7 +21,7 @@ export async function post(
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
-      // Authorization: `Bearer ${body.privyId}`,
+      Authorization: `Bearer ${body.token}`,
     },
     body: JSON.stringify(body),
     ...options,

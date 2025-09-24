@@ -2,11 +2,13 @@
 "use client";
 
 import { useParticipate } from "@/custom-hooks/mutations";
-import { useUser } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 import { useState } from "react";
 
 export default function ParticipationForm() {
   const { isSignedIn, user } = useUser();
+  // Use `useAuth()` to access the `getToken()` method
+  const { getToken } = useAuth();
   const participateMutation = useParticipate();
   const [formData, setFormData] = useState({
     fullName: "",
@@ -20,10 +22,10 @@ export default function ParticipationForm() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isSignedIn || !user?.primaryEmailAddress?.emailAddress) return;
-
+    const token = await getToken();
     participateMutation.mutate({
       brandId: "88a1603d-67ec-4f95-adc5-072dcefc63fa",
       eventId: "386e4d08-0b04-45d5-9c1c-a4b675826f4e",
@@ -31,6 +33,7 @@ export default function ParticipationForm() {
       fullName: formData.fullName,
       phone: formData.phone,
       purchasedBefore: formData.shopped === "yes" ? true : false,
+      token: token,
     });
 
     console.log({

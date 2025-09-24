@@ -34,6 +34,7 @@ export async function participate(body: {
   email: string;
   phone: string;
   purchasedBefore: boolean;
+  token: string | null;
 }) {
   return post(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/participate`,

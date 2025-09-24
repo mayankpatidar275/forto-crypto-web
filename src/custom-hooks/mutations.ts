@@ -14,6 +14,7 @@ function useMutationWithSuccessMessage<TVariables>(
   // navigateTo: string | null = null
 ) {
   const queryClient = useQueryClient();
+  // Use `getToken()` to get the current session token
   // const navigate = useNavigate();
 
   return useMutation({
