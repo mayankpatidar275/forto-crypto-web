@@ -4,15 +4,15 @@ import ContactSection from "./components/ContactSection";
 import GetNowSection from "./components/GetNowSection";
 
 import HowSection from "./components/HowSection";
-import NextDrawCounterSection from "./components/NextDrawCounterSection";
 import VisionSection from "./components/VisionSection";
 import WinnersSection from "./components/WinnersSection";
+import CurrentGiveawaysSection from "./components/CurrentGiveawaysSection";
 
 export default function Home() {
   return (
     <div className="scroll-smooth">
       <HeroSection />
-      <NextDrawCounterSection />
+      <CurrentGiveawaysSection />
       <GetNowSection
         eventName="Italian-Brainrot"
         heading="Get your unique NFT ticket now"

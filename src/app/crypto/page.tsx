@@ -3,7 +3,7 @@ import ContactSection from "../components/ContactSection";
 import GetNowSection from "../components/GetNowSection";
 import HeroSection from "../components/HeroSection";
 import HowSection from "../components/HowSection";
-import NextDrawCounterSection from "../components/NextDrawCounterSection";
+import NextDrawCounterSection from "../components/CurrentGiveawaysSection";
 import VisionSection from "../components/VisionSection";
 import WinnersSection from "../components/WinnersSection";
 
