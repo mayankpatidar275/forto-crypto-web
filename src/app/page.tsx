@@ -11,6 +11,7 @@ import CustomerWinMoreSection from "./components-brand/CustomerWinMoreSection";
 import NewsTicker from "./components-brand/NewsTicker";
 import { Rocket } from "./assets";
 import BrandsTurnGiveaways from "./components-brand/BrandsTurnGiveaways";
+import HeaderBanner from "./components-brand/HeadingBanner";
 
 export default function Home() {
   return (
@@ -23,6 +24,9 @@ export default function Home() {
       <CurrentGiveawaysSection />
       <CustomerWinMoreSection />
       <BrandsTurnGiveaways />
+      <div className="cp-y flex justify-center">
+        <HeaderBanner title="FORTO vs TRADITIONAL GIVEAWAYS" />
+      </div>
       <GetNowSection
         eventName="Italian-Brainrot"
         heading="Get your unique NFT ticket now"
