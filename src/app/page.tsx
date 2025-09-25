@@ -10,6 +10,7 @@ import CurrentGiveawaysSection from "./components/CurrentGiveawaysSection";
 import CustomerWinMoreSection from "./components-brand/CustomerWinMoreSection";
 import NewsTicker from "./components-brand/NewsTicker";
 import { Rocket } from "./assets";
+import BrandsTurnGiveaways from "./components-brand/BrandsTurnGiveaways";
 
 export default function Home() {
   return (
@@ -21,6 +22,7 @@ export default function Home() {
       <HeroSection />
       <CurrentGiveawaysSection />
       <CustomerWinMoreSection />
+      <BrandsTurnGiveaways />
       <GetNowSection
         eventName="Italian-Brainrot"
         heading="Get your unique NFT ticket now"

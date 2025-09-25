@@ -51,7 +51,7 @@ const CustomerWinMoreSection = () => {
         </div>
 
         {/* Left Content */}
-        <div className="sm:flex flex-col items-center gap-6 hidden">
+        <div className="lg:flex flex-col items-center gap-6 hidden">
           <figure className="flex flex-col justify-center items-center -z-1 w-full mb-10 relative overflow-hidden">
             <Image
               src={CustomersWinMore}
