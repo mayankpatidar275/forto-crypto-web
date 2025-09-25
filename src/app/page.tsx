@@ -1,17 +1,12 @@
 // TODO: OPTI: lazy load if possible
 import HeroSection from "./components-brand/HeroSection";
-import ContactSection from "./components/ContactSection";
-import GetNowSection from "./components/GetNowSection";
 
-import HowSection from "./components/HowSection";
-import VisionSection from "./components/VisionSection";
-import WinnersSection from "./components/WinnersSection";
-import CurrentGiveawaysSection from "./components/CurrentGiveawaysSection";
-import CustomerWinMoreSection from "./components-brand/CustomerWinMoreSection";
-import NewsTicker from "./components-brand/NewsTicker";
 import { Rocket } from "./assets";
 import BrandsTurnGiveaways from "./components-brand/BrandsTurnGiveaways";
+import CustomerWinMoreSection from "./components-brand/CustomerWinMoreSection";
 import HeaderBanner from "./components-brand/HeadingBanner";
+import NewsTicker from "./components-brand/NewsTicker";
+import CurrentGiveawaysSection from "./components/CurrentGiveawaysSection";
 
 export default function Home() {
   return (
@@ -27,14 +22,6 @@ export default function Home() {
       <div className="cp-y flex justify-center">
         <HeaderBanner title="FORTO vs TRADITIONAL GIVEAWAYS" />
       </div>
-      <GetNowSection
-        eventName="Italian-Brainrot"
-        heading="Get your unique NFT ticket now"
-      />
-      <WinnersSection />
-      <HowSection />
-      <VisionSection />
-      <ContactSection />
     </div>
   );
 }
