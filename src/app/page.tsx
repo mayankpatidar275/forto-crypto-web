@@ -8,10 +8,16 @@ import VisionSection from "./components/VisionSection";
 import WinnersSection from "./components/WinnersSection";
 import CurrentGiveawaysSection from "./components/CurrentGiveawaysSection";
 import CustomerWinMoreSection from "./components-brand/CustomerWinMoreSection";
+import NewsTicker from "./components-brand/NewsTicker";
+import { Rocket } from "./assets";
 
 export default function Home() {
   return (
     <div className="scroll-smooth">
+      <NewsTicker
+        text="FIRST REVOLUTIONARY REWARDS PROGRAM FOR BRANDS ON BLOCKCHAIN"
+        imageSrc={Rocket}
+      />
       <HeroSection />
       <CurrentGiveawaysSection />
       <CustomerWinMoreSection />

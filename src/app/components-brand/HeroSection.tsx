@@ -1,4 +1,3 @@
-import Label from "./ui/Label";
 import Para1 from "./ui/Para1";
 import BuyNowBtnHero from "./ui/BuyNowBtnHero";
 import HeroImageAnimation from "./ui/HeroImageAnimation";
@@ -8,9 +7,7 @@ const HeroSection = () => {
     <section className="section-hero cp-x">
       <div className="mt-2 md:mt-6">
         <div className="block-heading px-6 py-14 text-center flex flex-col items-center">
-          <Label text="FIRST REVOLUTIONARY REWARDS PROGRAM FOR BRANDS ON BLOCKCHAIN" />
-
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-heading to-brand-br1 leading-tight mb-6 max-w-5xl">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-brand-br bg-clip-text leading-tight mb-6 max-w-5xl">
             50% WINNERS & 100% FAIR
           </h1>
 

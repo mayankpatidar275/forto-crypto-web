@@ -22,7 +22,7 @@ export default function AppWrapper({
   return (
     <>
       <Toaster position="bottom-right" />
-      <div className="glow-top-light"></div>
+      {/* <div className="glow-top-light"></div> */}
       <div className="scan-line"></div>
       <Header />
       <main className="flex-grow">{children}</main>
