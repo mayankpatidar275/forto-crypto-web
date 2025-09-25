@@ -6,7 +6,9 @@ function CurrentGiveawaysSection() {
   return (
     <section className="cp-x cp-y flex justify-center">
       <div className="flex flex-col justify-center items-center">
-        <Heading2>Current Giveaways</Heading2>
+        <Heading2>
+          Current <span className="text-brand-br">Giveaways</span>
+        </Heading2>
         <figure className="flex justify-center items-center mb-10 relative overflow-hidden image-gradient-container">
           <Image
             src={CurrentGiveaways}
