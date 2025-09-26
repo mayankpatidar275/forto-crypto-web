@@ -13,7 +13,7 @@ export default function BuyNowBtnHero() {
     <button
       // onClick={() => scrollToSection("get-now")}
       onClick={() => router.push("/brand")}
-      className="inline-block border-2 border-brand-br2 text-brand-br1 pointer px-6 py-3 rounded-xl text-lg md:text-xl font-semibold hover:bg-brand-br2 hover:text-link transition-colors duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)]"
+      className="bg-white sm:font-semibold text-sm sm:text-lg cursor-pointer text-background hover:text-white hover:bg-brand-br1 text-center rounded-[30px] px-3.5 py-1.5 sm:px-7 sm:py-2.5 leading-[1.4] hover:scale-[0.93] transition-all duration-400 ease-[cubic-bezier(.25,.46,.45,.94)]"
     >
       Join Giveaway
     </button>

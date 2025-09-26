@@ -27,7 +27,7 @@ const HeroImageAnimation = () => {
     <figure className="flex justify-center items-center w-full mb-10 relative overflow-hidden">
       <Image
         ref={rotatingImageRef}
-        src="https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e5e9377ed62684eb7b990_Shape2-min.avif"
+        src="https://cdn.prod.website-files.com/67d94a83b4dcb2e406b897dc/67da95f00cef47fd93da39e5_Hero%20Cercale.png"
         alt=""
         role="presentation"
         aria-hidden="true"

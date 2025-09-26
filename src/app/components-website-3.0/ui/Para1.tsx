@@ -10,7 +10,7 @@ const Para1: React.FC<Para1Props> = ({ children, className }) => {
   return (
     <div
       className={clsx(
-        "text-2xl text-center md:text-3xl font-semibold text-background-b1 opacity-75 max-w-3xl leading-9",
+        "text-lg text-center md:text-3xl font-semibold text-background-b1 max-w-3xl leading-9 w-full",
         className
       )}
     >

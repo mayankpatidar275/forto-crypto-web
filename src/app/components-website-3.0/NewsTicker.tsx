@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Image, { StaticImageData } from "next/image";
 import gsap from "gsap";
+import { poppins } from "../layout";
 
 interface NewsTickerProps {
   text: string;
@@ -29,10 +30,12 @@ export default function NewsTicker({ text, imageSrc }: NewsTickerProps) {
   }, []);
 
   return (
-    <div className="w-full overflow-hidden bg-brand-br font-roboto">
+    <div
+      className={`w-full overflow-hidden bg-background ${poppins.className}`}
+    >
       <div
         ref={tickerRef}
-        className="flex items-center whitespace-nowrap text-white text-base sm:text-lg md:text-xl font-bold py-2 sm:py-4"
+        className="flex items-center whitespace-nowrap text-white text-3xl sm:text-lg md:text-xl font-bold py-2 sm:py-4"
       >
         {/* Duplicate for seamless loop */}
         <div className="flex items-center gap-4 pr-12">
@@ -43,7 +46,7 @@ export default function NewsTicker({ text, imageSrc }: NewsTickerProps) {
             height={36}
             className="inline-block shrink-0"
           />
-          <span>{text}</span>
+          <span className="text-ticker">{text}</span>
         </div>
         <div className="flex items-center gap-4 pr-12">
           <Image
@@ -53,7 +56,7 @@ export default function NewsTicker({ text, imageSrc }: NewsTickerProps) {
             height={36}
             className="inline-block shrink-0"
           />
-          <span>{text}</span>
+          <span className="text-ticker">{text}</span>
         </div>
         <div className="flex items-center gap-4 pr-12">
           <Image
@@ -63,7 +66,7 @@ export default function NewsTicker({ text, imageSrc }: NewsTickerProps) {
             height={36}
             className="inline-block shrink-0"
           />
-          <span>{text}</span>
+          <span className="text-ticker">{text}</span>
         </div>
         <div className="flex items-center gap-4 pr-12">
           <Image
@@ -73,7 +76,7 @@ export default function NewsTicker({ text, imageSrc }: NewsTickerProps) {
             height={36}
             className="inline-block shrink-0"
           />
-          <span>{text}</span>
+          <span className="text-ticker">{text}</span>
         </div>
       </div>
     </div>
