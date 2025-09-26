@@ -335,3 +335,33 @@ body {
 .animate-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+.hero-section {
+  background-image: url("https://cdn.prod.website-files.com/67d94a83b4dcb2e406b897dc/67da90d9971da1b1236d93fc_Hero%20Bg.jpg");
+  background-position: 50% 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-top: 198px;
+  overflow: hidden;
+}
+@media screen and (max-width: 991px) {
+  .hero-section {
+    background-image: url("https://cdn.prod.website-files.com/67d94a83b4dcb2e406b897dc/67f3c1b1af26701c0a617691_Home%20bg.jpg");
+    background-position: 50% 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-top: 144px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .hero-section {
+    padding-top: 118px;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  .hero-section {
+    padding-top: 88px;
+  }
+}
