@@ -1,6 +1,6 @@
 "use client";
 
-import { OrangeLogo } from "@/app/assets/index";
+import { WhiteLogo } from "@/app/assets/index";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Menu, X } from "lucide-react";
@@ -23,6 +23,7 @@ const navLinks = [
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -37,14 +38,20 @@ export default function Header() {
       },
       duration: "1ms",
     });
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 60);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <header className="sticky top-0 z-30 text-background">
-      {/* Shadow that appears on scroll */}
-      <div className="shadow-navbar-light" aria-hidden="true"></div>
-
-      <div className="mx-auto px-4 sm:px-4 lg:px-8 py-4 z-50 relative">
+    <header
+      className={`top-0 z-30 w-full fixed transition-colors duration-300 ${
+        scrolled ? "bg-background shadow-md" : "bg-transparent"
+      }`}
+    >
+      <div className="mx-auto px-4 sm:px-4 lg:px-8 py-0 sm:py-4 z-50 relative">
         <div className="flex items-center justify-between h-16">
           <div className="flex justify-center items-center gap-3">
             {/* Mobile Menu Button */}
@@ -64,7 +71,7 @@ export default function Header() {
             {/* Logo */}
             <Link href="/" aria-label="Homepage" className="flex-shrink-0">
               <Image
-                src={OrangeLogo}
+                src={WhiteLogo}
                 alt="Logo"
                 className="h-5 sm:h-8 w-auto"
                 width={150}
@@ -79,7 +86,7 @@ export default function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-background text-lg hover:text-brand-br1 transition-colors duration-400 ease-[cubic-bezier(.25,.46,.45,.94)]"
+                className="text-white text-lg hover:text-brand-br1 transition-colors duration-400 ease-[cubic-bezier(.25,.46,.45,.94)]"
               >
                 {link.label}
               </Link>
@@ -105,7 +112,7 @@ export default function Header() {
           role="navigation"
           className={`transform transition-transform duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)] ${
             isOpen ? "translate-y-0 opacity-100" : "-translate-y-100"
-          } bg-forground rounded-[15px] mt-[15px] mx-[30px] px-[5px] py-[15px] space-y-2`}
+          } bg-very-light-pink py-2`}
           data-nav-menu-open=""
         >
           {navLinks.map((link) => (

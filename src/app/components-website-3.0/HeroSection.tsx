@@ -4,7 +4,7 @@ import HeroImageAnimation from "./ui/HeroImageAnimation";
 
 const HeroSection = () => {
   return (
-    <section className="section-hero cp-x hero-section bg-url[]">
+    <section className="section-hero cp-x hero-section">
       <div className="mt-2 md:mt-6">
         <div className="block-heading px-6 py-14 text-center flex flex-col items-center">
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-brand-br bg-clip-text leading-tight mb-6 max-w-5xl">
