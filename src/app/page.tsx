@@ -5,6 +5,7 @@ import HeaderBanner from "./components-brand/HeadingBanner";
 import BrandsTurnGiveaways from "./components-website-3.0/BrandsTurnGiveaways";
 import CurrentGiveawaysSection from "./components-website-3.0/CurrentGiveawaysSection";
 import CustomerWinMoreSection from "./components-website-3.0/CustomerWinMoreSection";
+import FortoVsTraditional from "./components-website-3.0/FortoVsTraditional";
 import HeroSection from "./components-website-3.0/HeroSection";
 import NewsTicker from "./components-website-3.0/NewsTicker";
 
@@ -18,6 +19,7 @@ export default function Home() {
       />
       <CurrentGiveawaysSection />
       <CustomerWinMoreSection />
+      <FortoVsTraditional />
       <BrandsTurnGiveaways />
       <div className="cp-y flex justify-center">
         <HeaderBanner title="FORTO vs TRADITIONAL GIVEAWAYS" />
