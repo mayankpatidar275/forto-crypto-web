@@ -1,6 +1,7 @@
+import { X } from "lucide-react";
 import Image from "next/image";
+import { Street, WhiteLogo } from "../assets";
 import Heading2 from "./ui/Heading2";
-import { CurrentGiveaways, Street, WhiteLogo } from "../assets";
 
 function CurrentGiveawaysSection() {
   return (
@@ -19,7 +20,7 @@ function CurrentGiveawaysSection() {
                 priority
               />
             </div>
-            <span>x</span>
+            <X />
             <div>
               <Image
                 src={Street}
@@ -32,24 +33,29 @@ function CurrentGiveawaysSection() {
             </div>
           </div>
           <div className="flex flex-col justify-center items-center">
-            <h1 className="title">
-              50,0000
-              <div className="aurora">
-                <div className="aurora__item"></div>
-                <div className="aurora__item"></div>
-                <div className="aurora__item"></div>
-                <div className="aurora__item"></div>
-              </div>
-            </h1>
-
-            <span className="text-4xl">GIVEAWAY</span>
+            <div className="flex justify-center justify-items gap-4">
+              <h1 className="title">
+                50,0000
+                <div className="aurora">
+                  <div className="aurora__item"></div>
+                  <div className="aurora__item"></div>
+                  <div className="aurora__item"></div>
+                  <div className="aurora__item"></div>
+                </div>
+              </h1>{" "}
+              <span className="title text-very-light-pink"> AED</span>
+            </div>
+            <span className="text-5xl neon-text">GIVEAWAY</span>
           </div>
-          <div className="flex flex-col justify-center items-center">
-            <span>50% WINNERS, 100% FAIR</span>
-            <span>TRANSPARENT ON BLOCKCHAIN</span>
+          <div className="flex flex-col justify-center items-center text-2xl">
+            <span className="text-center">50% WINNERS, 100% FAIR</span>
+            <span className="text-center">TRANSPARENT ON BLOCKCHAIN</span>
+          </div>
+          <div className="bg-white sm:font-semibold text-sm sm:text-lg cursor-pointer text-background hover:text-white hover:bg-brand-br1 text-center rounded-[30px] px-3.5 py-1.5 sm:px-7 sm:py-2.5 leading-[1.4] hover:scale-[0.93] transition-all duration-400 ease-[cubic-bezier(.25,.46,.45,.94)]">
+            Join Giveaways
           </div>
         </div>
-        <figure className="flex justify-center items-center mb-10 relative overflow-hidden image-gradient-container">
+        {/* <figure className="flex justify-center items-center mb-10 relative overflow-hidden image-gradient-container">
           <Image
             src={CurrentGiveaways}
             alt=""
@@ -62,7 +68,7 @@ function CurrentGiveawaysSection() {
             height={8000}
             style={{ height: "100%", width: "auto" }}
           />
-        </figure>
+        </figure> */}
       </div>
     </section>
   );

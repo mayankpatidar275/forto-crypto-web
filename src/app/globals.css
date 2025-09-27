@@ -417,7 +417,8 @@ body {
   letter-spacing: var(--ls);
   position: relative;
   overflow: hidden;
-  background: var(--bg);
+  /* background: var(--bg); */
+  background: transparent;
   margin: 0;
 }
 
@@ -580,5 +581,26 @@ body {
 
   100% {
     border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
+  }
+}
+
+/* Neon Text */
+
+.neon-text {
+  font-size: 3rem;
+  color: #fff;
+  text-shadow: 0 0 5px #ff005e, 0 0 10px #ff005e, 0 0 20px #ff005e,
+    0 0 40px #ff005e, 0 0 80px #ff005e;
+  animation: glow 1.5s infinite alternate;
+}
+
+@keyframes glow {
+  0% {
+    text-shadow: 0 0 5px #ff005e, 0 0 10px #ff005e, 0 0 20px #ff005e,
+      0 0 40px #ff005e, 0 0 80px #ff005e;
+  }
+  100% {
+    text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 40px #00d4ff,
+      0 0 80px #00d4ff, 0 0 160px #00d4ff;
   }
 }
