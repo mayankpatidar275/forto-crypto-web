@@ -9,7 +9,7 @@ import { Coins, Handshake, ShoppingBag, Sparkle } from "lucide-react";
 
 const BrandsTurnGiveaways = () => {
   return (
-    <section className="cp-x cp-y flex justify-center">
+    <section className="cp-x cp-y flex justify-center brands-section">
       <div className="max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
         {/* Left Content */}
         <div className="lg:flex flex-col items-center gap-6 hidden">
@@ -28,11 +28,8 @@ const BrandsTurnGiveaways = () => {
         {/* Right Content */}
         <div className="flex flex-col items-center lg:items-end gap-4 h-full justify-center">
           {/* <Label text="About us" /> */}
-          <Heading2 className="lg:text-right">
-            <span className="text-brand-br"> BRANDS:</span>
-            TURN GIVEAWAYS INTO GROWTH
-          </Heading2>
-          <div className="flex flex-col gap-2">
+          <Heading2 className="">BRANDS: TURN GIVEAWAYS INTO GROWTH</Heading2>
+          <div className="flex flex-col gap-4">
             <SolutionCard
               title="Only pay when rewards drive sales"
               icon={Coins}

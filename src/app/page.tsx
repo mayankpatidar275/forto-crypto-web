@@ -1,8 +1,8 @@
 // TODO: OPTI: lazy load if possible
 
 import { Rocket } from "./assets";
-import BrandsTurnGiveaways from "./components-brand/BrandsTurnGiveaways";
 import HeaderBanner from "./components-brand/HeadingBanner";
+import BrandsTurnGiveaways from "./components-website-3.0/BrandsTurnGiveaways";
 import CurrentGiveawaysSection from "./components-website-3.0/CurrentGiveawaysSection";
 import CustomerWinMoreSection from "./components-website-3.0/CustomerWinMoreSection";
 import HeroSection from "./components-website-3.0/HeroSection";

@@ -404,6 +404,36 @@ body {
   }
 }
 
+.brands-section {
+  background-image: url("https://cdn.prod.website-files.com/67d94a83b4dcb2e406b897dc/67dbadae5990780b5fc4803f_Feature%20Bg.jpg");
+  background-position: 50% 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-top: 198px;
+  overflow: hidden;
+}
+@media screen and (max-width: 991px) {
+  .brands-section {
+    background-image: url("https://cdn.prod.website-files.com/67d94a83b4dcb2e406b897dc/67dbadae5990780b5fc4803f_Feature%20Bg.jpg");
+    background-position: 50% 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-top: 144px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .brands-section {
+    padding-top: 118px;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  .brands-section {
+    padding-top: 88px;
+  }
+}
+
 .text-ticker {
   color: #fff3f300;
   -webkit-text-stroke-width: 1px;
