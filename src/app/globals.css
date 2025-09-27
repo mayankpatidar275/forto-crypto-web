@@ -405,7 +405,7 @@ body {
 }
 
 .brands-section {
-  background-image: url("https://cdn.prod.website-files.com/67d94a83b4dcb2e406b897dc/67dbadae5990780b5fc4803f_Feature%20Bg.jpg");
+  background-image: url("https://cdn.prod.website-files.com/67d94a83b4dcb2e406b897dc/67dbf06eb8ca0ec2a24b26df_Feature%20Choose%20Bg.jpg");
   background-position: 50% 0;
   background-repeat: no-repeat;
   background-size: cover;
@@ -414,7 +414,7 @@ body {
 }
 @media screen and (max-width: 991px) {
   .brands-section {
-    background-image: url("https://cdn.prod.website-files.com/67d94a83b4dcb2e406b897dc/67dbadae5990780b5fc4803f_Feature%20Bg.jpg");
+    background-image: url("https://cdn.prod.website-files.com/67d94a83b4dcb2e406b897dc/67dbf06eb8ca0ec2a24b26df_Feature%20Choose%20Bg.jpg");
     background-position: 50% 0;
     background-repeat: no-repeat;
     background-size: cover;

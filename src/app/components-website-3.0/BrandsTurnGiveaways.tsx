@@ -1,11 +1,11 @@
 import React from "react";
 // import Label from "./ui/Label";
-import Heading2 from "./ui/Heading2";
 // import Para1 from "./ui/Para1";
 import Image from "next/image";
 import { BrandTurnsGiveaways } from "../assets";
 import SolutionCard from "./ui/SolutionCard";
 import { Coins, Handshake, ShoppingBag, Sparkle } from "lucide-react";
+import Heading4 from "./ui/Heading4";
 
 const BrandsTurnGiveaways = () => {
   return (
@@ -28,7 +28,7 @@ const BrandsTurnGiveaways = () => {
         {/* Right Content */}
         <div className="flex flex-col items-center lg:items-end gap-4 h-full justify-center">
           {/* <Label text="About us" /> */}
-          <Heading2 className="">BRANDS: TURN GIVEAWAYS INTO GROWTH</Heading2>
+          <Heading4 className="">BRANDS: TURN GIVEAWAYS INTO GROWTH</Heading4>
           <div className="flex flex-col gap-4">
             <SolutionCard
               title="Only pay when rewards drive sales"
