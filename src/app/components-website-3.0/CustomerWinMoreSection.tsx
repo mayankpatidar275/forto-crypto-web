@@ -9,7 +9,7 @@ import { Gift, Handshake, Percent, ShoppingBag } from "lucide-react";
 
 const CustomerWinMoreSection = () => {
   return (
-    <section className="cp-x cp-y flex justify-center">
+    <section className="cp-x cp-y flex justify-center customer-section">
       <div className="max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
         {/* Right Content */}
         <div className="flex flex-col items-center lg:items-start gap-4 h-full justify-center">
@@ -17,7 +17,7 @@ const CustomerWinMoreSection = () => {
           <Heading2 className="lg:text-left">
             CUSTOMERS: WIN MORE AND SHOP SMARTER
           </Heading2>
-          <div className="  flex flex-col gap-2">
+          <div className="flex flex-col gap-4">
             <SolutionCard
               title="50% Chance to win in every draw"
               icon={Percent}

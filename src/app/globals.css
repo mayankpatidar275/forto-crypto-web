@@ -6,6 +6,7 @@
 :root {
   /* --background: #05070b; */
   --background: #15100c;
+  --background-b4: #15100b;
   --foreground: #ffffff;
   --background-a: #05070b;
   --background-b1: #38261d;
@@ -15,6 +16,7 @@
   --brand-br2: #cc6133;
   --border: #404040;
   --very-light-pink: #fff3f3;
+  --text-color: #bebebe;
   /* --color-fd-background: hsl(0, 100%, 64%); */
 }
 
@@ -37,10 +39,12 @@
   --color-brand-br2: #cc6133;
   --color-background-b1: #38261d;
   --color-background-b3: #38261d40;
+  --color-background-b4: #15100b;
   --color-heading: white;
   --color-background: #05070b;
   --color-very-light-pink: #fff3f3;
   --color-border: #404040;
+  --color-text-color: #bebebe;
 }
 
 body {
@@ -366,6 +370,36 @@ body {
 
 @media screen and (max-width: 479px) {
   .hero-section {
+    padding-top: 88px;
+  }
+}
+
+.customer-section {
+  background-image: url("https://cdn.prod.website-files.com/67d94a83b4dcb2e406b897dc/67dbadae5990780b5fc4803f_Feature%20Bg.jpg");
+  background-position: 50% 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-top: 198px;
+  overflow: hidden;
+}
+@media screen and (max-width: 991px) {
+  .customer-section {
+    background-image: url("https://cdn.prod.website-files.com/67d94a83b4dcb2e406b897dc/67dbadae5990780b5fc4803f_Feature%20Bg.jpg");
+    background-position: 50% 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-top: 144px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .customer-section {
+    padding-top: 118px;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  .customer-section {
     padding-top: 88px;
   }
 }

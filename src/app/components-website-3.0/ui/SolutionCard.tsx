@@ -1,5 +1,7 @@
 import React from "react";
 import { LucideProps } from "lucide-react";
+import Heading3 from "./Heading3";
+import Para3 from "./Para3";
 
 type SolutionCardProps = {
   icon: React.ForwardRefExoticComponent<
@@ -11,13 +13,16 @@ type SolutionCardProps = {
 
 const SolutionCard: React.FC<SolutionCardProps> = ({ icon: Icon, title }) => {
   return (
-    <div className="flex gap-4 lg:gap-6 items-center px-4 py-4 rounded-2xl bg-brand-br max-w-sm min-w-xs opacity-75">
-      <div className="h-full p-1">
-        <Icon className="w-6 h-6 text-white" />
+    <div className="p-6 bg-background-b4 rounded-2xl w-full">
+      <div className="relative">
+        <Heading3>{title}</Heading3>
+        <Para3>{title}</Para3>
+        <div className="icon-box mt-6 bg-[#321d1a] h-12 w-12 ml-auto rounded-full flex justify-center items-center">
+          <Icon className="w-6 h-6 text-[#834543]" />
+        </div>
+        <div className="feature-dot bg-[#2e2118] h-2.5 w-2.5 rounded-full absolute right-0 top-0"></div>
+        <div className="feature-dot bg-[#2e2118] h-2.5 w-2.5 rounded-full absolute left-0 bottom-0"></div>
       </div>
-      <h6 className="text-white text-left text-lg lg:text-xl md:text-xl font-bold max-w-2xl">
-        {title}
-      </h6>
     </div>
   );
 };
