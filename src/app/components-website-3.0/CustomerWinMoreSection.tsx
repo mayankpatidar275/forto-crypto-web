@@ -15,8 +15,7 @@ const CustomerWinMoreSection = () => {
         <div className="flex flex-col items-center lg:items-start gap-4 h-full justify-center">
           {/* <Label text="About us" /> */}
           <Heading2 className="lg:text-left">
-            <span className="text-brand-br"> CUSTOMERS:</span>
-            WIN MORE AND SHOP SMARTER
+            CUSTOMERS: WIN MORE AND SHOP SMARTER
           </Heading2>
           <div className="  flex flex-col gap-2">
             <SolutionCard

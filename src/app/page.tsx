@@ -2,11 +2,11 @@
 
 import { Rocket } from "./assets";
 import BrandsTurnGiveaways from "./components-brand/BrandsTurnGiveaways";
-import CustomerWinMoreSection from "./components-brand/CustomerWinMoreSection";
 import HeaderBanner from "./components-brand/HeadingBanner";
+import CurrentGiveawaysSection from "./components-website-3.0/CurrentGiveawaysSection";
+import CustomerWinMoreSection from "./components-website-3.0/CustomerWinMoreSection";
 import HeroSection from "./components-website-3.0/HeroSection";
 import NewsTicker from "./components-website-3.0/NewsTicker";
-import CurrentGiveawaysSection from "./components/CurrentGiveawaysSection";
 
 export default function Home() {
   return (
