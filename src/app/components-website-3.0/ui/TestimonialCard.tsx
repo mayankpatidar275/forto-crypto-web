@@ -1,19 +1,19 @@
 import React from "react";
 import { Star } from "lucide-react";
-import Image from "next/image";
+// import Image from "next/image";
 
 type TestimonialCardProps = {
-  avatar?: string; // user profile image
+  // avatar?: string; // user profile image
   name: string;
-  address: string;
+  // address: string;
   testimonial: string;
   rating?: number; // default 5
 };
 
 const TestimonialCard: React.FC<TestimonialCardProps> = ({
-  avatar,
+  // avatar,
   name,
-  address,
+  // address,
   testimonial,
   rating = 5,
 }) => {
@@ -21,14 +21,14 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
     <div className="p-6 bg-background-b4 rounded-2xl w-full max-w-md shadow-lg">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <img
+        {/* <img
           src={avatar}
           alt={name}
           className="w-12 h-12 rounded-full object-cover border border-gray-300"
-        />
+        /> */}
         <div>
           <p className="font-semibold text-lg text-white">{name}</p>
-          <p className="text-sm text-gray-400">{address}</p>
+          {/* <p className="text-sm text-gray-400">{address}</p> */}
         </div>
       </div>
 
@@ -40,11 +40,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
         {/* Rating */}
         <div className="flex gap-1 mb-3">
           {Array.from({ length: rating }).map((_, i) => (
-            <Star
-              key={i}
-              size={18}
-              className="text-yellow-400 fill-yellow-400"
-            />
+            <Star key={i} size={18} className="text-brand-br fill-brand-br" />
           ))}
         </div>
         {/* Testimonial */}

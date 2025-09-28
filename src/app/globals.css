@@ -698,3 +698,18 @@ body {
       0 0 80px #00d4ff, 0 0 160px #00d4ff;
   }
 }
+
+/* Vertical marquee testimonial */
+
+@keyframes marquee-vertical {
+  0% {
+    transform: translateY(0%);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+.animate-marquee-vertical {
+  animation: marquee-vertical 20s linear infinite;
+}
