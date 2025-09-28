@@ -20,7 +20,7 @@ export default function NewsTicker({ text, imageSrc }: NewsTickerProps) {
 
     gsap.to(tickerRef.current, {
       x: -tickerWidth,
-      duration: 20, // adjust speed here
+      duration: 70, // adjust speed here
       ease: "linear",
       repeat: -1,
       modifiers: {
@@ -42,8 +42,8 @@ export default function NewsTicker({ text, imageSrc }: NewsTickerProps) {
           <Image
             src={imageSrc}
             alt="Ticker Icon"
-            width={36}
-            height={36}
+            width={64}
+            height={64}
             className="inline-block shrink-0"
           />
           <span className="text-ticker">{text}</span>
@@ -52,8 +52,8 @@ export default function NewsTicker({ text, imageSrc }: NewsTickerProps) {
           <Image
             src={imageSrc}
             alt="Ticker Icon"
-            width={36}
-            height={36}
+            width={64}
+            height={64}
             className="inline-block shrink-0"
           />
           <span className="text-ticker">{text}</span>
@@ -62,8 +62,8 @@ export default function NewsTicker({ text, imageSrc }: NewsTickerProps) {
           <Image
             src={imageSrc}
             alt="Ticker Icon"
-            width={36}
-            height={36}
+            width={64}
+            height={64}
             className="inline-block shrink-0"
           />
           <span className="text-ticker">{text}</span>
@@ -72,8 +72,8 @@ export default function NewsTicker({ text, imageSrc }: NewsTickerProps) {
           <Image
             src={imageSrc}
             alt="Ticker Icon"
-            width={36}
-            height={36}
+            width={64}
+            height={64}
             className="inline-block shrink-0"
           />
           <span className="text-ticker">{text}</span>

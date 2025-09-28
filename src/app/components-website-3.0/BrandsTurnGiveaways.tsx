@@ -34,21 +34,25 @@ const BrandsTurnGiveaways = () => {
               title="Only pay when rewards drive sales"
               icon={Coins}
               alt={""}
+              description="No wasted spend — you only pay when customers redeem"
             />
             <SolutionCard
               title="Engagement that fuels revenue"
               icon={Sparkle}
               alt={""}
+              description="Every draw attracts first-time buyers eager to shop your brand"
             />
             <SolutionCard
               title="Attract new customers and build loyal database"
               icon={Handshake}
               alt={""}
+              description="Giveaways drive purchases, boost order value, and grow revenue"
             />
             <SolutionCard
               title="Transparent draws building customer trust"
               icon={ShoppingBag}
               alt={""}
+              description="Transparent draws win trust, spark buzz, and boost loyalty"
             />
           </div>
           {/* <Para1 className="lg:text-left hidden md:flex">

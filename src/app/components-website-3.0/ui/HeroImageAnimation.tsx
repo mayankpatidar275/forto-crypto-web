@@ -31,12 +31,12 @@ const HeroImageAnimation = () => {
         alt=""
         role="presentation"
         aria-hidden="true"
-        className="h-full max-w-full w-auto inline-block"
+        className="h-full max-w-full w-[275px] inline-block"
         loading="lazy"
         sizes="(max-width: 767px) 83vw, 500px"
         width={4000}
         height={4000}
-        style={{ height: "100%", width: "auto" }}
+        // style={{ height: "100%", width: "auto" }}
       />
     </figure>
   );

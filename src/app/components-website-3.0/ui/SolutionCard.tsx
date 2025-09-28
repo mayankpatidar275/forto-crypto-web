@@ -9,14 +9,19 @@ type SolutionCardProps = {
   >;
   alt: string;
   title: string;
+  description?: string;
 };
 
-const SolutionCard: React.FC<SolutionCardProps> = ({ icon: Icon, title }) => {
+const SolutionCard: React.FC<SolutionCardProps> = ({
+  icon: Icon,
+  title,
+  description,
+}) => {
   return (
     <div className="p-6 bg-background-b4 rounded-2xl w-full">
       <div className="relative">
         <Heading3>{title}</Heading3>
-        <Para3>{title}</Para3>
+        <Para3>{description}</Para3>
         <div className="icon-box mt-6 bg-[#321d1a] h-12 w-12 ml-auto rounded-full flex justify-center items-center">
           <Icon className="w-6 h-6 text-[#834543]" />
         </div>
