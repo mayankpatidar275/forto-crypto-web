@@ -11,7 +11,7 @@ const Heading3: React.FC<Heading3Props> = ({ children, className }) => {
   return (
     <h2
       className={clsx(
-        "text-left text-xl md:text-6xl lg:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-heading to-brand-br1 leading-tight mb-2 max-w-5xl",
+        "text-left text-xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-heading to-brand-br1 leading-tight mb-2 max-w-5xl",
         className,
         funnel.className
       )}
