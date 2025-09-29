@@ -47,13 +47,15 @@ export default function ParticipationForm() {
 
   if (!isSignedIn) {
     return (
-      <div className="max-w-md mx-auto p-6 bg-white rounded-2xl shadow-md text-center">
+      <div className="max-w-md mx-auto p-6 bg-white rounded-2xl shadow-md mt-24 text-center">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">
           Please sign in to participate
         </h2>
         <p className="text-gray-600">
           Click the{" "}
-          <span className="text-[var(--brand-br1)] font-medium">Sign Up</span>{" "}
+          <span className="text-[var(--brand-br1)] font-medium">
+            Sign Up/In
+          </span>{" "}
           button in the header to continue.
         </p>
       </div>
@@ -63,7 +65,7 @@ export default function ParticipationForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-md mx-auto p-6 bg-white rounded-2xl shadow-md space-y-4"
+      className="max-w-md mx-auto p-6 bg-white rounded-2xl shadow-md space-y-4 mt-24"
     >
       <h2 className="text-2xl font-semibold text-gray-800 text-center">
         Participation Form
