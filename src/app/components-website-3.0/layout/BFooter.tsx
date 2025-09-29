@@ -1,4 +1,4 @@
-import { OrangeLogo } from "@/app/assets";
+import { WhiteLogo } from "@/app/assets";
 import { socialLinks } from "@/app/data/data";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,7 +14,7 @@ export default function Footer() {
             <Image
               // src="https://cdn.prod.website-files.com/679e441b90452288c5c37443/679e4609e7b123fb0460c97c_Logo_trainai.avif"
               // src={OrangeLogo}
-              src={OrangeLogo}
+              src={WhiteLogo}
               alt="Logo"
               // className="h-8 w-auto"
               width={150}
@@ -44,25 +44,25 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link href="/docs/how" className="hover:text-white">
-                How it works
+              <Link href="/brand" className="hover:text-white">
+                Giveaway
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link href="/docs/tokenomics" className="hover:text-white">
                 Tokenomics
               </Link>
-            </li>
+            </li> */}
             {/* <li>
               <Link href="/about" className="hover:text-white">
                 About
               </Link>
             </li> */}
-            <li>
+            {/* <li>
               <Link href="/faq" className="hover:text-white">
                 FAQs
               </Link>
-            </li>
+            </li> */}
             {/* <li>
               <Link href="/contact" className="hover:text-white">
                 Contact
