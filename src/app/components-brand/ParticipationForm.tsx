@@ -15,6 +15,7 @@ export default function ParticipationForm() {
     phone: "",
     shopped: "",
   });
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -25,6 +26,8 @@ export default function ParticipationForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isSignedIn || !user?.primaryEmailAddress?.emailAddress) return;
+    if (!acceptedTerms) return; // block submit if not accepted
+
     const token = await getToken();
     participateMutation.mutate({
       brandId: "88a1603d-67ec-4f95-adc5-072dcefc63fa",
@@ -32,7 +35,7 @@ export default function ParticipationForm() {
       email: user?.primaryEmailAddress?.emailAddress,
       fullName: formData.fullName,
       phone: formData.phone,
-      purchasedBefore: formData.shopped === "yes" ? true : false,
+      purchasedBefore: formData.shopped === "yes",
       token: token,
     });
 
@@ -136,10 +139,36 @@ export default function ParticipationForm() {
         </select>
       </div>
 
+      {/* Terms & Conditions */}
+      <div className="flex items-start space-x-2">
+        <input
+          type="checkbox"
+          id="terms"
+          checked={acceptedTerms}
+          onChange={(e) => setAcceptedTerms(e.target.checked)}
+          className="mt-1"
+        />
+        <label htmlFor="terms" className="text-sm text-gray-600">
+          I agree to the{" "}
+          <a
+            href="/terms"
+            target="_blank"
+            className="text-[var(--brand-br1)] underline"
+          >
+            Terms and Conditions
+          </a>
+        </label>
+      </div>
+
       {/* Submit */}
       <button
         type="submit"
-        className="w-full py-2 px-4 bg-[var(--brand-br1)] text-white font-medium rounded-lg hover:bg-[var(--brand-br2)] transition"
+        disabled={!acceptedTerms}
+        className={`w-full py-2 px-4 rounded-lg font-medium transition ${
+          acceptedTerms
+            ? "bg-[var(--brand-br1)] text-white hover:bg-[var(--brand-br2)]"
+            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+        }`}
       >
         Participate
       </button>
