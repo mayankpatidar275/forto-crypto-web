@@ -37,7 +37,7 @@ const TestimonialSection = () => {
       <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
         {/* Left side heading */}
         <div className="flex flex-col items-center lg:items-end gap-4 h-full justify-center">
-          <Heading4 className="uppercase text-center lg:text-right">
+          <Heading4 className="uppercase text-center lg:text-left">
             What customers and brands are saying about us
           </Heading4>
         </div>
