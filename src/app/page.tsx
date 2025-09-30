@@ -8,20 +8,19 @@ import FortoVsTraditional from "./components-website-3.0/FortoVsTraditional";
 import HeroSection from "./components-website-3.0/HeroSection";
 import NewsTicker from "./components-website-3.0/NewsTicker";
 import TestimonialSection from "./components-website-3.0/TestimonialSection";
+import ProblemSection from "./components/ProblemSection";
 
 export default function Home() {
   return (
     <div className="scroll-smooth">
       <HeroSection />
-      <NewsTicker
-        imageSrc={Rocket}
-        text="FIRST REVOLUTIONARY REWARDS PROGRAM FOR BRANDS ON BLOCKCHAIN"
-      />
+      <NewsTicker imageSrc={Rocket} text="REVOLUTIONARY REWARDS PLATFORM" />
       <CurrentGiveawaysSection />
       <CustomerWinMoreSection />
       <FortoVsTraditional />
       <BrandsTurnGiveaways />
       <TestimonialSection />
+      <ProblemSection />
     </div>
   );
 }

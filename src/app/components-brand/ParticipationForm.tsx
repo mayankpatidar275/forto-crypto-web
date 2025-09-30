@@ -17,6 +17,14 @@ export default function ParticipationForm() {
   });
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
+  const [countryCode, setCountryCode] = useState("+91"); // default India
+  const countryOptions = [
+    { code: "+1", label: "US" },
+    { code: "+44", label: "UK" },
+    { code: "+91", label: "Ind" },
+    { code: "+61", label: "Aus" },
+  ];
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -34,7 +42,7 @@ export default function ParticipationForm() {
       eventId: "386e4d08-0b04-45d5-9c1c-a4b675826f4e",
       email: user?.primaryEmailAddress?.emailAddress,
       fullName: formData.fullName,
-      phone: formData.phone,
+      phone: `${countryCode}${formData.phone}`,
       purchasedBefore: formData.shopped === "yes",
       token: token,
     });
@@ -104,19 +112,35 @@ export default function ParticipationForm() {
 
       {/* Phone */}
       <div>
-        <label className="block text-sm font-medium text-gray-500 mb-1">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
           Phone Number
         </label>
-        <input
-          type="tel"
-          name="phone"
-          value={formData.phone}
-          onChange={handleChange}
-          required
-          pattern="[0-9]{10}"
-          placeholder="Enter 10-digit phone number"
-          className="w-full px-4 py-2 text-gray-700 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-[var(--brand-br1)]"
-        />
+        <div className="flex">
+          {/* Country Code Dropdown */}
+          <select
+            value={countryCode}
+            onChange={(e) => setCountryCode(e.target.value)}
+            className="pl-3 py-2 border border-gray-300 text-gray-700 rounded-l-lg bg-white focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-[var(--brand-br1)]"
+          >
+            {countryOptions.map((c) => (
+              <option key={c.code} value={c.code}>
+                {c.label} {c.code}
+              </option>
+            ))}
+          </select>
+
+          {/* Phone Input */}
+          <input
+            type="tel"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            required
+            pattern="[0-9]{6,15}"
+            placeholder="Enter phone number"
+            className="w-full px-4 py-2 text-gray-700 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-[var(--brand-br1)]"
+          />
+        </div>
       </div>
 
       {/* Dropdown */}
