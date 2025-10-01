@@ -7,23 +7,26 @@ import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-// import LoginUser from "../ui/LoginUser";
 import {
   SignedIn,
   SignedOut,
   SignOutButton,
   SignUpButton,
 } from "@clerk/nextjs";
+import { usePathname, useRouter } from "next/navigation";
 
 const navLinks = [
-  { href: "/docs", label: "Docs" },
-  { href: "/docs/tokenomics", label: "Tokenomics" },
-  { href: "/faq", label: "FAQ" },
+  { href: "#how-it-works", label: "HOW" },
+  { href: "#faq", label: "FAQ" },
+  { href: "#contact", label: "CONTACT" },
+  { href: "/brands", label: "FOR BRANDS" },
 ];
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -44,6 +47,26 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleNavClick = (href: string) => {
+    setIsOpen(false);
+
+    if (href.startsWith("#")) {
+      // Handle section scrolling
+      if (pathname === "/") {
+        // On home page, scroll to section
+        const sectionId = href.substring(1);
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      } else {
+        // On other pages, navigate to home page with hash
+        router.push(`/${href}`);
+      }
+    }
+    // For regular links, the Link component will handle navigation
+  };
 
   return (
     <header
@@ -83,13 +106,13 @@ export default function Header() {
           {/* Desktop Menu */}
           <nav className="hidden lg:flex space-x-12">
             {navLinks.map((link) => (
-              <Link
+              <button
                 key={link.href}
-                href={link.href}
+                onClick={() => handleNavClick(link.href)}
                 className="text-white text-lg hover:text-brand-br1 transition-colors duration-400 ease-[cubic-bezier(.25,.46,.45,.94)]"
               >
                 {link.label}
-              </Link>
+              </button>
             ))}
           </nav>
 
@@ -116,14 +139,13 @@ export default function Header() {
           data-nav-menu-open=""
         >
           {navLinks.map((link) => (
-            <Link
+            <button
               key={link.href}
-              href={link.href}
-              className="block text-background text-lg px-6 py-2 hover:text-brand-br1 transition-colors duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)]"
-              onClick={() => setIsOpen(false)}
+              onClick={() => handleNavClick(link.href)}
+              className="block text-background text-lg px-6 py-2 hover:text-brand-br1 transition-colors duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)] w-full text-left"
             >
               {link.label}
-            </Link>
+            </button>
           ))}
         </nav>
       </div>

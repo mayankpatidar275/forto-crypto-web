@@ -7,7 +7,10 @@ import { Tally1, Tally2, Tally3, Tally4 } from "lucide-react";
 
 const HowItWorks = () => {
   return (
-    <section className="cp-x cp-y flex justify-center customer-section">
+    <section
+      id="how-it-works"
+      className="cp-x cp-y flex justify-center customer-section"
+    >
       <div className="max-w-6xl">
         {/* Right Content */}
         <div className="flex flex-col items-center lg:items-start gap-4 h-full justify-center">
