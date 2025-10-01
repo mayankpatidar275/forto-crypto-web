@@ -37,54 +37,42 @@ export default function ParticipationForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isSignedIn || !user?.primaryEmailAddress?.emailAddress) return;
-    if (!acceptedTerms) return; // block submit if not accepted
+    if (!acceptedTerms) return;
 
     const token = await getToken();
-    participateMutation.mutateAsync(
-      {
+
+    // Use toast.promise for loader toast
+    toast.promise(
+      participateMutation.mutateAsync({
         brandId: "88a1603d-67ec-4f95-adc5-072dcefc63fa",
         eventId: "386e4d08-0b04-45d5-9c1c-a4b675826f4e",
-        email: user?.primaryEmailAddress?.emailAddress,
+        email: user.primaryEmailAddress?.emailAddress,
         fullName: formData.fullName,
         phone: `${countryCode}${formData.phone}`,
         purchasedBefore: formData.shopped === "yes",
         token: token,
-      },
+      }),
       {
-        onError: (error) => {
+        loading: "Submitting your participation...",
+        success: "Participated successfully!",
+        error: (err) => {
           try {
-            // Parse the error message to get backend response
-            const errorData = JSON.parse(error.message);
+            const errorData = JSON.parse(err.message);
             const backendError = errorData.body;
 
-            // Now you can access backendError.message or backendError.error
-            if (backendError.message === "invalid_email") {
-              toast.error("Please enter a valid email address");
-            } else if (backendError.message === "already_participated") {
-              toast.error("You've already participated in this event");
-            } else if (backendError.message === "invalid_phone") {
-              toast.error("Please enter a valid phone number");
-            } else {
-              toast.error(backendError.error || "Something went wrong");
-            }
+            if (backendError.message === "invalid_email")
+              return "Please enter a valid email";
+            if (backendError.message === "already_participated")
+              return "You've already participated";
+            if (backendError.message === "invalid_phone")
+              return "Please enter a valid phone number";
+            return backendError.error || "Something went wrong";
           } catch {
-            // Fallback if error parsing fails
-            toast.error("Something went wrong");
+            return "Something went wrong";
           }
-        },
-        onSuccess: () => {
-          toast.success("Participated successfully!");
         },
       }
     );
-
-    console.log({
-      fullName: formData.fullName,
-      email: user?.primaryEmailAddress?.emailAddress,
-      phone: formData.phone,
-      shopped: formData.shopped,
-    });
-    // TODO: send data to backend
   };
 
   if (!isSignedIn) {
