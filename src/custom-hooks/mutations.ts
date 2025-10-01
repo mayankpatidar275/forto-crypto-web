@@ -62,7 +62,8 @@ export const useBuyNft = () =>
   useMutationWithSuccessMessage(buyNft, "NFT bought!", ["buy"]);
 
 // Cart mutations
-export const useParticipate = () =>
-  useMutationWithSuccessMessage(participate, "Participated successfully!", [
-    "participate",
-  ]);
+export const useParticipate = () => {
+  return useMutation({
+    mutationFn: participate,
+  });
+};

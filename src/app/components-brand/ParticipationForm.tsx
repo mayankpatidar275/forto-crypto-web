@@ -4,6 +4,7 @@
 import { useParticipate } from "@/custom-hooks/mutations";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function ParticipationForm() {
   const { isSignedIn, user } = useUser();
@@ -17,12 +18,14 @@ export default function ParticipationForm() {
   });
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
-  const [countryCode, setCountryCode] = useState("+91"); // default India
+  const [countryCode, setCountryCode] = useState("+973"); // default India
   const countryOptions = [
-    { code: "+1", label: "US" },
-    { code: "+44", label: "UK" },
-    { code: "+91", label: "Ind" },
-    { code: "+61", label: "Aus" },
+    { code: "+973", label: "🇧🇭" }, // Bahrain
+    { code: "+965", label: "🇰🇼" }, // Kuwait
+    { code: "+968", label: "🇴🇲" }, // Oman
+    { code: "+974", label: "🇶🇦" }, // Qatar
+    { code: "+966", label: "🇸🇦" }, // Saudi
+    { code: "+971", label: "🇦🇪" }, // UAE
   ];
 
   const handleChange = (
@@ -37,15 +40,43 @@ export default function ParticipationForm() {
     if (!acceptedTerms) return; // block submit if not accepted
 
     const token = await getToken();
-    participateMutation.mutate({
-      brandId: "88a1603d-67ec-4f95-adc5-072dcefc63fa",
-      eventId: "386e4d08-0b04-45d5-9c1c-a4b675826f4e",
-      email: user?.primaryEmailAddress?.emailAddress,
-      fullName: formData.fullName,
-      phone: `${countryCode}${formData.phone}`,
-      purchasedBefore: formData.shopped === "yes",
-      token: token,
-    });
+    participateMutation.mutateAsync(
+      {
+        brandId: "88a1603d-67ec-4f95-adc5-072dcefc63fa",
+        eventId: "386e4d08-0b04-45d5-9c1c-a4b675826f4e",
+        email: user?.primaryEmailAddress?.emailAddress,
+        fullName: formData.fullName,
+        phone: `${countryCode}${formData.phone}`,
+        purchasedBefore: formData.shopped === "yes",
+        token: token,
+      },
+      {
+        onError: (error) => {
+          try {
+            // Parse the error message to get backend response
+            const errorData = JSON.parse(error.message);
+            const backendError = errorData.body;
+
+            // Now you can access backendError.message or backendError.error
+            if (backendError.message === "invalid_email") {
+              toast.error("Please enter a valid email address");
+            } else if (backendError.message === "already_participated") {
+              toast.error("You've already participated in this event");
+            } else if (backendError.message === "invalid_phone") {
+              toast.error("Please enter a valid phone number");
+            } else {
+              toast.error(backendError.error || "Something went wrong");
+            }
+          } catch {
+            // Fallback if error parsing fails
+            toast.error("Something went wrong");
+          }
+        },
+        onSuccess: () => {
+          toast.success("Participated successfully!");
+        },
+      }
+    );
 
     console.log({
       fullName: formData.fullName,
@@ -136,7 +167,7 @@ export default function ParticipationForm() {
             value={formData.phone}
             onChange={handleChange}
             required
-            pattern="[0-9]{6,15}"
+            pattern="[0-9]{7,15}" // only digits, 7-15 length
             placeholder="Enter phone number"
             className="w-full px-4 py-2 text-gray-700 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-[var(--brand-br1)]"
           />

@@ -1,8 +1,22 @@
 export async function handleResponse(response: Response, url: string) {
   if (!response.ok) {
+    let errorBody;
+    try {
+      errorBody = await response.json(); // Get the actual error response
+    } catch {
+      errorBody = await response.text(); // Fallback to text
+    }
+
     const errorMessage = `HTTP error in ${url}, status: ${response.status} - ${response.statusText}`;
-    console.log(errorMessage);
-    throw new Error(errorMessage);
+
+    // Throw an error that includes the backend's response
+    throw new Error(
+      JSON.stringify({
+        status: response.status,
+        message: errorMessage,
+        body: errorBody,
+      })
+    );
   }
 
   try {
@@ -11,6 +25,6 @@ export async function handleResponse(response: Response, url: string) {
     return jsonResponse;
   } catch (error) {
     console.warn(`Failed to parse JSON from ${url}: `, error);
-    return { error: response.text(), message: "Failed to parse JSON" }; // Fallback to plain text
+    return { error: response.text(), message: "Failed to parse JSON" };
   }
 }
