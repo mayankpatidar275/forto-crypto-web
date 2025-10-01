@@ -16,10 +16,10 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 
 const navLinks = [
-  { href: "#how-it-works", label: "HOW" },
+  { href: "#how-it-works", label: "How" },
   { href: "#faq", label: "FAQ" },
-  { href: "#contact", label: "CONTACT" },
-  { href: "/brands", label: "FOR BRANDS" },
+  { href: "#contact", label: "Contact" },
+  { href: "/brands", label: "For Brands" },
 ];
 
 export default function Header() {
