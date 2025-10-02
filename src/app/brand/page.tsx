@@ -20,6 +20,7 @@ function ParticipatePage() {
           style={{ height: "100%", width: "auto" }}
         />
       </figure>
+
       <ParticipationForm></ParticipationForm>
     </div>
   );

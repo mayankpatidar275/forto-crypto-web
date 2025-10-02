@@ -8,11 +8,9 @@ const BrandsTurnGiveaways = () => {
     <section className="cp-x cp-y flex justify-center brands-section">
       <div className="max-w-6xl gap-10 items-start">
         {/* Right Content */}
-        <div className="flex flex-col items-center lg:items-start gap-4 h-full justify-center">
+        <div className="flex flex-col items-center gap-4 h-full justify-center">
           {/* <Label text="About us" /> */}
-          <Heading4 className="lg:text-left">
-            BRANDS: TURN GIVEAWAYS INTO GROWTH
-          </Heading4>
+          <Heading4 className="">BRANDS: TURN GIVEAWAYS INTO GROWTH</Heading4>
           <div className="flex flex-col gap-4">
             <SolutionCard
               title="Only pay when rewards drive sales"

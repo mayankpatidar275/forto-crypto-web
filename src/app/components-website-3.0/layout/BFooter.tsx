@@ -5,7 +5,10 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="relative mt-auto w-full z-50 cp-y pb-10 cp-x">
+    <footer
+      id="footer"
+      className="relative mt-auto w-full z-50 cp-y pb-10 cp-x"
+    >
       <div className="max-w-screen-xl mx-auto w-full flex flex-col md:flex-row gap-20 md:gap-10 justify-between">
         {/* Logo and Description */}
         <div className="flex-2 flex flex-col md:block justify-center items-center md:text-left mb-8">

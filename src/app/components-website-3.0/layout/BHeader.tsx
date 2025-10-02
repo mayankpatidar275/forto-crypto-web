@@ -18,8 +18,8 @@ import { usePathname, useRouter } from "next/navigation";
 const navLinks = [
   { href: "#how-it-works", label: "How" },
   { href: "#faq", label: "FAQ" },
-  { href: "#contact", label: "Contact" },
-  { href: "/brands", label: "For Brands" },
+  { href: "#footer", label: "Contact" },
+  { href: "/brand", label: "For Brands" },
 ];
 
 export default function Header() {
@@ -66,10 +66,14 @@ export default function Header() {
       }
     }
     // For regular links, the Link component will handle navigation
+    else {
+      router.push(`${href}`);
+    }
   };
 
   return (
     <header
+      id="header"
       className={`top-0 z-30 w-full fixed transition-colors duration-300 ${
         scrolled ? "bg-background shadow-md" : "bg-transparent"
       }`}

@@ -10,11 +10,9 @@ const CustomerWinMoreSection = () => {
     <section className="cp-x cp-y flex justify-center customer-section">
       <div className="max-w-6xl">
         {/* Right Content */}
-        <div className="flex flex-col items-center lg:items-start gap-4 h-full justify-center">
+        <div className="flex flex-col items-center gap-4 h-full justify-center">
           {/* <Label text="About us" /> */}
-          <Heading2 className="lg:text-left">
-            CUSTOMERS: WIN MORE AND SHOP SMARTER
-          </Heading2>
+          <Heading2 className="">CUSTOMERS: WIN MORE AND SHOP SMARTER</Heading2>
           <div className="flex flex-col gap-4">
             <SolutionCard
               title="50% Chance to win in every draw"
