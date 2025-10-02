@@ -96,130 +96,132 @@ export default function ParticipationForm() {
   // }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-md mx-auto p-6 bg-white rounded-2xl shadow-md space-y-4 mt-24"
-    >
-      <h2 className="text-2xl font-semibold text-gray-800 text-center">
-        Participation Form
-      </h2>
+    <div className="cp-x cp-y">
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-md mx-auto p-6 bg-white rounded-2xl shadow-md space-y-4"
+      >
+        <h2 className="text-2xl font-semibold text-gray-800 text-center">
+          Participation Form
+        </h2>
 
-      {/* Full Name */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Full Name
-        </label>
-        <input
-          type="text"
-          name="fullName"
-          value={formData.fullName}
-          onChange={handleChange}
-          required
-          className="w-full px-4 py-2 border text-gray-700 border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-[var(--brand-br1)]"
-        />
-      </div>
-
-      {/* Email (readonly) */}
-      {isSignedIn && (
+        {/* Full Name */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Email
+            Full Name
           </label>
           <input
-            type="email"
-            value={user?.primaryEmailAddress?.emailAddress || ""}
-            readOnly
-            className="w-full px-4 py-2 border text-gray-700 border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed"
-          />
-        </div>
-      )}
-
-      {/* Phone */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Phone Number
-        </label>
-        <div className="flex">
-          {/* Country Code Dropdown */}
-          <select
-            value={countryCode}
-            onChange={(e) => setCountryCode(e.target.value)}
-            className="pl-3 py-2 border border-gray-300 text-gray-700 rounded-l-lg bg-white focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-[var(--brand-br1)]"
-          >
-            {countryOptions.map((c) => (
-              <option key={c.code} value={c.code}>
-                {c.label} {c.code}
-              </option>
-            ))}
-          </select>
-
-          {/* Phone Input */}
-          <input
-            type="tel"
-            name="phone"
-            value={formData.phone}
+            type="text"
+            name="fullName"
+            value={formData.fullName}
             onChange={handleChange}
             required
-            pattern="[0-9]{7,15}" // only digits, 7-15 length
-            placeholder="Enter phone number"
-            className="w-full px-4 py-2 text-gray-700 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-[var(--brand-br1)]"
+            className="w-full px-4 py-2 border text-gray-700 border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-[var(--brand-br1)]"
           />
         </div>
-      </div>
 
-      {/* Dropdown */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Have you shopped from brandxyz.com?
-        </label>
-        <select
-          name="shopped"
-          value={formData.shopped}
-          onChange={handleChange}
-          required
-          className="w-full px-4 py-2 border text-gray-700 border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-[var(--brand-br1)]"
-        >
-          <option value="" disabled>
-            Select an option
-          </option>
-          <option value="yes">Yes</option>
-          <option value="no">No</option>
-        </select>
-      </div>
+        {/* Email (readonly) */}
+        {isSignedIn && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Email
+            </label>
+            <input
+              type="email"
+              value={user?.primaryEmailAddress?.emailAddress || ""}
+              readOnly
+              className="w-full px-4 py-2 border text-gray-700 border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed"
+            />
+          </div>
+        )}
 
-      {/* Terms & Conditions */}
-      <div className="flex items-start space-x-2">
-        <input
-          type="checkbox"
-          id="terms"
-          checked={acceptedTerms}
-          onChange={(e) => setAcceptedTerms(e.target.checked)}
-          className="mt-1"
-        />
-        <label htmlFor="terms" className="text-sm text-gray-600">
-          I agree to the{" "}
-          <a
-            href="/terms"
-            target="_blank"
-            className="text-[var(--brand-br1)] underline"
+        {/* Phone */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Phone Number
+          </label>
+          <div className="flex">
+            {/* Country Code Dropdown */}
+            <select
+              value={countryCode}
+              onChange={(e) => setCountryCode(e.target.value)}
+              className="pl-3 py-2 border border-gray-300 text-gray-700 rounded-l-lg bg-white focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-[var(--brand-br1)]"
+            >
+              {countryOptions.map((c) => (
+                <option key={c.code} value={c.code}>
+                  {c.label} {c.code}
+                </option>
+              ))}
+            </select>
+
+            {/* Phone Input */}
+            <input
+              type="tel"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+              pattern="[0-9]{7,15}" // only digits, 7-15 length
+              placeholder="Enter phone number"
+              className="w-full px-4 py-2 text-gray-700 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-[var(--brand-br1)]"
+            />
+          </div>
+        </div>
+
+        {/* Dropdown */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Have you shopped from brandxyz.com?
+          </label>
+          <select
+            name="shopped"
+            value={formData.shopped}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 border text-gray-700 border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-[var(--brand-br1)]"
           >
-            Terms and Conditions
-          </a>
-        </label>
-      </div>
+            <option value="" disabled>
+              Select an option
+            </option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
 
-      {/* Submit */}
-      <button
-        type="submit"
-        disabled={!acceptedTerms}
-        className={`w-full py-2 px-4 rounded-lg font-medium transition ${
-          acceptedTerms
-            ? "bg-[var(--brand-br1)] text-white hover:bg-[var(--brand-br2)]"
-            : "bg-gray-300 text-gray-500 cursor-not-allowed"
-        }`}
-      >
-        Participate
-      </button>
-    </form>
+        {/* Terms & Conditions */}
+        <div className="flex items-start space-x-2">
+          <input
+            type="checkbox"
+            id="terms"
+            checked={acceptedTerms}
+            onChange={(e) => setAcceptedTerms(e.target.checked)}
+            className="mt-1"
+          />
+          <label htmlFor="terms" className="text-sm text-gray-600">
+            I agree to the{" "}
+            <a
+              href="/terms"
+              target="_blank"
+              className="text-[var(--brand-br1)] underline"
+            >
+              Terms and Conditions
+            </a>
+          </label>
+        </div>
+
+        {/* Submit */}
+        <button
+          type="submit"
+          disabled={!acceptedTerms}
+          className={`w-full py-2 px-4 rounded-lg font-medium transition ${
+            acceptedTerms
+              ? "bg-[var(--brand-br1)] text-white hover:bg-[var(--brand-br2)]"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+          }`}
+        >
+          Participate
+        </button>
+      </form>
+    </div>
   );
 }

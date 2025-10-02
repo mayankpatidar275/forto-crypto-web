@@ -1,9 +1,13 @@
+"use client";
+
 import { X } from "lucide-react";
 import Image from "next/image";
 import { Street, WhiteLogo } from "../assets";
 import Heading2 from "./ui/Heading2";
+import { useRouter } from "next/navigation";
 
 function CurrentGiveawaysSection() {
+  const router = useRouter();
   return (
     <section className="cp-x cp-y flex justify-center">
       <div className="flex flex-col justify-center items-center">
@@ -51,8 +55,11 @@ function CurrentGiveawaysSection() {
             <span className="text-center">50% WINNERS, 100% FAIR</span>
             <span className="text-center">TRANSPARENT ON BLOCKCHAIN</span>
           </div>
-          <div className="bg-white sm:font-semibold text-sm sm:text-lg cursor-pointer text-background hover:text-white hover:bg-brand-br1 text-center rounded-[30px] px-3.5 py-1.5 sm:px-7 sm:py-2.5 leading-[1.4] hover:scale-[0.93] transition-all duration-400 ease-[cubic-bezier(.25,.46,.45,.94)]">
-            Join Giveaways
+          <div
+            onClick={() => router.push("/brand")}
+            className="bg-white sm:font-semibold text-sm sm:text-lg cursor-pointer text-background hover:text-white hover:bg-brand-br1 text-center rounded-[30px] px-3.5 py-1.5 sm:px-7 sm:py-2.5 leading-[1.4] hover:scale-[0.93] transition-all duration-400 ease-[cubic-bezier(.25,.46,.45,.94)]"
+          >
+            Join Giveaway
           </div>
         </div>
         {/* <figure className="flex justify-center items-center mb-10 relative overflow-hidden image-gradient-container">

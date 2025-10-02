@@ -2,6 +2,8 @@ import ParticipationForm from "@/app/components-brand/ParticipationForm";
 import Image from "next/image";
 import React from "react";
 import { Brand1 } from "../assets";
+import TermsSection from "../components-website-3.0/TermsSection";
+import TestimonialSection from "../components-website-3.0/TestimonialSection";
 
 function ParticipatePage() {
   return (
@@ -20,8 +22,9 @@ function ParticipatePage() {
           style={{ height: "100%", width: "auto" }}
         />
       </figure>
-
+      <TermsSection />
       <ParticipationForm></ParticipationForm>
+      <TestimonialSection />
     </div>
   );
 }

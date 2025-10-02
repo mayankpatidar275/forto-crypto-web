@@ -11,7 +11,7 @@ const Heading2: React.FC<Heading2Props> = ({ children, className }) => {
   return (
     <h2
       className={clsx(
-        "text-center text-3xl md:text-6xl lg:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-heading to-brand-br1 leading-tight mb-6 max-w-5xl",
+        "text-center text-3xl md:text-6xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-heading to-brand-br1 leading-tight mb-6 max-w-5xl",
         className,
         funnel.className
       )}

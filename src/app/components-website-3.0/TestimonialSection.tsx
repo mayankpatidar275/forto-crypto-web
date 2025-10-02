@@ -49,7 +49,7 @@ const TestimonialSection = () => {
           <div className="pointer-events-none absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-background-b4 to-transparent z-10" /> */}
 
           {/* Scrolling container */}
-          <div className="animate-marquee-vertical flex flex-col gap-6">
+          <div className="animate-marquee-vertical flex flex-col justify-center items-center gap-6">
             {testimonials.concat(testimonials).map((t, idx) => (
               <TestimonialCard
                 key={idx}
