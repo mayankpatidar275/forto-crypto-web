@@ -7,3 +7,4 @@ export { default as CustomersWinMore } from "./ChatGPT Image Sep 21, 2025, 03_53
 export { default as BrandTurnsGiveaways } from "./ChatGPT Image Sep 21, 2025, 04_08_04 PM.png";
 export { default as Rocket } from "./rocket.png";
 export { default as Street } from "./6thStreet.svg";
+export { default as Brand1 } from "./Brand1.png";

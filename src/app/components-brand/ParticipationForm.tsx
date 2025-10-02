@@ -36,6 +36,9 @@ export default function ParticipationForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isSignedIn) {
+      return toast.error("Please Sign In first");
+    }
     if (!isSignedIn || !user?.primaryEmailAddress?.emailAddress) return;
     if (!acceptedTerms) return;
 
@@ -75,22 +78,22 @@ export default function ParticipationForm() {
     );
   };
 
-  if (!isSignedIn) {
-    return (
-      <div className="max-w-md mx-auto p-6 bg-white rounded-2xl shadow-md mt-24 text-center">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">
-          Please sign in to participate
-        </h2>
-        <p className="text-gray-600">
-          Click the{" "}
-          <span className="text-[var(--brand-br1)] font-medium">
-            Sign Up/In
-          </span>{" "}
-          button in the header to continue.
-        </p>
-      </div>
-    );
-  }
+  // if (!isSignedIn) {
+  //   return (
+  //     <div className="max-w-md mx-auto p-6 bg-white rounded-2xl shadow-md mt-24 text-center">
+  //       <h2 className="text-xl font-semibold text-gray-800 mb-4">
+  //         Please sign in to participate
+  //       </h2>
+  //       <p className="text-gray-600">
+  //         Click the{" "}
+  //         <span className="text-[var(--brand-br1)] font-medium">
+  //           Sign Up/In
+  //         </span>{" "}
+  //         button in the header to continue.
+  //       </p>
+  //     </div>
+  //   );
+  // }
 
   return (
     <form
@@ -117,17 +120,19 @@ export default function ParticipationForm() {
       </div>
 
       {/* Email (readonly) */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Email
-        </label>
-        <input
-          type="email"
-          value={user?.primaryEmailAddress?.emailAddress || ""}
-          readOnly
-          className="w-full px-4 py-2 border text-gray-700 border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed"
-        />
-      </div>
+      {isSignedIn && (
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Email
+          </label>
+          <input
+            type="email"
+            value={user?.primaryEmailAddress?.emailAddress || ""}
+            readOnly
+            className="w-full px-4 py-2 border text-gray-700 border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed"
+          />
+        </div>
+      )}
 
       {/* Phone */}
       <div>
