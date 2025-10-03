@@ -3,10 +3,8 @@
 
 import { useParticipate } from "@/custom-hooks/mutations";
 import { useAuth, useUser } from "@clerk/nextjs";
-import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import Confetti from "react-confetti";
 
 // Success Modal Component
 interface SuccessModalProps {
@@ -14,7 +12,7 @@ interface SuccessModalProps {
   onClose: () => void;
   ticket: {
     shortCode: string;
-  } | null; // Replace with proper ticket type
+  } | null;
   totalTickets: number;
 }
 
@@ -24,78 +22,170 @@ function SuccessModal({
   ticket,
   totalTickets,
 }: SuccessModalProps) {
-  return (
-    <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={onClose}>
-        <Transition.Child
-          as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div className="fixed inset-0 bg-black bg-opacity-50" />
-        </Transition.Child>
+  const [isVisible, setIsVisible] = useState(false);
 
-        <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4 text-center">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
-            >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                <Confetti
-                  width={window.innerWidth}
-                  height={window.innerHeight}
-                  recycle={false}
-                  numberOfPieces={200}
-                  className="absolute inset-0"
-                />
-                <Dialog.Title
-                  as="h3"
-                  className="text-2xl font-bold leading-6 text-gray-900 text-center"
+  // Handle animation states
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => setIsVisible(true), 50);
+    } else {
+      setIsVisible(false);
+    }
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Enhanced Backdrop */}
+      <div
+        className={`absolute inset-0 bg-gradient-to-br from-purple-900/40 via-blue-900/30 to-emerald-900/20 backdrop-blur-md transition-opacity duration-500 ${
+          isVisible ? "opacity-100" : "opacity-0"
+        }`}
+        onClick={onClose}
+      />
+
+      {/* Floating Particles */}
+      <div className="absolute inset-0 overflow-hidden">
+        {[...Array(15)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-2 h-2 bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] rounded-full animate-float"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${i * 0.5}s`,
+              animationDuration: `${3 + Math.random() * 2}s`,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Main Modal Card */}
+      <div
+        className={`relative w-full max-w-lg transform transition-all duration-500 ${
+          isVisible
+            ? "scale-100 opacity-100 translate-y-0"
+            : "scale-90 opacity-0 translate-y-10"
+        }`}
+      >
+        {/* Glow Effect */}
+        <div className="absolute -inset-4 bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] rounded-3xl blur-xl opacity-20" />
+
+        <div className="relative bg-white/95 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl overflow-hidden">
+          {/* Header with Gradient */}
+          <div className="bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] p-8 text-center relative overflow-hidden">
+            {/* Animated Rings */}
+            <div className="absolute -top-20 -right-20 w-40 h-40 border-2 border-white/10 rounded-full animate-pulse" />
+            <div className="absolute -bottom-20 -left-20 w-40 h-40 border-2 border-white/10 rounded-full animate-pulse" />
+
+            {/* Success Icon */}
+            <div className="relative mx-auto w-20 h-20 mb-4">
+              <div className="absolute inset-0 bg-white/20 rounded-full animate-ping" />
+              <div className="relative flex items-center justify-center w-20 h-20 bg-white rounded-full shadow-lg">
+                <svg
+                  className="w-10 h-10 text-[var(--brand-br1)]"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  Congratulations!
-                </Dialog.Title>
-                <div className="mt-4 text-center">
-                  <p className="text-lg text-gray-600">
-                    You&apos;ve successfully participated in the event!
-                  </p>
-                  <p className="mt-2 text-sm text-gray-500">
-                    Your ticket code:{" "}
-                    <span className="font-semibold text-[var(--brand-br1)]">
-                      {ticket?.shortCode}
-                    </span>
-                  </p>
-                  <p className="mt-2 text-sm text-gray-500">
-                    Total participants:{" "}
-                    <span className="font-semibold text-[var(--brand-br1)]">
-                      {500 + totalTickets}
-                    </span>
-                  </p>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            <h3 className="text-3xl font-bold text-white mb-2">
+              Congratulations!
+            </h3>
+            <p className="text-white/90 text-lg">
+              You&apos;re officially in the event!
+            </p>
+          </div>
+
+          {/* Content */}
+          <div className="p-8 space-y-6">
+            {/* Ticket Code */}
+            <div className="text-center space-y-2">
+              <p className="text-gray-600 text-sm font-medium uppercase tracking-wide">
+                Your Ticket Code
+              </p>
+              <div className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border border-gray-200 shadow-sm">
+                <span className="text-2xl font-mono font-bold text-gray-800 tracking-wider">
+                  {ticket?.shortCode}
+                </span>
+              </div>
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border border-blue-200">
+                <div className="text-2xl font-bold text-blue-600">
+                  #{500 + totalTickets}
                 </div>
-                <div className="mt-6 flex justify-center">
-                  <button
-                    type="button"
-                    className="inline-flex justify-center rounded-lg bg-[var(--brand-br1)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--brand-br2)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-br1)]"
-                    onClick={onClose}
-                  >
-                    Close
-                  </button>
+                <div className="text-sm text-blue-600/80 font-medium">
+                  Your Position
                 </div>
-              </Dialog.Panel>
-            </Transition.Child>
+              </div>
+              <div className="text-center p-4 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl border border-emerald-200">
+                <div className="text-2xl font-bold text-emerald-600">
+                  {/* {totalTickets} */}
+                  15
+                </div>
+                <div className="text-sm text-emerald-600/80 font-medium">
+                  {/* Total Participants */}
+                  Days to Go
+                </div>
+              </div>
+            </div>
+
+            {/* Action Button */}
+            <div className="flex justify-center pt-4">
+              <button
+                onClick={onClose}
+                className="group relative inline-flex items-center justify-center px-8 py-3 text-white bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                <span className="relative">Awesome! Let&apos;s Go</span>
+                <svg
+                  className="ml-2 w-4 h-4 relative transition-transform group-hover:translate-x-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
-      </Dialog>
-    </Transition>
+      </div>
+
+      {/* Add custom animations to your global CSS */}
+      <style jsx global>{`
+        @keyframes float {
+          0%,
+          100% {
+            transform: translateY(0) rotate(0deg);
+          }
+          50% {
+            transform: translateY(-20px) rotate(180deg);
+          }
+        }
+        .animate-float {
+          animation: float linear infinite;
+        }
+      `}</style>
+    </div>
   );
 }
 
