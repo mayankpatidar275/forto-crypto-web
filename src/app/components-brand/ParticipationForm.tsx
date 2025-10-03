@@ -188,11 +188,8 @@ function SuccessModal({
     </div>
   );
 }
-
-// Participation Form Component
 export default function ParticipationForm() {
   const { isSignedIn, user } = useUser();
-  // Use `useAuth()` to access the `getToken()` method
   const { getToken } = useAuth();
   const participateMutation = useParticipate();
   const [formData, setFormData] = useState({
@@ -201,11 +198,11 @@ export default function ParticipationForm() {
     shopped: "",
   });
   const [acceptedTerms, setAcceptedTerms] = useState(false);
-  const [countryCode, setCountryCode] = useState("+973"); // default Bahrain
+  const [countryCode, setCountryCode] = useState("+973");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [ticketData, setTicketData] = useState<{ shortCode: string } | null>(
     null
-  ); // Replace with proper ticket type
+  );
   const [totalTickets, setTotalTickets] = useState(0);
 
   const countryOptions = [
@@ -225,22 +222,17 @@ export default function ParticipationForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isSignedIn) {
-      return toast.error("Please Sign In first");
-    }
-    if (!isSignedIn || !user?.primaryEmailAddress?.emailAddress) return;
-    if (!acceptedTerms) {
+    if (!isSignedIn) return toast.error("Please Sign In first");
+    if (!acceptedTerms)
       return toast.error("Please accept the Terms and Conditions");
-    }
 
     const token = await getToken();
 
-    // Use toast.promise for loader toast
     toast.promise(
       participateMutation.mutateAsync({
         brandId: "88a1603d-67ec-4f95-adc5-072dcefc63fa",
         eventId: "386e4d08-0b04-45d5-9c1c-a4b675826f4e",
-        email: user.primaryEmailAddress?.emailAddress,
+        email: user?.primaryEmailAddress?.emailAddress || "",
         fullName: formData.fullName,
         phone: `${countryCode}${formData.phone}`,
         purchasedBefore: formData.shopped === "yes",
@@ -249,7 +241,6 @@ export default function ParticipationForm() {
       {
         loading: "Submitting your participation...",
         success: (data) => {
-          console.log("data: ", data);
           setTicketData(data.data.ticket);
           setTotalTickets(data.data.totalTickets);
           setIsModalOpen(true);
@@ -259,7 +250,6 @@ export default function ParticipationForm() {
           try {
             const errorData = JSON.parse(err.message);
             const backendError = errorData.body;
-
             if (backendError.message === "invalid_email")
               return "Please enter a valid email";
             if (backendError.message === "already_participated")
@@ -276,132 +266,160 @@ export default function ParticipationForm() {
   };
 
   return (
-    <div className="cp-x cp-y">
-      <form
-        onSubmit={handleSubmit}
-        className="max-w-md mx-auto p-6 bg-white rounded-2xl shadow-md space-y-4"
-      >
-        <h2 className="text-2xl font-semibold text-gray-800 text-center">
-          Join the Event
-        </h2>
-
-        {/* Full Name */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Full Name
-          </label>
-          <input
-            type="text"
-            name="fullName"
-            value={formData.fullName}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-2 border text-gray-700 border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-[var(--brand-br1)]"
-          />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 cp-x cp-y">
+      <div className="max-w-lg mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] bg-clip-text text-transparent mb-3">
+            Join the Event
+          </h1>
+          <p className="text-gray-600 text-lg">
+            Complete your registration to participate
+          </p>
         </div>
 
-        {/* Email (readonly) */}
-        {isSignedIn && (
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              value={user?.primaryEmailAddress?.emailAddress || ""}
-              readOnly
-              className="w-full px-4 py-2 border text-gray-700 border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed"
-            />
-          </div>
-        )}
+        {/* Form Card */}
+        <div className="relative">
+          {/* Glow Effect */}
+          <div className="absolute -inset-4 bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] rounded-3xl blur-xl opacity-10" />
 
-        {/* Phone */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Phone Number
-          </label>
-          <div className="flex">
-            {/* Country Code Dropdown */}
-            <select
-              value={countryCode}
-              onChange={(e) => setCountryCode(e.target.value)}
-              className="pl-3 py-2 border border-gray-300 text-gray-700 rounded-l-lg bg-white focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-[var(--brand-br1)]"
-            >
-              {countryOptions.map((c) => (
-                <option key={c.code} value={c.code}>
-                  {c.label} {c.code}
-                </option>
-              ))}
-            </select>
-
-            {/* Phone Input */}
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-              pattern="[0-9]{7,15}" // only digits, 7-15 length
-              placeholder="Enter phone number"
-              className="w-full px-4 py-2 text-gray-700 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-[var(--brand-br1)]"
-            />
-          </div>
-        </div>
-
-        {/* Dropdown */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Have you shopped from brandxyz.com?
-          </label>
-          <select
-            name="shopped"
-            value={formData.shopped}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-2 border text-gray-700 border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-[var(--brand-br1)]"
+          <form
+            onSubmit={handleSubmit}
+            className="relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 p-8 space-y-6"
           >
-            <option value="" disabled>
-              Select an option
-            </option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-          </select>
-        </div>
+            {/* Full Name */}
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-gray-700 tracking-wide">
+                Full Name
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  name="fullName"
+                  value={formData.fullName}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
+                  placeholder="Enter your full name"
+                />
+              </div>
+            </div>
 
-        {/* Terms & Conditions */}
-        <div className="flex items-start space-x-2">
-          <input
-            type="checkbox"
-            id="terms"
-            checked={acceptedTerms}
-            onChange={(e) => setAcceptedTerms(e.target.checked)}
-            className="mt-1"
-          />
-          <label htmlFor="terms" className="text-sm text-gray-600">
-            I agree to the{" "}
-            <a
-              href="/terms"
-              target="_blank"
-              className="text-[var(--brand-br1)] underline"
+            {/* Email */}
+            {isSignedIn && (
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-gray-700 tracking-wide">
+                  Email
+                </label>
+                <div className="relative">
+                  <input
+                    type="email"
+                    value={user?.primaryEmailAddress?.emailAddress || ""}
+                    readOnly
+                    className="w-full px-4 py-3 bg-gray-100/50 border border-gray-200 rounded-xl text-gray-600 cursor-not-allowed"
+                  />
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full font-medium">
+                      Verified
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Phone */}
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-gray-700 tracking-wide">
+                Phone Number
+              </label>
+              <div className="flex gap-3">
+                <select
+                  value={countryCode}
+                  onChange={(e) => setCountryCode(e.target.value)}
+                  className="w-32 px-3 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
+                >
+                  {countryOptions.map((c) => (
+                    <option key={c.code} value={c.code}>
+                      {c.label} {c.code}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                  pattern="[0-9]{7,15}"
+                  placeholder="Phone number"
+                  className="flex-1 px-4 py-3 bg-white/50 border text-gray-700 border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
+                />
+              </div>
+            </div>
+
+            {/* Shopping Experience */}
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-gray-700 tracking-wide">
+                Have you shopped from brandxyz.com?
+              </label>
+              <select
+                name="shopped"
+                value={formData.shopped}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 bg-white/50 text-gray-700 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
+              >
+                <option value="" disabled>
+                  Select your experience
+                </option>
+                <option value="yes">Yes, I&apos;ve shopped before</option>
+                <option value="no">No, first time</option>
+              </select>
+            </div>
+
+            {/* Terms */}
+            <div className="flex items-start space-x-3 p-4 bg-blue-50/50 rounded-xl border border-blue-100">
+              <input
+                type="checkbox"
+                id="terms"
+                checked={acceptedTerms}
+                onChange={(e) => setAcceptedTerms(e.target.checked)}
+                className="mt-1 w-4 h-4 text-[var(--brand-br1)] bg-white border-gray-300 rounded focus:ring-[var(--brand-br1)]"
+              />
+              <label htmlFor="terms" className="text-sm text-gray-600 flex-1">
+                I agree to the{" "}
+                <a
+                  href="/terms"
+                  target="_blank"
+                  className="text-[var(--brand-br1)] font-semibold hover:underline"
+                >
+                  Terms and Conditions
+                </a>
+              </label>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={!acceptedTerms}
+              className={`w-full py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 transform ${
+                acceptedTerms
+                  ? "bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] text-white shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              }`}
             >
-              Terms and Conditions
-            </a>
-          </label>
+              {participateMutation.isPending ? (
+                <div className="flex items-center justify-center">
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                  Submitting...
+                </div>
+              ) : (
+                "Participate Now 🎉"
+              )}
+            </button>
+          </form>
         </div>
-
-        {/* Submit */}
-        <button
-          type="submit"
-          disabled={!acceptedTerms}
-          className={`w-full py-2 px-4 rounded-lg font-medium transition ${
-            acceptedTerms
-              ? "bg-[var(--brand-br1)] text-white hover:bg-[var(--brand-br2)]"
-              : "bg-gray-300 text-gray-500 cursor-not-allowed"
-          }`}
-        >
-          Participate Now
-        </button>
-      </form>
+      </div>
 
       {/* Success Modal */}
       <SuccessModal
