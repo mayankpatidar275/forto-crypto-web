@@ -26,7 +26,7 @@ export default function ParticipationForm() {
     e.preventDefault();
     if (!isSignedIn || !user?.primaryEmailAddress?.emailAddress) return;
     const token = await getToken();
-    participateMutation.mutate({
+    const participationRes = participateMutation.mutate({
       brandId: "88a1603d-67ec-4f95-adc5-072dcefc63fa",
       eventId: "386e4d08-0b04-45d5-9c1c-a4b675826f4e",
       email: user?.primaryEmailAddress?.emailAddress,
@@ -36,12 +36,7 @@ export default function ParticipationForm() {
       token: token,
     });
 
-    console.log({
-      fullName: formData.fullName,
-      email: user?.primaryEmailAddress?.emailAddress,
-      phone: formData.phone,
-      shopped: formData.shopped,
-    });
+    console.log("Participation data: ", participationRes);
     // TODO: send data to backend
   };
 

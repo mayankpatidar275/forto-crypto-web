@@ -46,3 +46,10 @@ const FortoVsTraditional = () => {
 };
 
 export default FortoVsTraditional;
+
+// TODO
+// Ticket infor show to user
+// Count of participants
+// countdown
+// email setup
+// email template

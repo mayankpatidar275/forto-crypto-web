@@ -3,9 +3,103 @@
 
 import { useParticipate } from "@/custom-hooks/mutations";
 import { useAuth, useUser } from "@clerk/nextjs";
-import { useState } from "react";
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, useState } from "react";
 import toast from "react-hot-toast";
+import Confetti from "react-confetti";
 
+// Success Modal Component
+interface SuccessModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  ticket: {
+    shortCode: string;
+  } | null; // Replace with proper ticket type
+  totalTickets: number;
+}
+
+function SuccessModal({
+  isOpen,
+  onClose,
+  ticket,
+  totalTickets,
+}: SuccessModalProps) {
+  return (
+    <Transition appear show={isOpen} as={Fragment}>
+      <Dialog as="div" className="relative z-50" onClose={onClose}>
+        <Transition.Child
+          as={Fragment}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div className="fixed inset-0 bg-black bg-opacity-50" />
+        </Transition.Child>
+
+        <div className="fixed inset-0 overflow-y-auto">
+          <div className="flex min-h-full items-center justify-center p-4 text-center">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Confetti
+                  width={window.innerWidth}
+                  height={window.innerHeight}
+                  recycle={false}
+                  numberOfPieces={200}
+                  className="absolute inset-0"
+                />
+                <Dialog.Title
+                  as="h3"
+                  className="text-2xl font-bold leading-6 text-gray-900 text-center"
+                >
+                  Congratulations!
+                </Dialog.Title>
+                <div className="mt-4 text-center">
+                  <p className="text-lg text-gray-600">
+                    You&apos;ve successfully participated in the event!
+                  </p>
+                  <p className="mt-2 text-sm text-gray-500">
+                    Your ticket code:{" "}
+                    <span className="font-semibold text-[var(--brand-br1)]">
+                      {ticket?.shortCode}
+                    </span>
+                  </p>
+                  <p className="mt-2 text-sm text-gray-500">
+                    Total participants:{" "}
+                    <span className="font-semibold text-[var(--brand-br1)]">
+                      {500 + totalTickets}
+                    </span>
+                  </p>
+                </div>
+                <div className="mt-6 flex justify-center">
+                  <button
+                    type="button"
+                    className="inline-flex justify-center rounded-lg bg-[var(--brand-br1)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--brand-br2)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-br1)]"
+                    onClick={onClose}
+                  >
+                    Close
+                  </button>
+                </div>
+              </Dialog.Panel>
+            </Transition.Child>
+          </div>
+        </div>
+      </Dialog>
+    </Transition>
+  );
+}
+
+// Participation Form Component
 export default function ParticipationForm() {
   const { isSignedIn, user } = useUser();
   // Use `useAuth()` to access the `getToken()` method
@@ -17,8 +111,13 @@ export default function ParticipationForm() {
     shopped: "",
   });
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [countryCode, setCountryCode] = useState("+973"); // default Bahrain
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [ticketData, setTicketData] = useState<{ shortCode: string } | null>(
+    null
+  ); // Replace with proper ticket type
+  const [totalTickets, setTotalTickets] = useState(0);
 
-  const [countryCode, setCountryCode] = useState("+973"); // default India
   const countryOptions = [
     { code: "+973", label: "🇧🇭" }, // Bahrain
     { code: "+965", label: "🇰🇼" }, // Kuwait
@@ -40,7 +139,9 @@ export default function ParticipationForm() {
       return toast.error("Please Sign In first");
     }
     if (!isSignedIn || !user?.primaryEmailAddress?.emailAddress) return;
-    if (!acceptedTerms) return;
+    if (!acceptedTerms) {
+      return toast.error("Please accept the Terms and Conditions");
+    }
 
     const token = await getToken();
 
@@ -57,7 +158,13 @@ export default function ParticipationForm() {
       }),
       {
         loading: "Submitting your participation...",
-        success: "Participated successfully!",
+        success: (data) => {
+          console.log("data: ", data);
+          setTicketData(data.data.ticket);
+          setTotalTickets(data.data.totalTickets);
+          setIsModalOpen(true);
+          return "Participated successfully!";
+        },
         error: (err) => {
           try {
             const errorData = JSON.parse(err.message);
@@ -78,23 +185,6 @@ export default function ParticipationForm() {
     );
   };
 
-  // if (!isSignedIn) {
-  //   return (
-  //     <div className="max-w-md mx-auto p-6 bg-white rounded-2xl shadow-md mt-24 text-center">
-  //       <h2 className="text-xl font-semibold text-gray-800 mb-4">
-  //         Please sign in to participate
-  //       </h2>
-  //       <p className="text-gray-600">
-  //         Click the{" "}
-  //         <span className="text-[var(--brand-br1)] font-medium">
-  //           Sign Up/In
-  //         </span>{" "}
-  //         button in the header to continue.
-  //       </p>
-  //     </div>
-  //   );
-  // }
-
   return (
     <div className="cp-x cp-y">
       <form
@@ -102,7 +192,7 @@ export default function ParticipationForm() {
         className="max-w-md mx-auto p-6 bg-white rounded-2xl shadow-md space-y-4"
       >
         <h2 className="text-2xl font-semibold text-gray-800 text-center">
-          Participation Form
+          Join the Event
         </h2>
 
         {/* Full Name */}
@@ -219,9 +309,17 @@ export default function ParticipationForm() {
               : "bg-gray-300 text-gray-500 cursor-not-allowed"
           }`}
         >
-          Participate
+          Participate Now
         </button>
       </form>
+
+      {/* Success Modal */}
+      <SuccessModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        ticket={ticketData}
+        totalTickets={totalTickets}
+      />
     </div>
   );
 }

@@ -4,6 +4,8 @@ import React from "react";
 import { Brand1 } from "../assets";
 import TermsSection from "../components-website-3.0/TermsSection";
 import TestimonialSection from "../components-website-3.0/TestimonialSection";
+import CountDown from "../components-website-3.0/ui/CountDown";
+import Heading2 from "../components-website-3.0/ui/Heading2";
 
 function ParticipatePage() {
   return (
@@ -23,6 +25,16 @@ function ParticipatePage() {
         />
       </figure>
       <TermsSection />
+      <section className="cp-x cp-y flex justify-center">
+        <div className="max-w-6xl">
+          {/* Right Content */}
+          <div className="flex flex-col items-center gap-4 h-full justify-center">
+            {/* <Label text="About us" /> */}
+            <Heading2>Join Soon</Heading2>
+            <CountDown targetDate="2025-12-31T23:59:59" />
+          </div>
+        </div>
+      </section>
       <ParticipationForm></ParticipationForm>
       <TestimonialSection />
     </div>

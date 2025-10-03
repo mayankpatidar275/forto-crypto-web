@@ -47,7 +47,7 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link href="/brand" className="hover:text-white">
+              <Link href="/6thstreet" className="hover:text-white">
                 Giveaway
               </Link>
             </li>

@@ -19,7 +19,7 @@ const navLinks = [
   { href: "#how-it-works", label: "How" },
   { href: "#faq", label: "FAQ" },
   { href: "#footer", label: "Contact" },
-  { href: "/brand", label: "For Brands" },
+  { href: "/6thstreet", label: "For Brands" },
 ];
 
 export default function Header() {
