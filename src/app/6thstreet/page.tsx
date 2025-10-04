@@ -1,3 +1,5 @@
+"use client";
+
 import ParticipationForm from "@/app/components-brand/ParticipationForm";
 import Image from "next/image";
 import React from "react";
@@ -6,8 +8,26 @@ import TermsSection from "../components-website-3.0/TermsSection";
 import TestimonialSection from "../components-website-3.0/TestimonialSection";
 import CountDown from "../components-website-3.0/ui/CountDown";
 import Heading2 from "../components-website-3.0/ui/Heading2";
+import { useEventById } from "@/custom-hooks/queries";
 
 function ParticipatePage() {
+  const {
+    data: event,
+    isLoading: isLoadingEvent,
+    error,
+  } = useEventById("386e4d08-0b04-45d5-9c1c-a4b675826f4e");
+
+  if (isLoadingEvent) {
+    return <div>Loading...</div>;
+  }
+
+  if (!event || !event.data || !event.data.status) {
+    return <div>Event not found</div>;
+  }
+
+  if (error) {
+    return <div>Something went wrong!</div>;
+  }
   return (
     <div className="cp-y">
       <figure className="flex justify-center items-center w-full mb-10 relative overflow-hidden">
@@ -31,7 +51,7 @@ function ParticipatePage() {
           <div className="flex flex-col items-center gap-4 h-full justify-center">
             {/* <Label text="About us" /> */}
             <Heading2>Draw ends in</Heading2>
-            <CountDown targetDate="2025-12-31T23:59:59" />
+            <CountDown targetDate={event.data.endDate} />
           </div>
         </div>
       </section>

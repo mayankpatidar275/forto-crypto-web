@@ -2,6 +2,7 @@
 "use client";
 
 import { useParticipate } from "@/custom-hooks/mutations";
+import { useEventById } from "@/custom-hooks/queries";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -195,6 +196,12 @@ export default function ParticipationForm() {
     phone: "",
     shopped: "",
   });
+  const {
+    data: event,
+    isLoading: isLoadingEvent,
+    error,
+  } = useEventById("386e4d08-0b04-45d5-9c1c-a4b675826f4e");
+
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [countryCode, setCountryCode] = useState("+971");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -264,161 +271,178 @@ export default function ParticipationForm() {
     );
   };
 
+  if (isLoadingEvent) {
+    <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Something went wrong!</div>;
+  }
+
+  if (!event || !event.data || !event.data.status) {
+    return <div>Event not found</div>;
+  }
+  console.log("event: ", event);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 cp-x cp-y">
-      <div className="max-w-lg mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] bg-clip-text text-transparent mb-3">
-            Join the Event
-          </h1>
-          <p className="text-gray-600 text-lg">
-            Complete your registration to participate
-          </p>
-        </div>
+      {event.data.status === "ACTIVE" ? (
+        <div className="max-w-lg mx-auto">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] bg-clip-text text-transparent mb-3">
+              Join the Event
+            </h1>
+            <p className="text-gray-600 text-lg">
+              Complete your registration to participate
+            </p>
+          </div>
 
-        {/* Form Card */}
-        <div className="relative">
-          {/* Glow Effect */}
-          <div className="absolute -inset-4 bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] rounded-3xl blur-xl opacity-10" />
+          {/* Form Card */}
+          <div className="relative">
+            {/* Glow Effect */}
+            <div className="absolute -inset-4 bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] rounded-3xl blur-xl opacity-10" />
 
-          <form
-            onSubmit={handleSubmit}
-            className="relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 p-8 space-y-6"
-          >
-            {/* Full Name */}
-            <div className="space-y-2">
-              <label className="block text-sm font-semibold text-gray-700 tracking-wide">
-                Full Name
-              </label>
-              <div className="relative">
-                <input
-                  type="text"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
-                  placeholder="Enter your full name"
-                />
-              </div>
-            </div>
-
-            {/* Email */}
-            {isSignedIn && (
+            <form
+              onSubmit={handleSubmit}
+              className="relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 p-8 space-y-6"
+            >
+              {/* Full Name */}
               <div className="space-y-2">
                 <label className="block text-sm font-semibold text-gray-700 tracking-wide">
-                  Email
+                  Full Name
                 </label>
                 <div className="relative">
                   <input
-                    type="email"
-                    value={user?.primaryEmailAddress?.emailAddress || ""}
-                    readOnly
-                    className="w-full px-4 py-3 bg-gray-100/50 border border-gray-200 rounded-xl text-gray-600 cursor-not-allowed"
+                    type="text"
+                    name="fullName"
+                    value={formData.fullName}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
+                    placeholder="Enter your full name"
                   />
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                    <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full font-medium">
-                      Verified
-                    </span>
+                </div>
+              </div>
+
+              {/* Email */}
+              {isSignedIn && (
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-gray-700 tracking-wide">
+                    Email
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="email"
+                      value={user?.primaryEmailAddress?.emailAddress || ""}
+                      readOnly
+                      className="w-full px-4 py-3 bg-gray-100/50 border border-gray-200 rounded-xl text-gray-600 cursor-not-allowed"
+                    />
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                      <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full font-medium">
+                        Verified
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Phone */}
-            <div className="space-y-2">
-              <label className="block text-sm font-semibold text-gray-700 tracking-wide">
-                Phone Number
-              </label>
-              <div className="flex gap-3">
+              {/* Phone */}
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-gray-700 tracking-wide">
+                  Phone Number
+                </label>
+                <div className="flex gap-3">
+                  <select
+                    value={countryCode}
+                    onChange={(e) => setCountryCode(e.target.value)}
+                    className="w-32 px-3 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
+                  >
+                    {countryOptions.map((c) => (
+                      <option key={c.code} value={c.code}>
+                        {c.label} {c.code}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    required
+                    pattern="[0-9]{7,15}"
+                    placeholder="Phone number"
+                    className="flex-1 px-4 py-3 bg-white/50 border text-gray-700 border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
+                  />
+                </div>
+              </div>
+
+              {/* Shopping Experience */}
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-gray-700 tracking-wide">
+                  Have you shopped from brandxyz.com?
+                </label>
                 <select
-                  value={countryCode}
-                  onChange={(e) => setCountryCode(e.target.value)}
-                  className="w-32 px-3 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
-                >
-                  {countryOptions.map((c) => (
-                    <option key={c.code} value={c.code}>
-                      {c.label} {c.code}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
+                  name="shopped"
+                  value={formData.shopped}
                   onChange={handleChange}
                   required
-                  pattern="[0-9]{7,15}"
-                  placeholder="Phone number"
-                  className="flex-1 px-4 py-3 bg-white/50 border text-gray-700 border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
-                />
-              </div>
-            </div>
-
-            {/* Shopping Experience */}
-            <div className="space-y-2">
-              <label className="block text-sm font-semibold text-gray-700 tracking-wide">
-                Have you shopped from brandxyz.com?
-              </label>
-              <select
-                name="shopped"
-                value={formData.shopped}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 bg-white/50 text-gray-700 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
-              >
-                <option value="" disabled>
-                  Select your experience
-                </option>
-                <option value="yes">Yes, I&apos;ve shopped before</option>
-                <option value="no">No, first time</option>
-              </select>
-            </div>
-
-            {/* Terms */}
-            <div className="flex items-start space-x-3 p-4 bg-blue-50/50 rounded-xl border border-blue-100">
-              <input
-                type="checkbox"
-                id="terms"
-                checked={acceptedTerms}
-                onChange={(e) => setAcceptedTerms(e.target.checked)}
-                className="mt-1 w-4 h-4 text-[var(--brand-br1)] bg-white border-gray-300 rounded focus:ring-[var(--brand-br1)]"
-              />
-              <label htmlFor="terms" className="text-sm text-gray-600 flex-1">
-                I agree to the{" "}
-                <a
-                  href="/terms"
-                  target="_blank"
-                  className="text-[var(--brand-br1)] font-semibold hover:underline"
+                  className="w-full px-4 py-3 bg-white/50 text-gray-700 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
                 >
-                  Terms and Conditions
-                </a>
-              </label>
-            </div>
+                  <option value="" disabled>
+                    Select your experience
+                  </option>
+                  <option value="yes">Yes, I&apos;ve shopped before</option>
+                  <option value="no">No, first time</option>
+                </select>
+              </div>
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={!acceptedTerms}
-              className={`w-full py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 transform ${
-                acceptedTerms
-                  ? "bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] text-white shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
-              }`}
-            >
-              {participateMutation.isPending ? (
-                <div className="flex items-center justify-center">
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                  Submitting...
-                </div>
-              ) : (
-                "Participate Now 🎉"
-              )}
-            </button>
-          </form>
+              {/* Terms */}
+              <div className="flex items-start space-x-3 p-4 bg-blue-50/50 rounded-xl border border-blue-100">
+                <input
+                  type="checkbox"
+                  id="terms"
+                  checked={acceptedTerms}
+                  onChange={(e) => setAcceptedTerms(e.target.checked)}
+                  className="mt-1 w-4 h-4 text-[var(--brand-br1)] bg-white border-gray-300 rounded focus:ring-[var(--brand-br1)]"
+                />
+                <label htmlFor="terms" className="text-sm text-gray-600 flex-1">
+                  I agree to the{" "}
+                  <a
+                    href="/terms"
+                    target="_blank"
+                    className="text-[var(--brand-br1)] font-semibold hover:underline"
+                  >
+                    Terms and Conditions
+                  </a>
+                </label>
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={!acceptedTerms}
+                className={`w-full py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 transform ${
+                  acceptedTerms
+                    ? "bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] text-white shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
+                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                }`}
+              >
+                {participateMutation.isPending ? (
+                  <div className="flex items-center justify-center">
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                    Submitting...
+                  </div>
+                ) : (
+                  "Participate Now 🎉"
+                )}
+              </button>
+            </form>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="text-black">Event Ended</div>
+      )}
 
       {/* Success Modal */}
       <SuccessModal

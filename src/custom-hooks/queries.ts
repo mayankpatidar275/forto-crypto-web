@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchSurveyQuestions } from "../services/api/surveyApi";
 import { fetchCart, fetchPurchaseHistory } from "@/services/api/cartApi";
 import {
+  fetchEventById,
   fetchNftById,
   fetchNfts,
   fetchNftsByCategory,
@@ -52,4 +53,8 @@ export function usePurchaseHistory(userPrivyId: string) {
     userPrivyId,
     !!userPrivyId
   );
+}
+
+export function useEventById(eventId: string) {
+  return useCustomQuery(["eventById", eventId], fetchEventById, eventId);
 }

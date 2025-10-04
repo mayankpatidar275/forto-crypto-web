@@ -42,3 +42,7 @@ export async function participate(body: {
     body
   );
 }
+
+export async function fetchEventById(eventId?: string) {
+  return get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/events/${eventId}`);
+}
