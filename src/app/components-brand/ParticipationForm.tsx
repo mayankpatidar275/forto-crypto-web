@@ -305,7 +305,7 @@ export default function ParticipationForm() {
 
             <form
               onSubmit={handleSubmit}
-              className="relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 p-8 space-y-6"
+              className="relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 p-4 sm:p-8 space-y-6"
             >
               {/* Full Name */}
               <div className="space-y-2">
@@ -356,7 +356,7 @@ export default function ParticipationForm() {
                   <select
                     value={countryCode}
                     onChange={(e) => setCountryCode(e.target.value)}
-                    className="w-32 px-3 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
+                    className="w-24 sm:w-28 px-1 sm:px-3 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
                   >
                     {countryOptions.map((c) => (
                       <option key={c.code} value={c.code}>
@@ -372,7 +372,7 @@ export default function ParticipationForm() {
                     required
                     pattern="[0-9]{7,15}"
                     placeholder="Phone number"
-                    className="flex-1 px-4 py-3 bg-white/50 border text-gray-700 border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
+                    className="flex-1 px-4 py-3 w-2 bg-white/50 border text-gray-700 border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
                   />
                 </div>
               </div>
