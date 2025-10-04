@@ -3,7 +3,7 @@
 
 import { useParticipate } from "@/custom-hooks/mutations";
 import { useEventById } from "@/custom-hooks/queries";
-import { useAuth, useUser } from "@clerk/nextjs";
+import { SignUpButton, useAuth, useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -285,10 +285,19 @@ export default function ParticipationForm() {
   console.log("event: ", event);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 cp-x cp-y">
-      {event.data.status === "ACTIVE" ? (
-        <div className="max-w-lg mx-auto">
-          {/* Header */}
+    <div className="bg-gradient-to-br from-slate-50 to-blue-50 cp-x cp-y">
+      <div className="max-w-lg mx-auto">
+        {/* Header */}(
+        {event.data.status !== "ACTIVE" ? (
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] bg-clip-text text-transparent mb-3">
+              Event Ended
+            </h1>
+            <p className="text-gray-600 text-lg">
+              This event is not active any more
+            </p>
+          </div>
+        ) : isSignedIn ? (
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] bg-clip-text text-transparent mb-3">
               Join the Event
@@ -297,12 +306,26 @@ export default function ParticipationForm() {
               Complete your registration to participate
             </p>
           </div>
-
-          {/* Form Card */}
+        ) : (
+          <div className="text-center mb-4">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] bg-clip-text text-transparent mb-3">
+              Sign in to Join
+            </h1>
+            <div className="flex mx-auto justify-center">
+              <SignUpButton>
+                <button className="btn-primary">Sign Up/In</button>
+              </SignUpButton>
+            </div>
+          </div>
+        )}
+        ){/* Form Card */}
+        {
           <div className="relative">
             {/* Glow Effect */}
             <div className="absolute -inset-4 bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] rounded-3xl blur-xl opacity-10" />
-
+            {(!isSignedIn || event.data.status !== "ACTIVE") && (
+              <div className="bg-background opacity-25 w-full h-full absolute z-50 rounded-3xl flex justify-center items-center"></div>
+            )}
             <form
               onSubmit={handleSubmit}
               className="relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 p-4 sm:p-8 space-y-6"
@@ -439,10 +462,8 @@ export default function ParticipationForm() {
               </button>
             </form>
           </div>
-        </div>
-      ) : (
-        <div className="text-black">Event Ended</div>
-      )}
+        }
+      </div>
 
       {/* Success Modal */}
       <SuccessModal
