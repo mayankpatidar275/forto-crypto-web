@@ -30,6 +30,7 @@ export async function buyNft(body: {
 export async function participate(body: {
   eventId: string;
   brandId: string;
+  drawId: string;
   fullName: string;
   email: string;
   phone: string;

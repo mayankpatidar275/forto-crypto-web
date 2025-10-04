@@ -122,26 +122,24 @@ function SuccessModal({
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border border-blue-200">
-                <div className="text-2xl font-bold text-blue-600">
-                  #{500 + totalTickets}
-                </div>
-                <div className="text-sm text-blue-600/80 font-medium">
-                  Your Position
-                </div>
+            {/* <div className="grid grid-cols-2 gap-4"> */}
+            <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border border-blue-200">
+              <div className="text-2xl font-bold text-blue-600">
+                #{500 + totalTickets}
               </div>
-              <div className="text-center p-4 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl border border-emerald-200">
+              <div className="text-sm text-blue-600/80 font-medium">
+                Your Position
+              </div>
+            </div>
+            {/* <div className="text-center p-4 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl border border-emerald-200">
                 <div className="text-2xl font-bold text-emerald-600">
-                  {/* {totalTickets} */}
                   15
                 </div>
                 <div className="text-sm text-emerald-600/80 font-medium">
-                  {/* Total Participants */}
                   Days to Go
                 </div>
-              </div>
-            </div>
+              </div> */}
+            {/* </div> */}
 
             {/* Action Button */}
             <div className="flex justify-center pt-4">
@@ -198,7 +196,7 @@ export default function ParticipationForm() {
     shopped: "",
   });
   const [acceptedTerms, setAcceptedTerms] = useState(false);
-  const [countryCode, setCountryCode] = useState("+973");
+  const [countryCode, setCountryCode] = useState("+971");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [ticketData, setTicketData] = useState<{ shortCode: string } | null>(
     null
@@ -232,6 +230,7 @@ export default function ParticipationForm() {
       participateMutation.mutateAsync({
         brandId: "88a1603d-67ec-4f95-adc5-072dcefc63fa",
         eventId: "386e4d08-0b04-45d5-9c1c-a4b675826f4e",
+        drawId: "e2bcdcfd-5c05-4007-b38f-44a9b9cf5cb9",
         email: user?.primaryEmailAddress?.emailAddress || "",
         fullName: formData.fullName,
         phone: `${countryCode}${formData.phone}`,

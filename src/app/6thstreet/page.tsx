@@ -30,7 +30,7 @@ function ParticipatePage() {
           {/* Right Content */}
           <div className="flex flex-col items-center gap-4 h-full justify-center">
             {/* <Label text="About us" /> */}
-            <Heading2>Join Soon</Heading2>
+            <Heading2>Draw ends in</Heading2>
             <CountDown targetDate="2025-12-31T23:59:59" />
           </div>
         </div>
