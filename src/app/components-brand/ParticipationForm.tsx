@@ -4,6 +4,7 @@
 import { useParticipate } from "@/custom-hooks/mutations";
 import { useEventById } from "@/custom-hooks/queries";
 import { SignUpButton, useAuth, useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -209,6 +210,7 @@ export default function ParticipationForm() {
     null
   );
   const [totalTickets, setTotalTickets] = useState(0);
+  const router = useRouter();
 
   const countryOptions = [
     { code: "+973", label: "🇧🇭" }, // Bahrain
@@ -468,7 +470,10 @@ export default function ParticipationForm() {
       {/* Success Modal */}
       <SuccessModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          router.push("/");
+          setIsModalOpen(false);
+        }}
         ticket={ticketData}
         totalTickets={totalTickets}
       />
