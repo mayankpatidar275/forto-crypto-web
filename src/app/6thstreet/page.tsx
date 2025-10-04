@@ -1,6 +1,5 @@
 "use client";
 
-import ParticipationForm from "@/app/components-brand/ParticipationForm";
 import Image from "next/image";
 import React from "react";
 import { Brand1 } from "../assets";
@@ -9,6 +8,7 @@ import TestimonialSection from "../components-website-3.0/TestimonialSection";
 import CountDown from "../components-website-3.0/ui/CountDown";
 import Heading2 from "../components-website-3.0/ui/Heading2";
 import { useEventById } from "@/custom-hooks/queries";
+import ParticipationForm from "../components-website-3.0/ParticipationForm";
 
 function ParticipatePage() {
   const {
