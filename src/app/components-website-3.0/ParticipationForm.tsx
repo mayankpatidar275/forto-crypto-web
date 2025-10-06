@@ -193,7 +193,9 @@ export default function ParticipationForm() {
   const { getToken } = useAuth();
   const participateMutation = useParticipate();
   const [formData, setFormData] = useState({
-    fullName: "",
+    // fullName: "",
+    firstName: "",
+    lastName: "",
     phone: "",
     shopped: "",
   });
@@ -241,7 +243,9 @@ export default function ParticipationForm() {
         eventId: "386e4d08-0b04-45d5-9c1c-a4b675826f4e",
         drawId: "e2bcdcfd-5c05-4007-b38f-44a9b9cf5cb9",
         email: user?.primaryEmailAddress?.emailAddress || "",
-        fullName: formData.fullName,
+        // fullName: formData.fullName,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
         phone: `${countryCode}${formData.phone}`,
         purchasedBefore: formData.shopped === "yes",
         token: token,
@@ -284,7 +288,6 @@ export default function ParticipationForm() {
   if (!event || !event.data || !event.data.status) {
     return <div>Event not found</div>;
   }
-  console.log("event: ", event);
 
   return (
     <div className="bg-gradient-to-br from-slate-50 to-blue-50 cp-x cp-y">
@@ -332,20 +335,38 @@ export default function ParticipationForm() {
               onSubmit={handleSubmit}
               className="relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 p-4 sm:p-8 space-y-6"
             >
-              {/* Full Name */}
+              {/* First Name */}
               <div className="space-y-2">
                 <label className="block text-sm font-semibold text-gray-700 tracking-wide">
-                  Full Name
+                  First Name
                 </label>
                 <div className="relative">
                   <input
                     type="text"
-                    name="fullName"
-                    value={formData.fullName}
+                    name="firstName"
+                    value={formData.firstName}
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
-                    placeholder="Enter your full name"
+                    placeholder="Enter your first name"
+                  />
+                </div>
+              </div>
+
+              {/* Last Name */}
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-gray-700 tracking-wide">
+                  Last Name
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
+                    placeholder="Enter your last name"
                   />
                 </div>
               </div>

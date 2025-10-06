@@ -31,7 +31,9 @@ export async function participate(body: {
   eventId: string;
   brandId: string;
   drawId: string;
-  fullName: string;
+  // fullName: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   purchasedBefore: boolean;
