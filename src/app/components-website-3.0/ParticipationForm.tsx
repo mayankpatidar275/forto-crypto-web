@@ -3,7 +3,7 @@
 
 import { useParticipate } from "@/custom-hooks/mutations";
 import { useEventById } from "@/custom-hooks/queries";
-import { SignUpButton, useAuth, useUser } from "@clerk/nextjs";
+import { useAuth, useSignIn, useSignUp, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -188,17 +188,29 @@ function SuccessModal({
     </div>
   );
 }
+
 export default function ParticipationForm() {
   const { isSignedIn, user } = useUser();
   const { getToken } = useAuth();
   const participateMutation = useParticipate();
+
+  // Clerk authentication hooks
+  const { signUp, setActive } = useSignUp();
+  const { signIn } = useSignIn();
+
   const [formData, setFormData] = useState({
-    // fullName: "",
     firstName: "",
     lastName: "",
     phone: "",
     shopped: "",
+    email: "",
   });
+
+  const [authStep, setAuthStep] = useState<"email" | "otp">("email");
+  const [otp, setOtp] = useState("");
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [authError, setAuthError] = useState("");
+
   const {
     data: event,
     isLoading: isLoadingEvent,
@@ -229,9 +241,117 @@ export default function ParticipationForm() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Handle email submission for sign in/sign up
+  const handleEmailSubmit = async () => {
+    setAuthError("");
+
+    if (!formData.email) {
+      setAuthError("Please enter your email address");
+      return;
+    }
+
+    setIsVerifying(true);
+
+    try {
+      // First try to sign in
+      if (signIn) {
+        const signInAttempt = await signIn.create({
+          identifier: formData.email,
+        });
+
+        // If user exists, prepare for first factor verification (email code)
+        if (
+          signInAttempt.supportedFirstFactors?.find(
+            (f) => f.strategy === "email_code"
+          )
+        ) {
+          await signIn.prepareFirstFactor({
+            strategy: "email_code",
+            emailAddressId: signInAttempt.supportedFirstFactors.find(
+              (f) => f.strategy === "email_code"
+            )?.emailAddressId,
+          });
+          setAuthStep("otp");
+        }
+      }
+    } catch (err: any) {
+      // If user doesn't exist, try to sign up
+      if (err.errors?.[0]?.code === "form_identifier_not_found") {
+        try {
+          if (signUp) {
+            await signUp.create({
+              emailAddress: formData.email,
+            });
+
+            await signUp.prepareEmailAddressVerification({
+              strategy: "email_code",
+            });
+            setAuthStep("otp");
+          }
+        } catch (signUpErr: any) {
+          setAuthError(
+            signUpErr.errors?.[0]?.message || "Failed to create account"
+          );
+        }
+      } else {
+        setAuthError(err.errors?.[0]?.message || "Authentication failed");
+      }
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
+  // Handle OTP verification
+  const handleOtpSubmit = async () => {
+    if (!otp) {
+      setAuthError("Please enter the verification code");
+      return;
+    }
+
+    setIsVerifying(true);
+    setAuthError("");
+
+    try {
+      // Try sign in first
+      if (signIn) {
+        const signInAttempt = await signIn.attemptFirstFactor({
+          strategy: "email_code",
+          code: otp,
+        });
+
+        if (signInAttempt.status === "complete") {
+          await setActive({ session: signInAttempt.createdSessionId });
+          return;
+        }
+      }
+    } catch (signInErr: any) {
+      // If sign in fails, try sign up
+      try {
+        if (signUp) {
+          const signUpAttempt = await signUp.attemptEmailAddressVerification({
+            code: otp,
+          });
+
+          if (signUpAttempt.status === "complete") {
+            await setActive({ session: signUpAttempt.createdSessionId });
+          }
+        }
+      } catch (signUpErr: any) {
+        setAuthError(
+          signUpErr.errors?.[0]?.message || "Invalid verification code"
+        );
+      }
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isSignedIn) return toast.error("Please Sign In first");
+    if (!isSignedIn) {
+      setAuthError("Please complete email verification first");
+      return;
+    }
     if (!acceptedTerms)
       return toast.error("Please accept the Terms and Conditions");
 
@@ -242,8 +362,7 @@ export default function ParticipationForm() {
         brandId: "88a1603d-67ec-4f95-adc5-072dcefc63fa",
         eventId: "386e4d08-0b04-45d5-9c1c-a4b675826f4e",
         drawId: "e2bcdcfd-5c05-4007-b38f-44a9b9cf5cb9",
-        email: user?.primaryEmailAddress?.emailAddress || "",
-        // fullName: formData.fullName,
+        email: formData.email,
         firstName: formData.firstName,
         lastName: formData.lastName,
         phone: `${countryCode}${formData.phone}`,
@@ -277,8 +396,15 @@ export default function ParticipationForm() {
     );
   };
 
+  // Reset auth state when signed in
+  useEffect(() => {
+    if (isSignedIn) {
+      setAuthStep("otp"); // Keep OTP step visible but show verified state
+    }
+  }, [isSignedIn]);
+
   if (isLoadingEvent) {
-    <div>Loading...</div>;
+    return <div>Loading...</div>;
   }
 
   if (error) {
@@ -292,7 +418,7 @@ export default function ParticipationForm() {
   return (
     <div className="bg-gradient-to-br from-slate-50 to-blue-50 cp-x cp-y">
       <div className="max-w-lg mx-auto">
-        {/* Header */}(
+        {/* Header */}
         {event.data.status !== "ACTIVE" ? (
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] bg-clip-text text-transparent mb-3">
@@ -302,7 +428,7 @@ export default function ParticipationForm() {
               This event is not active any more
             </p>
           </div>
-        ) : isSignedIn ? (
+        ) : (
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] bg-clip-text text-transparent mb-3">
               Join the Event
@@ -311,181 +437,249 @@ export default function ParticipationForm() {
               Complete your registration to participate
             </p>
           </div>
-        ) : (
-          <div className="text-center mb-4">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] bg-clip-text text-transparent mb-3">
-              Sign in to Join
-            </h1>
-            <div className="flex mx-auto justify-center">
-              <SignUpButton>
-                <button className="btn-primary">Sign Up/In</button>
-              </SignUpButton>
-            </div>
-          </div>
         )}
-        ){/* Form Card */}
-        {
-          <div className="relative">
-            {/* Glow Effect */}
-            <div className="absolute -inset-4 bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] rounded-3xl blur-xl opacity-10" />
-            {(!isSignedIn || event.data.status !== "ACTIVE") && (
-              <div className="bg-background opacity-25 w-full h-full absolute z-50 rounded-3xl flex justify-center items-center"></div>
-            )}
-            <form
-              onSubmit={handleSubmit}
-              className="relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 p-4 sm:p-8 space-y-6"
-            >
-              {/* First Name */}
-              <div className="space-y-2">
-                <label className="block text-sm font-semibold text-gray-700 tracking-wide">
-                  First Name
-                </label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
-                    placeholder="Enter your first name"
-                  />
-                </div>
-              </div>
 
-              {/* Last Name */}
-              <div className="space-y-2">
-                <label className="block text-sm font-semibold text-gray-700 tracking-wide">
-                  Last Name
-                </label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
-                    placeholder="Enter your last name"
-                  />
-                </div>
+        {/* Form Card */}
+        <div className="relative">
+          {/* Glow Effect */}
+          <div className="absolute -inset-4 bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] rounded-3xl blur-xl opacity-10" />
+          {event.data.status !== "ACTIVE" && (
+            <div className="bg-background opacity-25 w-full h-full absolute z-50 rounded-3xl flex justify-center items-center"></div>
+          )}
+          <form
+            onSubmit={handleSubmit}
+            className="relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 p-4 sm:p-8 space-y-6"
+          >
+            {/* First Name */}
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-gray-700 tracking-wide">
+                First Name
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
+                  placeholder="Enter your first name"
+                />
               </div>
+            </div>
 
-              {/* Email */}
-              {isSignedIn && (
-                <div className="space-y-2">
-                  <label className="block text-sm font-semibold text-gray-700 tracking-wide">
-                    Email
-                  </label>
+            {/* Last Name */}
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-gray-700 tracking-wide">
+                Last Name
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
+                  placeholder="Enter your last name"
+                />
+              </div>
+            </div>
+
+            {/* Email Authentication */}
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-gray-700 tracking-wide">
+                Email Address
+              </label>
+
+              {authStep === "email" && !isSignedIn && (
+                <div className="space-y-3">
                   <div className="relative">
                     <input
                       type="email"
-                      value={user?.primaryEmailAddress?.emailAddress || ""}
-                      readOnly
-                      className="w-full px-4 py-3 bg-gray-100/50 border border-gray-200 rounded-xl text-gray-600 cursor-not-allowed"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
+                      placeholder="Enter your email address"
                     />
-                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                      <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full font-medium">
-                        Verified
-                      </span>
-                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleEmailSubmit}
+                    disabled={isVerifying}
+                    className="w-full py-3 px-6 bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50"
+                  >
+                    {isVerifying ? (
+                      <div className="flex items-center justify-center">
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                        Sending Code...
+                      </div>
+                    ) : (
+                      "Send Verification Code"
+                    )}
+                  </button>
+                </div>
+              )}
+
+              {authStep === "otp" && !isSignedIn && (
+                <div className="space-y-3">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                      required
+                      className="flex-1 px-4 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400 text-center text-lg font-mono"
+                      placeholder="Enter 6-digit code"
+                      maxLength={6}
+                    />
+                    <button
+                      type="button"
+                      onClick={handleOtpSubmit}
+                      disabled={isVerifying}
+                      className="px-6 py-3 bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50 whitespace-nowrap"
+                    >
+                      {isVerifying ? (
+                        <div className="flex items-center justify-center">
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-1" />
+                        </div>
+                      ) : (
+                        "Verify"
+                      )}
+                    </button>
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    We sent a code to <strong>{formData.email}</strong>
+                    <button
+                      type="button"
+                      onClick={() => setAuthStep("email")}
+                      className="ml-2 text-[var(--brand-br1)] font-semibold hover:underline"
+                    >
+                      Change email
+                    </button>
+                  </p>
+                </div>
+              )}
+
+              {isSignedIn && (
+                <div className="relative">
+                  <input
+                    type="email"
+                    value={user?.primaryEmailAddress?.emailAddress || ""}
+                    readOnly
+                    className="w-full px-4 py-3 bg-green-50/50 border border-green-200 rounded-xl text-gray-700"
+                  />
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full font-medium">
+                      Verified ✓
+                    </span>
                   </div>
                 </div>
               )}
 
-              {/* Phone */}
-              <div className="space-y-2">
-                <label className="block text-sm font-semibold text-gray-700 tracking-wide">
-                  Phone Number
-                </label>
-                <div className="flex gap-3">
-                  <select
-                    value={countryCode}
-                    onChange={(e) => setCountryCode(e.target.value)}
-                    className="w-24 sm:w-28 px-1 sm:px-3 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
-                  >
-                    {countryOptions.map((c) => (
-                      <option key={c.code} value={c.code}>
-                        {c.label} {c.code}
-                      </option>
-                    ))}
-                  </select>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    required
-                    pattern="[0-9]{7,15}"
-                    placeholder="Phone number"
-                    className="flex-1 px-4 py-3 w-2 bg-white/50 border text-gray-700 border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
-                  />
+              {authError && (
+                <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg">
+                  {authError}
                 </div>
-              </div>
+              )}
+            </div>
 
-              {/* Shopping Experience */}
-              <div className="space-y-2">
-                <label className="block text-sm font-semibold text-gray-700 tracking-wide">
-                  Have you shopped from brandxyz.com?
-                </label>
+            {/* Phone */}
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-gray-700 tracking-wide">
+                Phone Number
+              </label>
+              <div className="flex gap-3">
                 <select
-                  name="shopped"
-                  value={formData.shopped}
+                  value={countryCode}
+                  onChange={(e) => setCountryCode(e.target.value)}
+                  className="w-24 sm:w-28 px-1 sm:px-3 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
+                >
+                  {countryOptions.map((c) => (
+                    <option key={c.code} value={c.code}>
+                      {c.label} {c.code}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 bg-white/50 text-gray-700 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
-                >
-                  <option value="" disabled>
-                    Select your experience
-                  </option>
-                  <option value="yes">Yes, I&apos;ve shopped before</option>
-                  <option value="no">No, first time</option>
-                </select>
-              </div>
-
-              {/* Terms */}
-              <div className="flex items-start space-x-3 p-4 bg-blue-50/50 rounded-xl border border-blue-100">
-                <input
-                  type="checkbox"
-                  id="terms"
-                  checked={acceptedTerms}
-                  onChange={(e) => setAcceptedTerms(e.target.checked)}
-                  className="mt-1 w-4 h-4 text-[var(--brand-br1)] bg-white border-gray-300 rounded focus:ring-[var(--brand-br1)]"
+                  pattern="[0-9]{7,15}"
+                  placeholder="Phone number"
+                  className="flex-1 px-4 py-3 w-2 bg-white/50 border text-gray-700 border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
                 />
-                <label htmlFor="terms" className="text-sm text-gray-600 flex-1">
-                  I agree to the{" "}
-                  <a
-                    href="/terms"
-                    target="_blank"
-                    className="text-[var(--brand-br1)] font-semibold hover:underline"
-                  >
-                    Terms and Conditions
-                  </a>
-                </label>
               </div>
+            </div>
 
-              {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={!acceptedTerms}
-                className={`w-full py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 transform ${
-                  acceptedTerms
-                    ? "bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] text-white shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
-                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                }`}
+            {/* Shopping Experience */}
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-gray-700 tracking-wide">
+                Have you shopped from brandxyz.com?
+              </label>
+              <select
+                name="shopped"
+                value={formData.shopped}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 bg-white/50 text-gray-700 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
               >
-                {participateMutation.isPending ? (
-                  <div className="flex items-center justify-center">
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                    Submitting...
-                  </div>
-                ) : (
-                  "Participate Now 🎉"
-                )}
-              </button>
-            </form>
-          </div>
-        }
+                <option value="" disabled>
+                  Select your experience
+                </option>
+                <option value="yes">Yes, I&apos;ve shopped before</option>
+                <option value="no">No, first time</option>
+              </select>
+            </div>
+
+            {/* Terms */}
+            <div className="flex items-start space-x-3 p-4 bg-blue-50/50 rounded-xl border border-blue-100">
+              <input
+                type="checkbox"
+                id="terms"
+                checked={acceptedTerms}
+                onChange={(e) => setAcceptedTerms(e.target.checked)}
+                className="mt-1 w-4 h-4 text-[var(--brand-br1)] bg-white border-gray-300 rounded focus:ring-[var(--brand-br1)]"
+              />
+              <label htmlFor="terms" className="text-sm text-gray-600 flex-1">
+                I agree to the{" "}
+                <a
+                  href="/terms"
+                  target="_blank"
+                  className="text-[var(--brand-br1)] font-semibold hover:underline"
+                >
+                  Terms and Conditions
+                </a>
+              </label>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={!acceptedTerms || !isSignedIn}
+              className={`w-full py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 transform ${
+                acceptedTerms && isSignedIn
+                  ? "bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] text-white shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              }`}
+            >
+              {!isSignedIn ? (
+                "Complete Email Verification First"
+              ) : participateMutation.isPending ? (
+                <div className="flex items-center justify-center">
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                  Submitting...
+                </div>
+              ) : (
+                "Participate Now 🎉"
+              )}
+            </button>
+          </form>
+        </div>
       </div>
 
       {/* Success Modal */}
