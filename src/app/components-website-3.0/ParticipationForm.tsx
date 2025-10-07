@@ -531,14 +531,14 @@ export default function ParticipationForm() {
 
               {authStep === "otp" && !isSignedIn && (
                 <div className="space-y-3">
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 overflow-hidden">
                     <input
                       type="text"
                       value={otp}
                       onChange={(e) => setOtp(e.target.value)}
                       required
-                      className="flex-1 px-4 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400 text-center text-lg font-mono"
-                      placeholder="Enter 6-digit code"
+                      className="flex-1 w-4 px-0 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400 text-center text-lg font-mono"
+                      placeholder="6-digit code"
                       maxLength={6}
                     />
                     <button
