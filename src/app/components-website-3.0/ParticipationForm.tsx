@@ -267,14 +267,16 @@ export default function ParticipationForm() {
         ) {
           await signIn.prepareFirstFactor({
             strategy: "email_code",
-            emailAddressId: signInAttempt.supportedFirstFactors.find(
-              (f) => f.strategy === "email_code"
-            )?.emailAddressId,
+            emailAddressId:
+              signInAttempt.supportedFirstFactors.find(
+                (f) => f.strategy === "email_code"
+              )?.emailAddressId ?? "",
           });
           setAuthStep("otp");
         }
       }
-    } catch (err: any) {
+    } catch (signInError: unknown) {
+      const err = signInError as ClerkError;
       // If user doesn't exist, try to sign up
       if (err.errors?.[0]?.code === "form_identifier_not_found") {
         try {
@@ -288,7 +290,8 @@ export default function ParticipationForm() {
             });
             setAuthStep("otp");
           }
-        } catch (signUpErr: any) {
+        } catch (signUpError: unknown) {
+          const signUpErr = signUpError as ClerkError;
           setAuthError(
             signUpErr.errors?.[0]?.message || "Failed to create account"
           );
@@ -319,12 +322,14 @@ export default function ParticipationForm() {
           code: otp,
         });
 
-        if (signInAttempt.status === "complete") {
+        if (signInAttempt.status === "complete" && setActive) {
           await setActive({ session: signInAttempt.createdSessionId });
           return;
         }
       }
-    } catch (signInErr: any) {
+    } catch (signInError: unknown) {
+      const _err = signInError as ClerkError;
+      console.log("Error in signIn: ", _err);
       // If sign in fails, try sign up
       try {
         if (signUp) {
@@ -336,7 +341,8 @@ export default function ParticipationForm() {
             await setActive({ session: signUpAttempt.createdSessionId });
           }
         }
-      } catch (signUpErr: any) {
+      } catch (signUpError: unknown) {
+        const signUpErr = signUpError as ClerkError;
         setAuthError(
           signUpErr.errors?.[0]?.message || "Invalid verification code"
         );
@@ -694,4 +700,11 @@ export default function ParticipationForm() {
       />
     </div>
   );
+}
+
+export interface ClerkError {
+  errors: Array<{
+    code: string;
+    message: string;
+  }>;
 }
