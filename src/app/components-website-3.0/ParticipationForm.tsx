@@ -204,6 +204,8 @@ export default function ParticipationForm() {
     phone: "",
     shopped: "",
     email: "",
+    gender: "",
+    shoppingWebsite: "",
   });
 
   const [authStep, setAuthStep] = useState<"email" | "otp">("email");
@@ -373,6 +375,8 @@ export default function ParticipationForm() {
         lastName: formData.lastName,
         phone: `${countryCode}${formData.phone}`,
         purchasedBefore: formData.shopped === "yes",
+        gender: formData.gender, // Add this line
+        shoppingWebsite: formData.shoppingWebsite, // Add this line
         token: token,
       }),
       {
@@ -490,6 +494,26 @@ export default function ParticipationForm() {
                   placeholder="Enter your last name"
                 />
               </div>
+            </div>
+
+            {/* Gender */}
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-gray-700 tracking-wide">
+                Gender
+              </label>
+              <select
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 bg-white/50 text-gray-700 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
+              >
+                <option value="" disabled>
+                  Select your gender
+                </option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
             </div>
 
             {/* Email Authentication */}
@@ -639,6 +663,29 @@ export default function ParticipationForm() {
                 </option>
                 <option value="yes">Yes, I&apos;ve shopped before</option>
                 <option value="no">No, first time</option>
+              </select>
+            </div>
+
+            {/* Shopping Websites */}
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-gray-700 tracking-wide">
+                Which website do you usually shop from?
+              </label>
+              <select
+                name="shoppingWebsite"
+                value={formData.shoppingWebsite}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 bg-white/50 text-gray-700 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
+              >
+                <option value="" disabled>
+                  Select your preferred shopping website
+                </option>
+                <option value="centerpoint">CenterPoint</option>
+                <option value="namshi">Namshi</option>
+                <option value="ounass">Ounass</option>
+                <option value="brands for less">Brands for Less</option>
+                <option value="styli">Styli</option>
               </select>
             </div>
 

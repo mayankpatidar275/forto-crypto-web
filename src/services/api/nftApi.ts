@@ -34,6 +34,8 @@ export async function participate(body: {
   // fullName: string;
   firstName: string;
   lastName: string;
+  gender: string;
+  shoppingWebsite: string;
   email: string;
   phone: string;
   purchasedBefore: boolean;
