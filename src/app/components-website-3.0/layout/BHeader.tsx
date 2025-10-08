@@ -3,16 +3,11 @@
 import { WhiteLogo } from "@/app/assets/index";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import {
-  SignedIn,
-  SignedOut,
-  SignOutButton,
-  SignUpButton,
-} from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignUpButton } from "@clerk/nextjs";
 import { usePathname, useRouter } from "next/navigation";
 
 const navLinks = [
@@ -71,6 +66,10 @@ export default function Header() {
     }
   };
 
+  const handleUserProfileClick = () => {
+    router.push("/my-profile");
+  };
+
   return (
     <header
       id="header"
@@ -123,11 +122,24 @@ export default function Header() {
           <div className="flex gap-1 sm:gap-4">
             <SignedOut>
               <SignUpButton>
-                <button className="btn-primary">Sign Up/In</button>
+                <button className="btn-primary">Sign In</button>
               </SignUpButton>
             </SignedOut>
             <SignedIn>
-              <SignOutButton />
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={handleUserProfileClick}
+                  className="flex items-center justify-center w-10 h-10 rounded-full transition-colors duration-300"
+                  aria-label="My Profile"
+                >
+                  <User className="h-5 w-5 text-white" />
+                </button>
+                {/* <SignOutButton>
+                  <button className="text-white text-sm hover:text-brand-br1 transition-colors duration-300">
+                    Sign Out
+                  </button>
+                </SignOutButton> */}
+              </div>
             </SignedIn>
           </div>
         </div>
@@ -151,6 +163,16 @@ export default function Header() {
               {link.label}
             </button>
           ))}
+          {/* Mobile User Profile Link */}
+          <SignedIn>
+            <button
+              onClick={handleUserProfileClick}
+              className="flex items-center gap-3 text-background text-lg px-6 py-2 hover:text-brand-br1 transition-colors duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)] w-full text-left"
+            >
+              <User className="h-5 w-5" />
+              My Profile
+            </button>
+          </SignedIn>
         </nav>
       </div>
     </header>
