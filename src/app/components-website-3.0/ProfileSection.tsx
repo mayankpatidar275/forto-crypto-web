@@ -1,19 +1,10 @@
 "use client";
 
 import React from "react";
-import { usePrivy, useUser } from "@privy-io/react-auth";
-
-// interface PrivyUser {
-//   id: string;
-//   email?: {
-//     address: string;
-//     verified: boolean;
-//   };
-//   // Add other fields that might be available from Privy
-// }
+import { useAuth, useUser } from "@clerk/nextjs";
 
 const ProfileSection = () => {
-  const { authenticated, user: privyUser } = usePrivy();
+  const { isSignedIn } = useAuth();
   const { user } = useUser();
 
   // Function to extract initials from email
@@ -58,12 +49,12 @@ const ProfileSection = () => {
     return colors[Math.abs(hash) % colors.length];
   };
 
-  // Get email from Privy user object
-  const userEmail = privyUser?.email?.address || user?.email?.address;
+  // Get email from Clerk user object
+  const userEmail = user?.emailAddresses?.[0]?.emailAddress;
   const avatarInitials = getInitialsFromEmail(userEmail);
   const avatarBgColor = getColorFromEmail(userEmail);
 
-  if (!authenticated) {
+  if (!isSignedIn) {
     return (
       <div className="flex gap-4 items-center bg-background-b3 rounded-xl shadow-sm p-6 w-full hover:shadow-md transition-all duration-300 max-w-md mx-auto">
         <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-600 flex-shrink-0">
