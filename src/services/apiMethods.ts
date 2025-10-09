@@ -2,9 +2,14 @@ import { handleResponse } from "./response";
 // Todo: function to get header(authorization/token) and put in the request
 
 export async function get(url: string, options: RequestInit = {}) {
+  console.log("url", url);
   const response = await fetch(url, {
     method: "GET",
-    credentials: "include", // Default credentials can be overridden by options
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
     ...options,
   });
   return handleResponse(response, url);

@@ -8,6 +8,8 @@ import {
   fetchNftsByCategory,
   fetchNftsByEventName,
 } from "@/services/api/nftApi";
+import { useAuth } from "@clerk/nextjs";
+import { get } from "@/services/apiMethods";
 
 // Reusable query function
 function useCustomQuery<TQueryFnData, TQueryParams = void>(
@@ -58,3 +60,20 @@ export function usePurchaseHistory(userPrivyId: string) {
 export function useEventById(eventId: string) {
   return useCustomQuery(["eventById", eventId], fetchEventById, eventId);
 }
+
+export const useUserTickets = () => {
+  const { getToken } = useAuth();
+
+  return useQuery({
+    queryKey: ["userTickets"],
+    queryFn: async () => {
+      const token = await getToken();
+      if (!token) throw new Error("No token available");
+      return get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/ticket/user`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    },
+  });
+};

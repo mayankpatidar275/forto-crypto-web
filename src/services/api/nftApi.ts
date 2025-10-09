@@ -50,3 +50,11 @@ export async function participate(body: {
 export async function fetchEventById(eventId?: string) {
   return get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/events/${eventId}`);
 }
+
+export async function fetchUserTickets(token?: string) {
+  return get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/ticket/user`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}

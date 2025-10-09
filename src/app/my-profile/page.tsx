@@ -1,7 +1,9 @@
+"use client";
+
 import React from "react";
 import ProfileSection from "../components-website-3.0/ProfileSection";
 import Logout from "../components-website-3.0/ui/Logout";
-// import PurchaseHistory from "../../components/PurchaseHistory";
+import UserTickets from "../components-website-3.0/UserTickets";
 
 const MyProfilePage = () => {
   return (
@@ -13,7 +15,7 @@ const MyProfilePage = () => {
       </div>
 
       <ProfileSection />
-      {/* <PurchaseHistory /> */}
+      <UserTickets />
       <Logout />
     </div>
   );
