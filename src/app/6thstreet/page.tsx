@@ -4,7 +4,6 @@ import Image from "next/image";
 import React from "react";
 import { Brand1 } from "../assets";
 import TermsSection from "../components-website-3.0/TermsSection";
-import TestimonialSection from "../components-website-3.0/TestimonialSection";
 import CountDown from "../components-website-3.0/ui/CountDown";
 import Heading2 from "../components-website-3.0/ui/Heading2";
 import { useEventById } from "@/custom-hooks/queries";
@@ -56,7 +55,7 @@ function ParticipatePage() {
         </div>
       </section>
       <ParticipationForm></ParticipationForm>
-      <TestimonialSection />
+      {/* <TestimonialSection /> */}
     </div>
   );
 }

@@ -8,7 +8,6 @@ import FortoVsTraditional from "./components-website-3.0/FortoVsTraditional";
 import HeroSection from "./components-website-3.0/HeroSection";
 import HowItWorks from "./components-website-3.0/HowItWorks";
 import NewsTicker from "./components-website-3.0/NewsTicker";
-import TestimonialSection from "./components-website-3.0/TestimonialSection";
 import ProblemSection from "./components/ProblemSection";
 
 export default function Home() {
@@ -21,7 +20,7 @@ export default function Home() {
       <CustomerWinMoreSection />
       <FortoVsTraditional />
       <BrandsTurnGiveaways />
-      <TestimonialSection />
+      {/* <TestimonialSection /> */}
       <ProblemSection />
     </div>
   );
