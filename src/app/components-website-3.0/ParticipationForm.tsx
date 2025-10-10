@@ -699,14 +699,14 @@ export default function ParticipationForm() {
                 className="mt-1 w-4 h-4 text-[var(--brand-br1)] bg-white border-gray-300 rounded focus:ring-[var(--brand-br1)]"
               />
               <label htmlFor="terms" className="text-sm text-gray-600 flex-1">
-                I agree to the{" "}
-                <a
+                I agree to participation terms
+                {/* <a
                   href="/terms"
                   target="_blank"
                   className="text-[var(--brand-br1)] font-semibold hover:underline"
                 >
                   Terms and Conditions
-                </a>
+                </a> */}
               </label>
             </div>
 

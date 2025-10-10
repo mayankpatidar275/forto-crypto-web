@@ -31,7 +31,7 @@ export default function NewsTicker({ text, imageSrc }: NewsTickerProps) {
 
   return (
     <div
-      className={`w-full overflow-hidden bg-background ${poppins.className}`}
+      className={`w-full overflow-hidden bg-transparent ${poppins.className}`}
     >
       <div
         ref={tickerRef}

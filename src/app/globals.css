@@ -467,8 +467,8 @@ body {
 .text-ticker {
   color: #fff3f300;
   -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: #fb7d5d33;
-  text-shadow: 0 0 25px #fb7d5d08;
+  -webkit-text-stroke-color: #f43b0c33;
+  text-shadow: 0 0 25px #f57a5c08;
   font-size: 130px;
   line-height: 110px;
 }

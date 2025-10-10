@@ -2,6 +2,8 @@ import Para1 from "./ui/Para1";
 import BuyNowBtnHero from "./ui/BuyNowBtnHero";
 import HeroImageAnimation from "./ui/HeroImageAnimation";
 import { funnel } from "../layout";
+import NewsTicker from "./NewsTicker";
+import { Rocket } from "../assets";
 
 const HeroSection = () => {
   return (
@@ -11,7 +13,7 @@ const HeroSection = () => {
           <h1
             className={`${funnel.className} text-4xl md:text-6xl lg:text-7xl font-bold text-white lg:text-background bg-clip-text leading-tight mb-6 max-w-5xl`}
           >
-            50% WINNERS & 100% FAIR
+            Next-Level Rewards, Powered by Blockchain
           </h1>
           <BuyNowBtnHero />
         </div>
@@ -19,12 +21,13 @@ const HeroSection = () => {
           <HeroImageAnimation />
           <div className="mb-8 flex justify-center">
             <Para1>
-              The first blockchain powered giveaway where 50% customers win
-              rewards and brands only pay when customers shop
+              Innovative, transparent draws that give brands real engagement and
+              customers guaranteed excitement.
             </Para1>
           </div>
         </div>
       </div>
+      <NewsTicker imageSrc={Rocket} text="REVOLUTIONARY REWARDS PLATFORM" />
     </section>
   );
 };
