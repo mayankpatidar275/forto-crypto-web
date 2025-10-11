@@ -9,7 +9,7 @@ const contacts = [
   {
     icon: <Mail size={40} className="text-brand-br1" />,
     title: "Email Us",
-    description: "support@forto.com",
+    description: "hello@fortotoken.com",
     href: socialLinks.email.href,
   },
   {

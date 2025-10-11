@@ -31,7 +31,7 @@ export default function NewsTicker({ text, imageSrc }: NewsTickerProps) {
 
   return (
     <div
-      className={`w-full overflow-hidden bg-transparent ${poppins.className}`}
+      className={`hidden lg:flex w-full overflow-hidden bg-transparent ${poppins.className}`}
     >
       <div
         ref={tickerRef}
@@ -42,8 +42,8 @@ export default function NewsTicker({ text, imageSrc }: NewsTickerProps) {
           <Image
             src={imageSrc}
             alt="Ticker Icon"
-            width={64}
-            height={64}
+            width={76}
+            height={76}
             className="inline-block shrink-0"
           />
           <span className="text-ticker">{text}</span>
@@ -52,8 +52,8 @@ export default function NewsTicker({ text, imageSrc }: NewsTickerProps) {
           <Image
             src={imageSrc}
             alt="Ticker Icon"
-            width={64}
-            height={64}
+            width={76}
+            height={76}
             className="inline-block shrink-0"
           />
           <span className="text-ticker">{text}</span>
@@ -62,8 +62,8 @@ export default function NewsTicker({ text, imageSrc }: NewsTickerProps) {
           <Image
             src={imageSrc}
             alt="Ticker Icon"
-            width={64}
-            height={64}
+            width={76}
+            height={76}
             className="inline-block shrink-0"
           />
           <span className="text-ticker">{text}</span>
@@ -72,8 +72,8 @@ export default function NewsTicker({ text, imageSrc }: NewsTickerProps) {
           <Image
             src={imageSrc}
             alt="Ticker Icon"
-            width={64}
-            height={64}
+            width={76}
+            height={76}
             className="inline-block shrink-0"
           />
           <span className="text-ticker">{text}</span>

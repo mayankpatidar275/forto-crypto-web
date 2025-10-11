@@ -464,13 +464,21 @@ body {
   }
 }
 
-.text-ticker {
-  color: #fff3f300;
+/* .text-ticker {
+  color: transparent;
   -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: #f43b0c33;
-  text-shadow: 0 0 25px #f57a5c08;
+  -webkit-text-stroke-color: #8b4513;
+  text-shadow: 0 0 25px rgba(139, 69, 19, 0.3);
   font-size: 130px;
   line-height: 110px;
+} */
+.text-ticker {
+  color: #38261d; /* dark gray */
+  text-shadow: none;
+  -webkit-text-stroke-width: 0;
+  font-size: 120px;
+  line-height: 110px;
+  opacity: 0.5;
 }
 
 @media screen and (max-width: 767px) {

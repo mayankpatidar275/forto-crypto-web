@@ -6,8 +6,8 @@ export const socialLinks = {
     href: "https://x.com/fortotoken",
   },
   email: {
-    address: "support@forto.com",
-    href: "mailto:support@forto.com",
+    address: "hello@fortotoken.com",
+    href: "mailto:hello@fortotoken.com",
   },
   telegram: {
     href: "https://t.me/+a_6F5vB32xAzMDg0",

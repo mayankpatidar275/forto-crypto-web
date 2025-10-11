@@ -370,7 +370,7 @@ export default function ParticipationForm() {
         brandId: "88a1603d-67ec-4f95-adc5-072dcefc63fa",
         eventId: "386e4d08-0b04-45d5-9c1c-a4b675826f4e",
         drawId: "e2bcdcfd-5c05-4007-b38f-44a9b9cf5cb9",
-        email: formData.email,
+        email: user?.primaryEmailAddress?.emailAddress ?? formData.email,
         firstName: formData.firstName,
         lastName: formData.lastName,
         phone: `${countryCode}${formData.phone}`,
@@ -739,7 +739,7 @@ export default function ParticipationForm() {
       <SuccessModal
         isOpen={isModalOpen}
         onClose={() => {
-          router.push("/");
+          router.push("/my-profile");
           setIsModalOpen(false);
         }}
         ticket={ticketData}
