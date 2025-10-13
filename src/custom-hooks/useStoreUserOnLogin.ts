@@ -19,5 +19,5 @@ export const useStoreUserOnLogin = () => {
         },
       });
     }
-  }, [isLoaded, isSignedIn, user, storeUser.mutate]);
+  }, [isLoaded, isSignedIn, user, storeUser.mutate, storeUser]);
 };
