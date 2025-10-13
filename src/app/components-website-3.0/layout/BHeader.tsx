@@ -129,7 +129,7 @@ export default function Header() {
               <div className="flex items-center gap-4">
                 <button
                   onClick={handleUserProfileClick}
-                  className="flex items-center justify-center w-10 h-10 rounded-full transition-colors duration-300"
+                  className="flex items-center justify-center w-10 h-10 rounded-full transition-colors duration-300 cursor-pointer"
                   aria-label="My Profile"
                 >
                   <User className="h-5 w-5 text-white" />

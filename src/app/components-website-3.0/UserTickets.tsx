@@ -80,7 +80,11 @@ const UserTickets = () => {
   const { data: ticketsData, isLoading, error } = useUserTickets();
 
   if (isLoading) {
-    return <Loader className="mx-auto my-auto flex justify-center" />;
+    return (
+      <div className="my-20">
+        <Loader className="mx-auto my-auto flex justify-center" />
+      </div>
+    );
   }
 
   if (error || !ticketsData?.success) {
