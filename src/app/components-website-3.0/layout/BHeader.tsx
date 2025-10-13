@@ -3,7 +3,7 @@
 import { WhiteLogo } from "@/app/assets/index";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Menu, X, User } from "lucide-react";
+import { Menu, X, User, Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -20,6 +20,7 @@ const navLinks = [
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isSigningIn, setIsSigningIn] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -42,6 +43,15 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleSignInClick = () => {
+    setIsSigningIn(true);
+    // The redirect will happen automatically via Clerk
+    // We'll reset the loading state after a timeout in case something goes wrong
+    setTimeout(() => {
+      setIsSigningIn(false);
+    }, 10000); // Reset after 10 seconds if still loading
+  };
 
   const handleNavClick = (href: string) => {
     setIsOpen(false);
@@ -122,23 +132,29 @@ export default function Header() {
           <div className="flex gap-1 sm:gap-4">
             <SignedOut>
               <SignUpButton>
-                <button className="btn-primary">Sign In</button>
+                <button
+                  onClick={handleSignInClick}
+                  disabled={isSigningIn}
+                  className="btn-primary disabled:opacity-70 disabled:cursor-not-allowed relative min-w-[100px] flex items-center justify-center"
+                >
+                  <span className={isSigningIn ? "opacity-0" : "opacity-100"}>
+                    Sign In
+                  </span>
+                  {isSigningIn && (
+                    <Loader2 className="h-4 w-4 animate-spin absolute" />
+                  )}
+                </button>
               </SignUpButton>
             </SignedOut>
             <SignedIn>
               <div className="flex items-center gap-4">
                 <button
                   onClick={handleUserProfileClick}
-                  className="flex items-center justify-center w-10 h-10 rounded-full transition-colors duration-300 cursor-pointer"
+                  className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-white/10 transition-colors duration-300 cursor-pointer"
                   aria-label="My Profile"
                 >
                   <User className="h-5 w-5 text-white" />
                 </button>
-                {/* <SignOutButton>
-                  <button className="text-white text-sm hover:text-brand-br1 transition-colors duration-300">
-                    Sign Out
-                  </button>
-                </SignOutButton> */}
               </div>
             </SignedIn>
           </div>
@@ -173,6 +189,25 @@ export default function Header() {
               My Profile
             </button>
           </SignedIn>
+          {/* Mobile Sign In Button */}
+          <SignedOut>
+            <SignUpButton>
+              <button
+                onClick={handleSignInClick}
+                disabled={isSigningIn}
+                className="flex items-center gap-3 text-background text-lg px-6 py-2 hover:text-brand-br1 transition-colors duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)] w-full text-left disabled:opacity-70"
+              >
+                {isSigningIn ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Signing In...
+                  </>
+                ) : (
+                  "Sign In"
+                )}
+              </button>
+            </SignUpButton>
+          </SignedOut>
         </nav>
       </div>
     </header>

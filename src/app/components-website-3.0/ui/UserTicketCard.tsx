@@ -67,13 +67,13 @@ const UserTicketCard: React.FC<UserTicketCardProps> = ({ ticket }) => {
   // const [showDetails, setShowDetails] = useState(false);
 
   const primaryBrand = ticket.event.brands[0]?.brand;
-  const eventEndDate = new Date(ticket.event.endDate);
-  const drawEndDate = ticket.draw?.endDate
-    ? new Date(ticket.draw.endDate)
-    : null;
 
   // Countdown timer effect
   useEffect(() => {
+    const eventEndDate = new Date(ticket.event.endDate);
+    const drawEndDate = ticket.draw?.endDate
+      ? new Date(ticket.draw.endDate)
+      : null;
     const targetDate = drawEndDate || eventEndDate;
 
     const calculateTimeLeft = () => {
@@ -97,7 +97,7 @@ const UserTicketCard: React.FC<UserTicketCardProps> = ({ ticket }) => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [eventEndDate, drawEndDate]);
+  }, [ticket.event.endDate, ticket.draw?.endDate]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -142,7 +142,7 @@ const UserTicketCard: React.FC<UserTicketCardProps> = ({ ticket }) => {
   return (
     <div className=" rounded-xl p-6 bg-background hover:bg-background-b2 transition-colors">
       {/* Header */}
-      <div className="flex justify-between items-start mb-4">
+      <div className="flex justify-between items-start mb-4 flex-col gap-2 sm:flex-row">
         <div className="flex items-center gap-4">
           <div className="relative w-16 h-16 overflow-hidden rounded-lg shrink-0">
             <Image
@@ -189,7 +189,7 @@ const UserTicketCard: React.FC<UserTicketCardProps> = ({ ticket }) => {
           <p className="text-sm text-link mb-2">
             {ticket.draw ? "Draw ends in:" : "Event ends in:"}
           </p>
-          <div className="flex gap-4 text-center">
+          <div className="flex gap-4 text-center scale-40 sm:scale-100">
             <div>
               <div className="text-xl font-bold text-white">
                 {timeLeft.days}
@@ -217,126 +217,6 @@ const UserTicketCard: React.FC<UserTicketCardProps> = ({ ticket }) => {
           </div>
         </div>
       )}
-
-      {/* Toggle Details Button */}
-      {/* <button
-        onClick={() => setShowDetails(!showDetails)}
-        className="w-full py-2 text-center text-sm text-link hover:text-white transition-colors border border-gray-700 rounded-lg mb-4"
-      >
-        {showDetails ? "Hide Details" : "Show Details"}
-      </button> */}
-
-      {/* Expandable Details */}
-      {/* {showDetails && (
-        <div className="space-y-4 p-4 bg-background-b3 rounded-lg"> */}
-      {/* Personal Information */}
-      {/* <div>
-            <h4 className="text-sm font-semibold text-white mb-2">
-              Personal Information
-            </h4>
-            <div className="grid grid-cols-2 gap-2 text-sm">
-              <div>
-                <span className="text-link">Name:</span>
-                <p className="text-white">
-                  {ticket.metadata.firstName} {ticket.metadata.lastName}
-                </p>
-              </div>
-              <div>
-                <span className="text-link">Email:</span>
-                <p className="text-white">{ticket.metadata.email}</p>
-              </div>
-              <div>
-                <span className="text-link">Phone:</span>
-                <p className="text-white">{ticket.metadata.phone}</p>
-              </div>
-              <div>
-                <span className="text-link">Gender:</span>
-                <p className="text-white capitalize">
-                  {ticket.metadata.gender}
-                </p>
-              </div>
-            </div>
-          </div> */}
-
-      {/* Event Information */}
-      {/* <div>
-            <h4 className="text-sm font-semibold text-white mb-2">
-              Event Information
-            </h4>
-            <div className="grid grid-cols-2 gap-2 text-sm">
-              <div>
-                <span className="text-link">Event Period:</span>
-                <p className="text-white">
-                  {formatDate(ticket.event.startDate)} -{" "}
-                  {formatDate(ticket.event.endDate)}
-                </p>
-              </div>
-              <div>
-                <span className="text-link">Status:</span>
-                <p className="text-white capitalize">
-                  {ticket.event.status.toLowerCase()}
-                </p>
-              </div>
-              {ticket.metadata.shoppingWebsite && (
-                <div className="col-span-2">
-                  <span className="text-link">Preferred Store:</span>
-                  <p className="text-white capitalize">
-                    {ticket.metadata.shoppingWebsite}
-                  </p>
-                </div>
-              )}
-            </div>
-          </div> */}
-
-      {/* Draw Information (if available) */}
-      {/* {ticket.draw && (
-            <div>
-              <h4 className="text-sm font-semibold text-white mb-2">
-                Draw Information
-              </h4>
-              <div className="grid grid-cols-2 gap-2 text-sm">
-                <div>
-                  <span className="text-link">Round:</span>
-                  <p className="text-white">#{ticket.draw.roundNumber}</p>
-                </div>
-                <div>
-                  <span className="text-link">Coins Allocated:</span>
-                  <p className="text-white">{ticket.draw.coinsAllocated}</p>
-                </div>
-              </div>
-            </div>
-          )} */}
-
-      {/* Winner Information (if available) */}
-      {/* {ticket.winner && (
-            <div className="p-3 bg-green-900/20 border border-green-500 rounded-lg">
-              <h4 className="text-sm font-semibold text-green-400 mb-2">
-                🎉 Congratulations! You Won!
-              </h4>
-              <div className="grid grid-cols-2 gap-2 text-sm">
-                <div>
-                  <span className="text-green-300">Tier:</span>
-                  <p className="text-white capitalize">
-                    {ticket.winner.tier.toLowerCase()}
-                  </p>
-                </div>
-                <div>
-                  <span className="text-green-300">Won On:</span>
-                  <p className="text-white">
-                    {formatDate(ticket.winner.decidedAt)}
-                  </p>
-                </div>
-                <div>
-                  <span className="text-green-300">Reward Status:</span>
-                  <p className="text-white">
-                    {ticket.winner.rewardSent ? "Sent" : "Processing"}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )} */}
-      {/* </div>
-      )} */}
     </div>
   );
 };

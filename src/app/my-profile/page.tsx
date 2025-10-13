@@ -34,7 +34,9 @@ const MyProfilePage = () => {
 
       <ProfileSection />
       <UserTickets />
-      <Logout />
+      <div className="flex justify-center">
+        <Logout />
+      </div>
     </div>
   );
 };

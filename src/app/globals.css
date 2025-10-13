@@ -721,3 +721,16 @@ body {
 .animate-marquee-vertical {
   animation: marquee-vertical 20s linear infinite;
 }
+
+@keyframes spinloader {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spinloader {
+  animation: spin 1s linear infinite;
+}
