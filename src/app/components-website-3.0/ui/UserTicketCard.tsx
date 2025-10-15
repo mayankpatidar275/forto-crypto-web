@@ -138,13 +138,13 @@ const UserTicketCard: React.FC<UserTicketCardProps> = ({ ticket }) => {
       primaryBrand?.name || ticket.event.name
     }&background=random&size=64`;
   };
-
   return (
-    <div className=" rounded-xl p-6 bg-background hover:bg-background-b2 transition-colors">
+    <div className="rounded-xl p-4 sm:p-6 bg-background hover:bg-background-b2 transition-colors">
       {/* Header */}
-      <div className="flex justify-between items-start mb-4 flex-col gap-2 sm:flex-row">
-        <div className="flex items-center gap-4">
-          <div className="relative w-16 h-16 overflow-hidden rounded-lg shrink-0">
+      <div className="flex flex-col gap-4 mb-4">
+        <div className="flex gap-3 items-start">
+          {/* Event Image */}
+          <div className="relative w-12 h-12 sm:w-16 sm:h-16 overflow-hidden rounded-lg shrink-0">
             <Image
               src={getImageUrl()}
               alt={primaryBrand?.name || ticket.event.name}
@@ -153,17 +153,18 @@ const UserTicketCard: React.FC<UserTicketCardProps> = ({ ticket }) => {
             />
           </div>
 
-          <div>
-            <h3 className="text-lg font-semibold text-white">
+          {/* Event Info */}
+          <div className="flex-1 min-w-0">
+            <h3 className="text-base sm:text-lg font-semibold text-white truncate">
               {ticket.event.name}
             </h3>
-            <p className="text-sm text-link">
+            <p className="text-xs sm:text-sm text-link mt-1">
               {primaryBrand?.name || "Event"} • Ticket #{ticket.shortCode}
             </p>
-            <div className="flex items-center gap-2 mt-1">
+            <div className="flex flex-wrap gap-1 sm:gap-2 mt-2">
               {getStatusBadge()}
               {ticket.draw && (
-                <span className="px-2 py-1 bg-purple-500 text-white text-xs rounded-full">
+                <span className="px-2 py-1 bg-purple-500 text-white text-xs rounded-full whitespace-nowrap">
                   Round {ticket.draw.roundNumber}
                 </span>
               )}
@@ -171,48 +172,44 @@ const UserTicketCard: React.FC<UserTicketCardProps> = ({ ticket }) => {
           </div>
         </div>
 
-        <div className="text-right">
-          <p className="text-sm text-link">
+        {/* Participation Date */}
+        <div className="text-left sm:text-right">
+          <p className="text-xs sm:text-sm text-link">
             Participated on {formatDate(ticket.createdAt)}
           </p>
-          {/* {ticket.blockchainHash && (
-            <p className="text-xs text-gray-400 mt-1">
-              Hash: {ticket.blockchainHash.slice(0, 8)}...
-            </p>
-          )} */}
         </div>
       </div>
 
       {/* Countdown Timer */}
       {timeLeft && (
         <div className="mb-4 p-3 bg-background-b3 rounded-lg">
-          <p className="text-sm text-link mb-2">
+          <p className="text-xs sm:text-sm text-link mb-3 text-center sm:text-left">
             {ticket.draw ? "Draw ends in:" : "Event ends in:"}
           </p>
-          <div className="flex gap-4 text-center scale-40 sm:scale-100">
-            <div>
-              <div className="text-xl font-bold text-white">
+          <div className="flex justify-between sm:justify-start sm:gap-6 text-center max-w-xs mx-auto sm:mx-0">
+            <div className="flex-1 sm:flex-none">
+              <div className="text-lg sm:text-xl font-bold text-white">
                 {timeLeft.days}
               </div>
-              <div className="text-xs text-link">Days</div>
+              <div className="text-xs text-link mt-1">Days</div>
             </div>
-            <div>
-              <div className="text-xl font-bold text-white">
+            <div className="flex-1 sm:flex-none">
+              <div className="text-lg sm:text-xl font-bold text-white">
                 {timeLeft.hours}
               </div>
-              <div className="text-xs text-link">Hours</div>
+              <div className="text-xs text-link mt-1">Hours</div>
             </div>
-            <div>
-              <div className="text-xl font-bold text-white">
+            <div className="flex-1 sm:flex-none">
+              <div className="text-lg sm:text-xl font-bold text-white">
                 {timeLeft.minutes}
               </div>
-              <div className="text-xs text-link">Minutes</div>
+              <div className="text-xs text-link mt-1">Minutes</div>
             </div>
-            <div>
-              <div className="text-xl font-bold text-white">
+            <div className="flex-1 sm:flex-none">
+              <div className="text-lg sm:text-xl font-bold text-white">
                 {timeLeft.seconds}
               </div>
-              <div className="text-xs text-link">Seconds</div>
+              <div className="text-xs text-link mt-1">Seconds</div>
             </div>
           </div>
         </div>
