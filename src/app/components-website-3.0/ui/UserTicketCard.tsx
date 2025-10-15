@@ -186,30 +186,42 @@ const UserTicketCard: React.FC<UserTicketCardProps> = ({ ticket }) => {
           <p className="text-xs sm:text-sm text-link mb-3 text-center sm:text-left">
             {ticket.draw ? "Draw ends in:" : "Event ends in:"}
           </p>
-          <div className="flex justify-between sm:justify-start sm:gap-6 text-center max-w-xs mx-auto sm:mx-0">
+          <div className="flex justify-between sm:justify-start sm:gap-4 lg:gap-6 text-center max-w-xs mx-auto sm:mx-0">
             <div className="flex-1 sm:flex-none">
               <div className="text-lg sm:text-xl font-bold text-white">
                 {timeLeft.days}
               </div>
-              <div className="text-xs text-link mt-1">Days</div>
+              <div className="text-[10px] xs:text-xs text-link mt-1">
+                <span className="sm:hidden">Day</span>
+                <span className="hidden sm:inline">Days</span>
+              </div>
             </div>
             <div className="flex-1 sm:flex-none">
               <div className="text-lg sm:text-xl font-bold text-white">
                 {timeLeft.hours}
               </div>
-              <div className="text-xs text-link mt-1">Hours</div>
+              <div className="text-[10px] xs:text-xs text-link mt-1">
+                <span className="sm:hidden">Hr</span>
+                <span className="hidden sm:inline">Hours</span>
+              </div>
             </div>
             <div className="flex-1 sm:flex-none">
               <div className="text-lg sm:text-xl font-bold text-white">
                 {timeLeft.minutes}
               </div>
-              <div className="text-xs text-link mt-1">Minutes</div>
+              <div className="text-[10px] xs:text-xs text-link mt-1">
+                <span className="sm:hidden">Min</span>
+                <span className="hidden sm:inline">Minutes</span>
+              </div>
             </div>
             <div className="flex-1 sm:flex-none">
               <div className="text-lg sm:text-xl font-bold text-white">
                 {timeLeft.seconds}
               </div>
-              <div className="text-xs text-link mt-1">Seconds</div>
+              <div className="text-[10px] xs:text-xs text-link mt-1">
+                <span className="sm:hidden">Sec</span>
+                <span className="hidden sm:inline">Seconds</span>
+              </div>
             </div>
           </div>
         </div>
