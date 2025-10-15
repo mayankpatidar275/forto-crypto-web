@@ -6,7 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Menu, X, User, Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { SignedIn, SignedOut, SignUpButton } from "@clerk/nextjs";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -23,6 +23,9 @@ export default function Header() {
   const [isSigningIn, setIsSigningIn] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+
+  // Ref for the mobile menu container
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -43,6 +46,29 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target as Node) &&
+        isOpen
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    // Add event listener when menu is open
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    // Cleanup event listener
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   const handleSignInClick = () => {
     setIsSigningIn(true);
@@ -77,6 +103,7 @@ export default function Header() {
   };
 
   const handleUserProfileClick = () => {
+    setIsOpen(false);
     router.push("/my-profile");
   };
 
@@ -162,7 +189,10 @@ export default function Header() {
       </div>
 
       {/* Mobile Menu Dropdown */}
-      <div className={`lg:hidden overflow-hidden ${!isOpen && "h-0"}`}>
+      <div
+        ref={mobileMenuRef}
+        className={`lg:hidden overflow-hidden ${!isOpen && "h-0"}`}
+      >
         <nav
           role="navigation"
           className={`transform transition-transform duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)] ${
