@@ -8,6 +8,7 @@ import CountDown from "../components-website-3.0/ui/CountDown";
 import Heading2 from "../components-website-3.0/ui/Heading2";
 import { useEventById } from "@/custom-hooks/queries";
 import ParticipationForm from "../components-website-3.0/ParticipationForm";
+import Loader from "../components-website-3.0/ui/Loader";
 
 function ParticipatePage() {
   const {
@@ -17,7 +18,11 @@ function ParticipatePage() {
   } = useEventById("386e4d08-0b04-45d5-9c1c-a4b675826f4e");
 
   if (isLoadingEvent) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center mt-30">
+        <Loader />
+      </div>
+    );
   }
 
   if (!event || !event.data || !event.data.status) {
