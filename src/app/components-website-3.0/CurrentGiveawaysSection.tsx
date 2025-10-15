@@ -1,10 +1,8 @@
 "use client";
 
-import { X } from "lucide-react";
-import Image from "next/image";
-import { Street, WhiteLogo } from "../assets";
 import Heading2 from "./ui/Heading2";
 import { useRouter } from "next/navigation";
+import FortoXBrand from "./FortoXBrand";
 
 function CurrentGiveawaysSection() {
   const router = useRouter();
@@ -13,29 +11,7 @@ function CurrentGiveawaysSection() {
       <div className="flex flex-col justify-center items-center">
         <Heading2>Current Giveaways</Heading2>
         <div className="flex flex-col justify-center items-center gap-4">
-          <div className="flex gap-4">
-            <div>
-              <Image
-                src={WhiteLogo}
-                alt="Logo"
-                className="h-5 sm:h-8 w-auto"
-                width={150}
-                height={50}
-                priority
-              />
-            </div>
-            <X />
-            <div>
-              <Image
-                src={Street}
-                alt="6thStreetLogo"
-                className="h-5 sm:h-8 w-auto invert"
-                width={150}
-                height={50}
-                priority
-              />
-            </div>
-          </div>
+          <FortoXBrand />
           <div className="flex flex-col justify-center items-center">
             <div className="flex justify-center justify-items gap-4">
               <h1 className="title">

@@ -9,6 +9,8 @@ import Heading2 from "../components-website-3.0/ui/Heading2";
 import { useEventById } from "@/custom-hooks/queries";
 import ParticipationForm from "../components-website-3.0/ParticipationForm";
 import Loader from "../components-website-3.0/ui/Loader";
+import FortoXBrand from "../components-website-3.0/FortoXBrand";
+import AboutBrandSection from "../components-website-3.0/AboutBrandSection";
 
 function ParticipatePage() {
   const {
@@ -34,6 +36,22 @@ function ParticipatePage() {
   }
   return (
     <div className="cp-y">
+      <section className="cp-x cp-y mt-10">
+        <FortoXBrand />
+      </section>
+      <AboutBrandSection />
+      <section className="cp-x cp-y flex justify-center">
+        <div className="max-w-6xl">
+          {/* Right Content */}
+          <div className="flex flex-col items-center gap-4 h-full justify-center">
+            {/* <Label text="About us" /> */}
+            <Heading2>Draw ends in</Heading2>
+            <CountDown targetDate={event.data.endDate} />
+          </div>
+        </div>
+      </section>
+      <ParticipationForm></ParticipationForm>
+      <TermsSection />
       <figure className="flex justify-center items-center w-full mb-10 relative overflow-hidden">
         <Image
           src={Brand1}
@@ -48,19 +66,6 @@ function ParticipatePage() {
           style={{ height: "100%", width: "auto" }}
         />
       </figure>
-      <TermsSection />
-      <section className="cp-x cp-y flex justify-center">
-        <div className="max-w-6xl">
-          {/* Right Content */}
-          <div className="flex flex-col items-center gap-4 h-full justify-center">
-            {/* <Label text="About us" /> */}
-            <Heading2>Draw ends in</Heading2>
-            <CountDown targetDate={event.data.endDate} />
-          </div>
-        </div>
-      </section>
-      <ParticipationForm></ParticipationForm>
-      {/* <TestimonialSection /> */}
     </div>
   );
 }
