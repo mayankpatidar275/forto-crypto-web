@@ -7,6 +7,7 @@ import { useAuth, useSignIn, useSignUp, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import Loader from "../components-brand/ui/Loader";
 
 // Success Modal Component
 interface SuccessModalProps {
@@ -414,15 +415,27 @@ export default function ParticipationForm() {
   }, [isSignedIn]);
 
   if (isLoadingEvent) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center mt-30">
+        <Loader />
+      </div>
+    );
   }
 
   if (error) {
-    return <div>Something went wrong!</div>;
+    return (
+      <div className="flex justify-center items-center mt-30">
+        Oops! Something went wrong
+      </div>
+    );
   }
 
   if (!event || !event.data || !event.data.status) {
-    return <div>Event not found</div>;
+    return (
+      <div className="flex justify-center items-center mt-30">
+        Oops! Something went wrong
+      </div>
+    );
   }
 
   return (

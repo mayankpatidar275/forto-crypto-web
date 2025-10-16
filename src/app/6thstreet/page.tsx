@@ -28,11 +28,19 @@ function ParticipatePage() {
   }
 
   if (!event || !event.data || !event.data.status) {
-    return <div>Event not found</div>;
+    return (
+      <div className="flex justify-center items-center mt-30">
+        Oops! Something went wrong
+      </div>
+    );
   }
 
   if (error) {
-    return <div>Something went wrong!</div>;
+    return (
+      <div className="flex justify-center items-center mt-30">
+        Oops! Something went wrong
+      </div>
+    );
   }
   return (
     <div className="cp-y">
