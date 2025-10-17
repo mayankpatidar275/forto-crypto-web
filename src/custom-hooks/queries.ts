@@ -77,3 +77,25 @@ export const useUserTickets = () => {
     },
   });
 };
+
+// Hook to check participation
+export const useUserParticipation = (drawId: string) => {
+  const { getToken, isSignedIn } = useAuth();
+
+  return useQuery({
+    queryKey: ["userParticipation", drawId],
+    queryFn: async () => {
+      const token = await getToken();
+      if (!token || !isSignedIn) throw new Error("Not authenticated");
+      return get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/ticket/${drawId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    },
+    enabled: !!drawId && isSignedIn, // Only run when we have eventId and user is signed in
+  });
+};

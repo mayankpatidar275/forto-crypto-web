@@ -2,7 +2,7 @@
 "use client";
 
 import { useParticipate } from "@/custom-hooks/mutations";
-import { useEventById } from "@/custom-hooks/queries";
+import { useEventById, useUserParticipation } from "@/custom-hooks/queries";
 import { useAuth, useSignIn, useSignUp, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -214,11 +214,20 @@ export default function ParticipationForm() {
   const [isVerifying, setIsVerifying] = useState(false);
   const [authError, setAuthError] = useState("");
 
+  const eventId = "386e4d08-0b04-45d5-9c1c-a4b675826f4e";
+  const drawId = "e2bcdcfd-5c05-4007-b38f-44a9b9cf5cb9";
+
   const {
     data: event,
     isLoading: isLoadingEvent,
-    error,
-  } = useEventById("386e4d08-0b04-45d5-9c1c-a4b675826f4e");
+    error: eventError,
+  } = useEventById(eventId);
+
+  const {
+    data: participationData,
+    isLoading: isLoadingParticipation,
+    error: participationError,
+  } = useUserParticipation(drawId);
 
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [countryCode, setCountryCode] = useState("+971");
@@ -238,9 +247,16 @@ export default function ParticipationForm() {
     { code: "+971", label: "🇦🇪" }, // UAE
   ];
 
+  // Check if user has already participated
+  const hasParticipated = participationData?.data?.hasParticipated || true;
+  const userTicket = participationData?.data?.ticket;
+
+  console.log("has participated: ", hasParticipated);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
+    if (hasParticipated) return; // Prevent changes if already participated
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -414,7 +430,7 @@ export default function ParticipationForm() {
     }
   }, [isSignedIn]);
 
-  if (isLoadingEvent) {
+  if (isLoadingEvent || (isSignedIn && isLoadingParticipation)) {
     return (
       <div className="flex justify-center items-center mt-30">
         <Loader />
@@ -422,7 +438,7 @@ export default function ParticipationForm() {
     );
   }
 
-  if (error) {
+  if (eventError || participationError) {
     return (
       <div className="flex justify-center items-center mt-30">
         Oops! Something went wrong
@@ -453,12 +469,22 @@ export default function ParticipationForm() {
           </div>
         ) : (
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] bg-clip-text text-transparent mb-3">
-              Join the Event
-            </h1>
-            <p className="text-gray-600 text-lg">
-              Complete your registration to participate
-            </p>
+            {/* Already participated message */}
+            {hasParticipated && (
+              <div className="text-center mb-8">
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] bg-clip-text text-transparent mb-3">
+                  Already Participated!
+                </h1>
+                <p className="text-gray-600 text-lg">
+                  Check the ticket in your profile
+                  {userTicket && (
+                    <p className="text-blue-600 text-sm mt-1">
+                      Your ticket code: <strong>{userTicket.shortCode}</strong>
+                    </p>
+                  )}
+                </p>
+              </div>
+            )}
           </div>
         )}
 
@@ -466,12 +492,16 @@ export default function ParticipationForm() {
         <div className="relative">
           {/* Glow Effect */}
           <div className="absolute -inset-4 bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] rounded-3xl blur-xl opacity-10" />
-          {event.data.status !== "ACTIVE" && (
+
+          {/* NEW: Gray overlay if event ended OR user already participated */}
+          {(event.data.status !== "ACTIVE" || hasParticipated) && (
             <div className="bg-background opacity-25 w-full h-full absolute z-50 rounded-3xl flex justify-center items-center"></div>
           )}
           <form
             onSubmit={handleSubmit}
-            className="relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 p-4 sm:p-8 space-y-6"
+            className={`relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 p-4 sm:p-8 space-y-6 ${
+              hasParticipated ? "opacity-60" : ""
+            }`}
           >
             {/* First Name */}
             <div className="space-y-2">
@@ -485,7 +515,8 @@ export default function ParticipationForm() {
                   value={formData.firstName}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
+                  disabled={hasParticipated}
+                  className="w-full px-4 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
                   placeholder="Enter your first name"
                 />
               </div>
@@ -503,7 +534,8 @@ export default function ParticipationForm() {
                   value={formData.lastName}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
+                  disabled={hasParticipated}
+                  className="w-full px-4 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
                   placeholder="Enter your last name"
                 />
               </div>
@@ -519,7 +551,8 @@ export default function ParticipationForm() {
                 value={formData.gender}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 bg-white/50 text-gray-700 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
+                disabled={hasParticipated}
+                className="w-full px-4 py-3 bg-white/50 text-gray-700 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <option value="" disabled>
                   Select your gender
@@ -529,105 +562,107 @@ export default function ParticipationForm() {
               </select>
             </div>
 
-            {/* Email Authentication */}
-            <div className="space-y-2">
-              <label className="block text-sm font-semibold text-gray-700 tracking-wide">
-                Email Address
-              </label>
+            {/* Email Authentication - Only show if not already participated */}
+            {!hasParticipated && (
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-gray-700 tracking-wide">
+                  Email Address
+                </label>
 
-              {authStep === "email" && !isSignedIn && (
-                <div className="space-y-3">
-                  <div className="relative">
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
-                      placeholder="Enter your email address"
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={handleEmailSubmit}
-                    disabled={isVerifying}
-                    className="w-full py-3 px-6 bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50"
-                  >
-                    {isVerifying ? (
-                      <div className="flex items-center justify-center">
-                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                        Sending Code...
-                      </div>
-                    ) : (
-                      "Send Verification Code"
-                    )}
-                  </button>
-                </div>
-              )}
-
-              {authStep === "otp" && !isSignedIn && (
-                <div className="space-y-3">
-                  <div className="flex gap-2 overflow-hidden">
-                    <input
-                      type="text"
-                      value={otp}
-                      onChange={(e) => setOtp(e.target.value)}
-                      required
-                      className="flex-1 w-4 px-0 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400 text-center text-lg font-mono"
-                      placeholder="6-digit code"
-                      maxLength={6}
-                    />
+                {authStep === "email" && !isSignedIn && (
+                  <div className="space-y-3">
+                    <div className="relative">
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
+                        placeholder="Enter your email address"
+                      />
+                    </div>
                     <button
                       type="button"
-                      onClick={handleOtpSubmit}
+                      onClick={handleEmailSubmit}
                       disabled={isVerifying}
-                      className="px-6 py-3 bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50 whitespace-nowrap"
+                      className="w-full py-3 px-6 bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50"
                     >
                       {isVerifying ? (
                         <div className="flex items-center justify-center">
-                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-1" />
+                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                          Sending Code...
                         </div>
                       ) : (
-                        "Verify"
+                        "Send Verification Code"
                       )}
                     </button>
                   </div>
-                  <p className="text-sm text-gray-600">
-                    We sent a code to <strong>{formData.email}</strong>
-                    <button
-                      type="button"
-                      onClick={() => setAuthStep("email")}
-                      className="ml-2 text-[var(--brand-br1)] font-semibold hover:underline"
-                    >
-                      Change email
-                    </button>
-                  </p>
-                </div>
-              )}
+                )}
 
-              {isSignedIn && (
-                <div className="relative">
-                  <input
-                    type="email"
-                    value={user?.primaryEmailAddress?.emailAddress || ""}
-                    readOnly
-                    className="w-full px-4 py-3 bg-green-50/50 border border-green-200 rounded-xl text-gray-700"
-                  />
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                    <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full font-medium">
-                      Verified ✓
-                    </span>
+                {authStep === "otp" && !isSignedIn && (
+                  <div className="space-y-3">
+                    <div className="flex gap-2 overflow-hidden">
+                      <input
+                        type="text"
+                        value={otp}
+                        onChange={(e) => setOtp(e.target.value)}
+                        required
+                        className="flex-1 w-4 px-0 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400 text-center text-lg font-mono"
+                        placeholder="6-digit code"
+                        maxLength={6}
+                      />
+                      <button
+                        type="button"
+                        onClick={handleOtpSubmit}
+                        disabled={isVerifying}
+                        className="px-6 py-3 bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50 whitespace-nowrap"
+                      >
+                        {isVerifying ? (
+                          <div className="flex items-center justify-center">
+                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-1" />
+                          </div>
+                        ) : (
+                          "Verify"
+                        )}
+                      </button>
+                    </div>
+                    <p className="text-sm text-gray-600">
+                      We sent a code to <strong>{formData.email}</strong>
+                      <button
+                        type="button"
+                        onClick={() => setAuthStep("email")}
+                        className="ml-2 text-[var(--brand-br1)] font-semibold hover:underline"
+                      >
+                        Change email
+                      </button>
+                    </p>
                   </div>
-                </div>
-              )}
+                )}
 
-              {authError && (
-                <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg">
-                  {authError}
-                </div>
-              )}
-            </div>
+                {isSignedIn && (
+                  <div className="relative">
+                    <input
+                      type="email"
+                      value={user?.primaryEmailAddress?.emailAddress || ""}
+                      readOnly
+                      className="w-full px-4 py-3 bg-green-50/50 border border-green-200 rounded-xl text-gray-700"
+                    />
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                      <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full font-medium">
+                        Verified ✓
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {authError && (
+                  <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg">
+                    {authError}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Phone */}
             <div className="space-y-2">
@@ -637,8 +672,11 @@ export default function ParticipationForm() {
               <div className="flex gap-3">
                 <select
                   value={countryCode}
-                  onChange={(e) => setCountryCode(e.target.value)}
-                  className="w-24 sm:w-28 px-1 sm:px-3 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
+                  onChange={(e) =>
+                    !hasParticipated && setCountryCode(e.target.value)
+                  }
+                  disabled={hasParticipated}
+                  className="w-24 sm:w-28 px-1 sm:px-3 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {countryOptions.map((c) => (
                     <option key={c.code} value={c.code}>
@@ -654,7 +692,8 @@ export default function ParticipationForm() {
                   required
                   pattern="[0-9]{7,15}"
                   placeholder="Phone number"
-                  className="flex-1 px-4 py-3 w-2 bg-white/50 border text-gray-700 border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
+                  disabled={hasParticipated}
+                  className="flex-1 px-4 py-3 w-2 bg-white/50 border text-gray-700 border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
                 />
               </div>
             </div>
@@ -669,7 +708,8 @@ export default function ParticipationForm() {
                 value={formData.shopped}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 bg-white/50 text-gray-700 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
+                disabled={hasParticipated}
+                className="w-full px-4 py-3 bg-white/50 text-gray-700 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <option value="" disabled>
                   Select your experience
@@ -689,7 +729,8 @@ export default function ParticipationForm() {
                 value={formData.shoppingWebsite}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 bg-white/50 text-gray-700 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
+                disabled={hasParticipated}
+                className="w-full px-4 py-3 bg-white/50 text-gray-700 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <option value="" disabled>
                   Select your preferred shopping website
@@ -702,48 +743,61 @@ export default function ParticipationForm() {
               </select>
             </div>
 
-            {/* Terms */}
-            <div className="flex items-start space-x-3 p-4 bg-blue-50/50 rounded-xl border border-blue-100">
-              <input
-                type="checkbox"
-                id="terms"
-                checked={acceptedTerms}
-                onChange={(e) => setAcceptedTerms(e.target.checked)}
-                className="mt-1 w-4 h-4 text-[var(--brand-br1)] bg-white border-gray-300 rounded focus:ring-[var(--brand-br1)]"
-              />
-              <label htmlFor="terms" className="text-sm text-gray-600 flex-1">
-                I agree to participation terms
-                {/* <a
+            {/* Terms - Only show if not already participated */}
+            {!hasParticipated && (
+              <div className="flex items-start space-x-3 p-4 bg-blue-50/50 rounded-xl border border-blue-100">
+                <input
+                  type="checkbox"
+                  id="terms"
+                  checked={acceptedTerms}
+                  onChange={(e) => setAcceptedTerms(e.target.checked)}
+                  disabled={hasParticipated}
+                  className="mt-1 w-4 h-4 text-[var(--brand-br1)] bg-white border-gray-300 rounded focus:ring-[var(--brand-br1)] disabled:opacity-50"
+                />
+                <label htmlFor="terms" className="text-sm text-gray-600 flex-1">
+                  I agree to participation terms
+                  {/* <a
                   href="/terms"
                   target="_blank"
                   className="text-[var(--brand-br1)] font-semibold hover:underline"
                 >
                   Terms and Conditions
                 </a> */}
-              </label>
-            </div>
+                </label>
+              </div>
+            )}
 
             {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={!acceptedTerms || !isSignedIn}
-              className={`w-full py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 transform ${
-                acceptedTerms && isSignedIn
-                  ? "bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] text-white shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
-              }`}
-            >
-              {!isSignedIn ? (
-                "Complete Email Verification First"
-              ) : participateMutation.isPending ? (
-                <div className="flex items-center justify-center">
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                  Submitting...
-                </div>
-              ) : (
-                "Participate Now 🎉"
-              )}
-            </button>
+            {!hasParticipated ? (
+              <button
+                type="submit"
+                disabled={!acceptedTerms || !isSignedIn || hasParticipated}
+                className={`w-full py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 transform ${
+                  acceptedTerms && isSignedIn && !hasParticipated
+                    ? "bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] text-white shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
+                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                }`}
+              >
+                {!isSignedIn ? (
+                  "Complete Email Verification First"
+                ) : participateMutation.isPending ? (
+                  <div className="flex items-center justify-center">
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                    Submitting...
+                  </div>
+                ) : (
+                  "Participate Now 🎉"
+                )}
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => router.push("/my-profile")}
+                className="w-full py-4 px-6 bg-gray-500 text-white rounded-xl font-semibold text-lg hover:bg-gray-600 transition-all duration-300"
+              >
+                View My Profile & Tickets
+              </button>
+            )}
           </form>
         </div>
       </div>
