@@ -32,7 +32,7 @@ const HowItWorks = () => {
               title="Win Big, Shop Bigger"
               icon={Tally3}
               alt={""}
-              description="→ The draws operate like raffle or sweepstakes draws - with a mega winner getting a large prize and then mid and small tier winners - ensuring more winners, higher prizes - More Fun"
+              description="→ The draws operate like raffle or sweepstakes draws - with a mega winner getting a large prize and then mid and small tier winners - ensuring more winners, higher prizes - More Fun."
             />
             <SolutionCard
               title="Redeem and Shop"

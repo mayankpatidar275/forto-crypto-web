@@ -17,25 +17,25 @@ const FortoVsTraditional = () => {
                 <span className="bg-[#331910] rounded-full h-7 w-7 flex justify-center items-center mr-4">
                   <Check className="text-[#ff8730] p-1" />
                 </span>{" "}
-                50% of participants win{" "}
+                50% of participants win.{" "}
               </li>
               <li className="flex text-very-light-pink items-center">
                 <span className="bg-[#331910] rounded-full h-7 w-7 flex justify-center items-center mr-4">
                   <Check className="text-[#ff8730] p-1" />
                 </span>{" "}
-                Pay only on redemption{" "}
+                Pay only on redemption.{" "}
               </li>
               <li className="flex text-very-light-pink items-center">
                 <span className="bg-[#331910] rounded-full h-7 w-7 flex justify-center items-center mr-4">
                   <Check className="text-[#ff8730] p-1" />
                 </span>{" "}
-                High participation and repeat draws{" "}
+                High participation and repeat draws.{" "}
               </li>
               <li className="flex text-very-light-pink items-center">
                 <span className="bg-[#331910] rounded-full h-7 w-7 flex justify-center items-center mr-4">
                   <Check className="text-[#ff8730] p-1" />
                 </span>{" "}
-                Blockchain-verified fairness{" "}
+                Blockchain-verified fairness.{" "}
               </li>
             </ul>
           </div>

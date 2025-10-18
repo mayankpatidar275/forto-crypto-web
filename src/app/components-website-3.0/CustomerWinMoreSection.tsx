@@ -24,19 +24,19 @@ const CustomerWinMoreSection = () => {
               title="Rewards redeemable instantly"
               icon={Gift}
               alt={""}
-              description="Win now, shop now. Credits arrive instantly at checkout"
+              description="Win now, shop now. Credits arrive instantly at checkout."
             />
             <SolutionCard
               title="Transparent draws you can trust"
               icon={Handshake}
               alt={""}
-              description="Every draw is on blockchain — provably fair, no hidden tricks"
+              description="Every draw is on blockchain — provably fair, no hidden tricks."
             />
             <SolutionCard
               title="Rewards that turn into real shopping"
               icon={ShoppingBag}
               alt={""}
-              description="Real credits from your favorite brands — shop your wishlist free"
+              description="Real credits from your favorite brands — shop your wishlist free."
             />
           </div>
           {/* <Para1 className="lg:text-left hidden md:flex">
