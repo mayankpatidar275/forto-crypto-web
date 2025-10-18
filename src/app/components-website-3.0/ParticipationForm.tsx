@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Loader from "../components-brand/ui/Loader";
+import Link from "next/link";
+import { useQueryClient } from "@tanstack/react-query";
 
 // Success Modal Component
 interface SuccessModalProps {
@@ -237,6 +239,7 @@ export default function ParticipationForm() {
   );
   const [totalTickets, setTotalTickets] = useState(0);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const countryOptions = [
     { code: "+973", label: "🇧🇭" }, // Bahrain
@@ -248,10 +251,8 @@ export default function ParticipationForm() {
   ];
 
   // Check if user has already participated
-  const hasParticipated = participationData?.data?.hasParticipated || true;
+  const hasParticipated = participationData?.data?.hasParticipated || false;
   const userTicket = participationData?.data?.ticket;
-
-  console.log("has participated: ", hasParticipated);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -402,6 +403,9 @@ export default function ParticipationForm() {
           setTicketData(data.data.ticket);
           setTotalTickets(data.data.totalTickets);
           setIsModalOpen(true);
+          queryClient.invalidateQueries({
+            queryKey: ["userParticipation", drawId],
+          });
           return "Participated successfully!";
         },
         error: (err) => {
@@ -422,6 +426,10 @@ export default function ParticipationForm() {
       }
     );
   };
+
+  useEffect(() => {
+    console.log("signed in", isSignedIn);
+  }, [isSignedIn]);
 
   // Reset auth state when signed in
   useEffect(() => {
@@ -453,6 +461,97 @@ export default function ParticipationForm() {
       </div>
     );
   }
+  if (isSignedIn && hasParticipated)
+    return (
+      <div className="bg-gradient-to-br from-slate-50 to-blue-50 cp-x cp-y">
+        <div className="max-w-lg mx-auto">
+          {/* Header */}
+          <div className="text-center">
+            <div className="bg-gradient-to-br from-green-50 to-emerald-100 border border-green-200 rounded-2xl p-6 max-w-md mx-auto">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg
+                  className="w-8 h-8 text-green-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+
+              <h1 className="text-2xl font-bold text-gray-800 mb-3">
+                Already Participated!
+              </h1>
+
+              <p className="text-gray-600 mb-4">
+                Your entry has been successfully submitted
+              </p>
+
+              <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+                <p className="text-sm text-gray-700 mb-3">
+                  Check your ticket in your{" "}
+                  <Link
+                    href="/my-profile"
+                    className="text-blue-600 font-semibold hover:text-blue-700 transition-colors"
+                  >
+                    profile
+                  </Link>
+                </p>
+
+                {userTicket && (
+                  <div className="space-y-2 text-left">
+                    <div className="flex items-center gap-2">
+                      <svg
+                        className="w-4 h-4 text-blue-500"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"
+                        />
+                      </svg>
+                      <span className="text-sm text-gray-600">Ticket ID:</span>
+                      <code className="text-sm font-mono font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">
+                        {userTicket.shortCode}
+                      </code>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <svg
+                        className="w-4 h-4 text-purple-500"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+                      </svg>
+                      <span className="text-sm text-gray-600">Event:</span>
+                      <span className="text-sm font-semibold text-gray-800">
+                        {userTicket.event.name}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
 
   return (
     <div className="bg-gradient-to-br from-slate-50 to-blue-50 cp-x cp-y">
@@ -469,22 +568,12 @@ export default function ParticipationForm() {
           </div>
         ) : (
           <div className="text-center mb-8">
-            {/* Already participated message */}
-            {hasParticipated && (
-              <div className="text-center mb-8">
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] bg-clip-text text-transparent mb-3">
-                  Already Participated!
-                </h1>
-                <p className="text-gray-600 text-lg">
-                  Check the ticket in your profile
-                  {userTicket && (
-                    <p className="text-blue-600 text-sm mt-1">
-                      Your ticket code: <strong>{userTicket.shortCode}</strong>
-                    </p>
-                  )}
-                </p>
-              </div>
-            )}
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] bg-clip-text text-transparent mb-3">
+              Join the Event
+            </h1>
+            <p className="text-gray-600 text-lg">
+              Complete your registration to participate
+            </p>
           </div>
         )}
 
@@ -492,16 +581,12 @@ export default function ParticipationForm() {
         <div className="relative">
           {/* Glow Effect */}
           <div className="absolute -inset-4 bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] rounded-3xl blur-xl opacity-10" />
-
-          {/* NEW: Gray overlay if event ended OR user already participated */}
-          {(event.data.status !== "ACTIVE" || hasParticipated) && (
+          {event.data.status !== "ACTIVE" && (
             <div className="bg-background opacity-25 w-full h-full absolute z-50 rounded-3xl flex justify-center items-center"></div>
           )}
           <form
             onSubmit={handleSubmit}
-            className={`relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 p-4 sm:p-8 space-y-6 ${
-              hasParticipated ? "opacity-60" : ""
-            }`}
+            className="relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 p-4 sm:p-8 space-y-6"
           >
             {/* First Name */}
             <div className="space-y-2">
@@ -515,8 +600,7 @@ export default function ParticipationForm() {
                   value={formData.firstName}
                   onChange={handleChange}
                   required
-                  disabled={hasParticipated}
-                  className="w-full px-4 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
                   placeholder="Enter your first name"
                 />
               </div>
@@ -534,8 +618,7 @@ export default function ParticipationForm() {
                   value={formData.lastName}
                   onChange={handleChange}
                   required
-                  disabled={hasParticipated}
-                  className="w-full px-4 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
                   placeholder="Enter your last name"
                 />
               </div>
@@ -551,8 +634,7 @@ export default function ParticipationForm() {
                 value={formData.gender}
                 onChange={handleChange}
                 required
-                disabled={hasParticipated}
-                className="w-full px-4 py-3 bg-white/50 text-gray-700 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-4 py-3 bg-white/50 text-gray-700 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
               >
                 <option value="" disabled>
                   Select your gender
@@ -562,107 +644,105 @@ export default function ParticipationForm() {
               </select>
             </div>
 
-            {/* Email Authentication - Only show if not already participated */}
-            {!hasParticipated && (
-              <div className="space-y-2">
-                <label className="block text-sm font-semibold text-gray-700 tracking-wide">
-                  Email Address
-                </label>
+            {/* Email Authentication */}
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-gray-700 tracking-wide">
+                Email Address
+              </label>
 
-                {authStep === "email" && !isSignedIn && (
-                  <div className="space-y-3">
-                    <div className="relative">
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
-                        placeholder="Enter your email address"
-                      />
-                    </div>
-                    <button
-                      type="button"
-                      onClick={handleEmailSubmit}
-                      disabled={isVerifying}
-                      className="w-full py-3 px-6 bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50"
-                    >
-                      {isVerifying ? (
-                        <div className="flex items-center justify-center">
-                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                          Sending Code...
-                        </div>
-                      ) : (
-                        "Send Verification Code"
-                      )}
-                    </button>
-                  </div>
-                )}
-
-                {authStep === "otp" && !isSignedIn && (
-                  <div className="space-y-3">
-                    <div className="flex gap-2 overflow-hidden">
-                      <input
-                        type="text"
-                        value={otp}
-                        onChange={(e) => setOtp(e.target.value)}
-                        required
-                        className="flex-1 w-4 px-0 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400 text-center text-lg font-mono"
-                        placeholder="6-digit code"
-                        maxLength={6}
-                      />
-                      <button
-                        type="button"
-                        onClick={handleOtpSubmit}
-                        disabled={isVerifying}
-                        className="px-6 py-3 bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50 whitespace-nowrap"
-                      >
-                        {isVerifying ? (
-                          <div className="flex items-center justify-center">
-                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-1" />
-                          </div>
-                        ) : (
-                          "Verify"
-                        )}
-                      </button>
-                    </div>
-                    <p className="text-sm text-gray-600">
-                      We sent a code to <strong>{formData.email}</strong>
-                      <button
-                        type="button"
-                        onClick={() => setAuthStep("email")}
-                        className="ml-2 text-[var(--brand-br1)] font-semibold hover:underline"
-                      >
-                        Change email
-                      </button>
-                    </p>
-                  </div>
-                )}
-
-                {isSignedIn && (
+              {authStep === "email" && !isSignedIn && (
+                <div className="space-y-3">
                   <div className="relative">
                     <input
                       type="email"
-                      value={user?.primaryEmailAddress?.emailAddress || ""}
-                      readOnly
-                      className="w-full px-4 py-3 bg-green-50/50 border border-green-200 rounded-xl text-gray-700"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
+                      placeholder="Enter your email address"
                     />
-                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                      <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full font-medium">
-                        Verified ✓
-                      </span>
-                    </div>
                   </div>
-                )}
+                  <button
+                    type="button"
+                    onClick={handleEmailSubmit}
+                    disabled={isVerifying}
+                    className="w-full py-3 px-6 bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50"
+                  >
+                    {isVerifying ? (
+                      <div className="flex items-center justify-center">
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                        Sending Code...
+                      </div>
+                    ) : (
+                      "Send Verification Code"
+                    )}
+                  </button>
+                </div>
+              )}
 
-                {authError && (
-                  <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg">
-                    {authError}
+              {authStep === "otp" && !isSignedIn && (
+                <div className="space-y-3">
+                  <div className="flex gap-2 overflow-hidden">
+                    <input
+                      type="text"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                      required
+                      className="flex-1 w-4 px-0 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400 text-center text-lg font-mono"
+                      placeholder="6-digit code"
+                      maxLength={6}
+                    />
+                    <button
+                      type="button"
+                      onClick={handleOtpSubmit}
+                      disabled={isVerifying}
+                      className="px-6 py-3 bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50 whitespace-nowrap"
+                    >
+                      {isVerifying ? (
+                        <div className="flex items-center justify-center">
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-1" />
+                        </div>
+                      ) : (
+                        "Verify"
+                      )}
+                    </button>
                   </div>
-                )}
-              </div>
-            )}
+                  <p className="text-sm text-gray-600">
+                    We sent a code to <strong>{formData.email}</strong>
+                    <button
+                      type="button"
+                      onClick={() => setAuthStep("email")}
+                      className="ml-2 text-[var(--brand-br1)] font-semibold hover:underline"
+                    >
+                      Change email
+                    </button>
+                  </p>
+                </div>
+              )}
+
+              {isSignedIn && (
+                <div className="relative">
+                  <input
+                    type="email"
+                    value={user?.primaryEmailAddress?.emailAddress || ""}
+                    readOnly
+                    className="w-full px-4 py-3 bg-green-50/50 border border-green-200 rounded-xl text-gray-700"
+                  />
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full font-medium">
+                      Verified ✓
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {authError && (
+                <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg">
+                  {authError}
+                </div>
+              )}
+            </div>
 
             {/* Phone */}
             <div className="space-y-2">
@@ -672,11 +752,8 @@ export default function ParticipationForm() {
               <div className="flex gap-3">
                 <select
                   value={countryCode}
-                  onChange={(e) =>
-                    !hasParticipated && setCountryCode(e.target.value)
-                  }
-                  disabled={hasParticipated}
-                  className="w-24 sm:w-28 px-1 sm:px-3 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  onChange={(e) => setCountryCode(e.target.value)}
+                  className="w-24 sm:w-28 px-1 sm:px-3 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
                 >
                   {countryOptions.map((c) => (
                     <option key={c.code} value={c.code}>
@@ -692,8 +769,7 @@ export default function ParticipationForm() {
                   required
                   pattern="[0-9]{7,15}"
                   placeholder="Phone number"
-                  disabled={hasParticipated}
-                  className="flex-1 px-4 py-3 w-2 bg-white/50 border text-gray-700 border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 px-4 py-3 w-2 bg-white/50 border text-gray-700 border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
                 />
               </div>
             </div>
@@ -708,8 +784,7 @@ export default function ParticipationForm() {
                 value={formData.shopped}
                 onChange={handleChange}
                 required
-                disabled={hasParticipated}
-                className="w-full px-4 py-3 bg-white/50 text-gray-700 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-4 py-3 bg-white/50 text-gray-700 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
               >
                 <option value="" disabled>
                   Select your experience
@@ -729,8 +804,7 @@ export default function ParticipationForm() {
                 value={formData.shoppingWebsite}
                 onChange={handleChange}
                 required
-                disabled={hasParticipated}
-                className="w-full px-4 py-3 bg-white/50 text-gray-700 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-4 py-3 bg-white/50 text-gray-700 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
               >
                 <option value="" disabled>
                   Select your preferred shopping website
@@ -743,61 +817,48 @@ export default function ParticipationForm() {
               </select>
             </div>
 
-            {/* Terms - Only show if not already participated */}
-            {!hasParticipated && (
-              <div className="flex items-start space-x-3 p-4 bg-blue-50/50 rounded-xl border border-blue-100">
-                <input
-                  type="checkbox"
-                  id="terms"
-                  checked={acceptedTerms}
-                  onChange={(e) => setAcceptedTerms(e.target.checked)}
-                  disabled={hasParticipated}
-                  className="mt-1 w-4 h-4 text-[var(--brand-br1)] bg-white border-gray-300 rounded focus:ring-[var(--brand-br1)] disabled:opacity-50"
-                />
-                <label htmlFor="terms" className="text-sm text-gray-600 flex-1">
-                  I agree to participation terms
-                  {/* <a
+            {/* Terms */}
+            <div className="flex items-start space-x-3 p-4 bg-blue-50/50 rounded-xl border border-blue-100">
+              <input
+                type="checkbox"
+                id="terms"
+                checked={acceptedTerms}
+                onChange={(e) => setAcceptedTerms(e.target.checked)}
+                className="mt-1 w-4 h-4 text-[var(--brand-br1)] bg-white border-gray-300 rounded focus:ring-[var(--brand-br1)]"
+              />
+              <label htmlFor="terms" className="text-sm text-gray-600 flex-1">
+                I agree to participation terms
+                {/* <a
                   href="/terms"
                   target="_blank"
                   className="text-[var(--brand-br1)] font-semibold hover:underline"
                 >
                   Terms and Conditions
                 </a> */}
-                </label>
-              </div>
-            )}
+              </label>
+            </div>
 
             {/* Submit Button */}
-            {!hasParticipated ? (
-              <button
-                type="submit"
-                disabled={!acceptedTerms || !isSignedIn || hasParticipated}
-                className={`w-full py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 transform ${
-                  acceptedTerms && isSignedIn && !hasParticipated
-                    ? "bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] text-white shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
-                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                }`}
-              >
-                {!isSignedIn ? (
-                  "Complete Email Verification First"
-                ) : participateMutation.isPending ? (
-                  <div className="flex items-center justify-center">
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                    Submitting...
-                  </div>
-                ) : (
-                  "Participate Now 🎉"
-                )}
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={() => router.push("/my-profile")}
-                className="w-full py-4 px-6 bg-gray-500 text-white rounded-xl font-semibold text-lg hover:bg-gray-600 transition-all duration-300"
-              >
-                View My Profile & Tickets
-              </button>
-            )}
+            <button
+              type="submit"
+              disabled={!acceptedTerms || !isSignedIn}
+              className={`w-full py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 transform ${
+                acceptedTerms && isSignedIn
+                  ? "bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] text-white shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              }`}
+            >
+              {!isSignedIn ? (
+                "Complete Email Verification First"
+              ) : participateMutation.isPending ? (
+                <div className="flex items-center justify-center">
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                  Submitting...
+                </div>
+              ) : (
+                "Participate Now 🎉"
+              )}
+            </button>
           </form>
         </div>
       </div>
@@ -815,7 +876,6 @@ export default function ParticipationForm() {
     </div>
   );
 }
-
 export interface ClerkError {
   errors: Array<{
     code: string;

@@ -11,15 +11,18 @@ import ParticipationForm from "../components-website-3.0/ParticipationForm";
 import Loader from "../components-website-3.0/ui/Loader";
 import FortoXBrand from "../components-website-3.0/FortoXBrand";
 import AboutBrandSection from "../components-website-3.0/AboutBrandSection";
+import { useUser } from "@clerk/nextjs";
 
 function ParticipatePage() {
+  const { isLoaded } = useUser();
+
   const {
     data: event,
     isLoading: isLoadingEvent,
     error,
   } = useEventById("386e4d08-0b04-45d5-9c1c-a4b675826f4e");
 
-  if (isLoadingEvent) {
+  if (isLoadingEvent || !isLoaded) {
     return (
       <div className="flex justify-center items-center mt-30">
         <Loader />
