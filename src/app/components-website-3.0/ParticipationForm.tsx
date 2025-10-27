@@ -1,7 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // app/components/ParticipationForm.tsx
 "use client";
 
-import { useParticipate } from "@/custom-hooks/mutations";
+import {
+  useCheckPhoneVerificationMutation,
+  useParticipate,
+  useSendPhoneVerificationMutation,
+} from "@/custom-hooks/mutations";
 import { useEventById, useUserParticipation } from "@/custom-hooks/queries";
 import { useAuth, useSignIn, useSignUp, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
@@ -10,6 +15,7 @@ import toast from "react-hot-toast";
 import Loader from "../components-brand/ui/Loader";
 import Link from "next/link";
 import { useQueryClient } from "@tanstack/react-query";
+import { CheckPhoneRes, SendPhoneRes } from "@/services/api/nftApi";
 
 // Success Modal Component
 interface SuccessModalProps {
@@ -196,6 +202,8 @@ export default function ParticipationForm() {
   const { isSignedIn, user } = useUser();
   const { getToken } = useAuth();
   const participateMutation = useParticipate();
+  const sendPhoneVerificationMutation = useSendPhoneVerificationMutation();
+  const checkPhoneVerificationMutation = useCheckPhoneVerificationMutation();
 
   // Clerk authentication hooks
   const { signUp, setActive } = useSignUp();
@@ -212,9 +220,13 @@ export default function ParticipationForm() {
   });
 
   const [authStep, setAuthStep] = useState<"email" | "otp">("email");
+  const [phoneAuthStep, setPhoneAuthStep] = useState<"input" | "otp">("input");
   const [otp, setOtp] = useState("");
+  const [phoneOtp, setPhoneOtp] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
+  const [isVerifyingPhone, setIsVerifyingPhone] = useState(false);
   const [authError, setAuthError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
 
   const eventId = "386e4d08-0b04-45d5-9c1c-a4b675826f4e";
   const drawId = "e2bcdcfd-5c05-4007-b38f-44a9b9cf5cb9";
@@ -248,6 +260,7 @@ export default function ParticipationForm() {
     { code: "+974", label: "🇶🇦" }, // Qatar
     { code: "+966", label: "🇸🇦" }, // Saudi
     { code: "+971", label: "🇦🇪" }, // UAE
+    { code: "+91", label: "🇦🇪" }, // UAE
   ];
 
   // Check if user has already participated
@@ -372,6 +385,61 @@ export default function ParticipationForm() {
     }
   };
 
+  // handlePhoneVerification
+  const handlePhoneVerification = async () => {
+    setPhoneError("");
+    if (!formData.phone) return setPhoneError("Please enter your phone number");
+
+    setIsVerifyingPhone(true);
+    try {
+      const fullPhone = `${countryCode}${formData.phone}`;
+
+      // mutateAsync is typed to return SendPhoneRes
+      const r = (await sendPhoneVerificationMutation.mutateAsync({
+        phone: fullPhone,
+      })) as SendPhoneRes;
+
+      if (!r || !r.ok) {
+        setPhoneError(
+          (r && (r as any).message) || "Failed to send verification code"
+        );
+        return;
+      }
+
+      setPhoneAuthStep("otp");
+    } catch (e: any) {
+      setPhoneError(e?.message || "Network error");
+    } finally {
+      setIsVerifyingPhone(false);
+    }
+  };
+
+  // handlePhoneOtpSubmit
+  const handlePhoneOtpSubmit = async () => {
+    if (!phoneOtp) return setPhoneError("Please enter the verification code");
+
+    setPhoneError("");
+    setIsVerifyingPhone(true);
+    try {
+      const fullPhone = `${countryCode}${formData.phone}`;
+
+      const r = (await checkPhoneVerificationMutation.mutateAsync({
+        phone: fullPhone,
+        code: phoneOtp,
+      })) as CheckPhoneRes;
+
+      if (r && r.ok && (r as any).verified) {
+        setPhoneAuthStep("input"); // success
+      } else {
+        setPhoneError((r && (r as any).message) || "Invalid verification code");
+      }
+    } catch (e: any) {
+      setPhoneError(e?.message || "Network error");
+    } finally {
+      setIsVerifyingPhone(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isSignedIn) {
@@ -393,8 +461,8 @@ export default function ParticipationForm() {
         lastName: formData.lastName,
         phone: `${countryCode}${formData.phone}`,
         purchasedBefore: formData.shopped === "yes",
-        gender: formData.gender, // Add this line
-        shoppingWebsite: formData.shoppingWebsite, // Add this line
+        gender: formData.gender,
+        shoppingWebsite: formData.shoppingWebsite,
         token: token,
       }),
       {
@@ -461,6 +529,7 @@ export default function ParticipationForm() {
       </div>
     );
   }
+
   if (isSignedIn && hasParticipated)
     return (
       <div className="bg-gradient-to-br from-slate-50 to-blue-50 cp-x cp-y">
@@ -744,34 +813,104 @@ export default function ParticipationForm() {
               )}
             </div>
 
-            {/* Phone */}
+            {/* Phone Verification */}
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-gray-700 tracking-wide">
                 Phone Number
               </label>
-              <div className="flex gap-3">
-                <select
-                  value={countryCode}
-                  onChange={(e) => setCountryCode(e.target.value)}
-                  className="w-24 sm:w-28 px-1 sm:px-3 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
-                >
-                  {countryOptions.map((c) => (
-                    <option key={c.code} value={c.code}>
-                      {c.label} {c.code}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  required
-                  pattern="[0-9]{7,15}"
-                  placeholder="Phone number"
-                  className="flex-1 px-4 py-3 w-2 bg-white/50 border text-gray-700 border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
-                />
-              </div>
+
+              {phoneAuthStep === "input" && (
+                <div className="space-y-3">
+                  <div className="flex gap-3">
+                    <select
+                      value={countryCode}
+                      onChange={(e) => setCountryCode(e.target.value)}
+                      className="w-24 sm:w-28 px-1 sm:px-3 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
+                    >
+                      {countryOptions.map((c) => (
+                        <option key={c.code} value={c.code}>
+                          {c.label} {c.code}
+                        </option>
+                      ))}
+                    </select>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      required
+                      pattern="[0-9]{7,15}"
+                      placeholder="Phone number"
+                      className="flex-1 px-4 py-3 w-2 bg-white/50 border text-gray-700 border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handlePhoneVerification}
+                    disabled={isVerifyingPhone || !formData.phone}
+                    className="w-full py-3 px-6 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50"
+                  >
+                    {isVerifyingPhone ? (
+                      <div className="flex items-center justify-center">
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                        Sending Code...
+                      </div>
+                    ) : (
+                      "Verify Phone Number"
+                    )}
+                  </button>
+                </div>
+              )}
+
+              {phoneAuthStep === "otp" && (
+                <div className="space-y-3">
+                  <div className="flex gap-2 overflow-hidden">
+                    <input
+                      type="text"
+                      value={phoneOtp}
+                      onChange={(e) => setPhoneOtp(e.target.value)}
+                      required
+                      className="flex-1 w-4 px-0 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-400 text-center text-lg font-mono"
+                      placeholder="6-digit code"
+                      maxLength={6}
+                    />
+                    <button
+                      type="button"
+                      onClick={handlePhoneOtpSubmit}
+                      disabled={isVerifyingPhone}
+                      className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50 whitespace-nowrap"
+                    >
+                      {isVerifyingPhone ? (
+                        <div className="flex items-center justify-center">
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-1" />
+                        </div>
+                      ) : (
+                        "Verify"
+                      )}
+                    </button>
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    We sent a code to{" "}
+                    <strong>
+                      {countryCode}
+                      {formData.phone}
+                    </strong>
+                    <button
+                      type="button"
+                      onClick={() => setPhoneAuthStep("input")}
+                      className="ml-2 text-blue-600 font-semibold hover:underline"
+                    >
+                      Change number
+                    </button>
+                  </p>
+                </div>
+              )}
+
+              {phoneError && (
+                <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg">
+                  {phoneError}
+                </div>
+              )}
             </div>
 
             {/* Shopping Experience */}
@@ -841,15 +980,19 @@ export default function ParticipationForm() {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={!acceptedTerms || !isSignedIn}
+              disabled={
+                !acceptedTerms || !isSignedIn || phoneAuthStep !== "input"
+              }
               className={`w-full py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 transform ${
-                acceptedTerms && isSignedIn
+                acceptedTerms && isSignedIn && phoneAuthStep === "input"
                   ? "bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] text-white shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
               }`}
             >
               {!isSignedIn ? (
                 "Complete Email Verification First"
+              ) : phoneAuthStep === "otp" ? (
+                "Verify Phone Number First"
               ) : participateMutation.isPending ? (
                 <div className="flex items-center justify-center">
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
@@ -876,6 +1019,7 @@ export default function ParticipationForm() {
     </div>
   );
 }
+
 export interface ClerkError {
   errors: Array<{
     code: string;

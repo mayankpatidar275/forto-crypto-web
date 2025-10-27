@@ -47,6 +47,35 @@ export async function participate(body: {
   );
 }
 
+// types
+export type SendPhoneReq = { phone: string };
+export type SendPhoneRes =
+  | { ok: true; sid?: string; status?: string }
+  | { ok: false; message?: string };
+
+export async function sendPhoneVerification(
+  body: SendPhoneReq
+): Promise<SendPhoneRes> {
+  return post(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/send-phone-verification`,
+    body
+  );
+}
+
+export type CheckPhoneReq = { phone: string; code: string };
+export type CheckPhoneRes =
+  | { ok: true; verified: true }
+  | { ok: false; verified?: false; message?: string; status?: string };
+
+export async function checkPhoneVerification(
+  body: CheckPhoneReq
+): Promise<CheckPhoneRes> {
+  return post(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/check-phone-verification`,
+    body
+  );
+}
+
 export async function fetchEventById(eventId?: string) {
   return get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/events/${eventId}`);
 }

@@ -1,10 +1,23 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  UseMutationOptions,
+  useQueryClient,
+} from "@tanstack/react-query";
 import toast from "react-hot-toast";
 // import { useNavigate } from "react-router-dom";
 import { mintFreeNft, submitSurvey } from "../services/api/surveyApi";
 import { storeUser } from "@/services/api/usersApi";
 import { addToCart, removeFromCart } from "@/services/api/cartApi";
-import { buyNft, participate } from "@/services/api/nftApi";
+import {
+  buyNft,
+  CheckPhoneReq,
+  CheckPhoneRes,
+  checkPhoneVerification,
+  participate,
+  SendPhoneReq,
+  SendPhoneRes,
+  sendPhoneVerification,
+} from "@/services/api/nftApi";
 
 // Generalized mutation function
 function useMutationWithSuccessMessage<TVariables>(
@@ -67,3 +80,22 @@ export const useParticipate = () => {
     mutationFn: participate,
   });
 };
+
+// Note: generics = <TData, TError, TVariables, TContext>
+export function useSendPhoneVerificationMutation(
+  options?: UseMutationOptions<SendPhoneRes, Error, SendPhoneReq, unknown>
+) {
+  return useMutation<SendPhoneRes, Error, SendPhoneReq, unknown>({
+    mutationFn: (payload: SendPhoneReq) => sendPhoneVerification(payload),
+    ...(options as unknown as object), // preserve caller options; narrow-cast to satisfy TS
+  });
+}
+
+export function useCheckPhoneVerificationMutation(
+  options?: UseMutationOptions<CheckPhoneRes, Error, CheckPhoneReq, unknown>
+) {
+  return useMutation<CheckPhoneRes, Error, CheckPhoneReq, unknown>({
+    mutationFn: (payload: CheckPhoneReq) => checkPhoneVerification(payload),
+    ...(options as unknown as object),
+  });
+}
