@@ -205,6 +205,10 @@ export default function ParticipationForm() {
   const sendPhoneVerificationMutation = useSendPhoneVerificationMutation();
   const checkPhoneVerificationMutation = useCheckPhoneVerificationMutation();
 
+  // convenience booleans from react-query (v5)
+  const sendingCode = sendPhoneVerificationMutation.isPending;
+  const verifyingCode = checkPhoneVerificationMutation.isPending;
+
   // Clerk authentication hooks
   const { signUp, setActive } = useSignUp();
   const { signIn } = useSignIn();
@@ -224,9 +228,10 @@ export default function ParticipationForm() {
   const [otp, setOtp] = useState("");
   const [phoneOtp, setPhoneOtp] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
-  const [isVerifyingPhone, setIsVerifyingPhone] = useState(false);
+  // const [isVerifyingPhone, setIsVerifyingPhone] = useState(false);
   const [authError, setAuthError] = useState("");
   const [phoneError, setPhoneError] = useState("");
+  const [phoneVerified, setPhoneVerified] = useState(false);
 
   const eventId = "386e4d08-0b04-45d5-9c1c-a4b675826f4e";
   const drawId = "e2bcdcfd-5c05-4007-b38f-44a9b9cf5cb9";
@@ -390,11 +395,13 @@ export default function ParticipationForm() {
     setPhoneError("");
     if (!formData.phone) return setPhoneError("Please enter your phone number");
 
-    setIsVerifyingPhone(true);
     try {
       const fullPhone = `${countryCode}${formData.phone}`;
 
-      // mutateAsync is typed to return SendPhoneRes
+      // clear previous otp so browser autofill doesn't reinsert last value
+      setPhoneOtp("");
+      setPhoneVerified(false);
+
       const r = (await sendPhoneVerificationMutation.mutateAsync({
         phone: fullPhone,
       })) as SendPhoneRes;
@@ -406,11 +413,11 @@ export default function ParticipationForm() {
         return;
       }
 
+      // Open OTP entry UI and focus/clear code field
       setPhoneAuthStep("otp");
+      // (optional) automatically focus OTP input with a ref if you have one
     } catch (e: any) {
       setPhoneError(e?.message || "Network error");
-    } finally {
-      setIsVerifyingPhone(false);
     }
   };
 
@@ -419,7 +426,6 @@ export default function ParticipationForm() {
     if (!phoneOtp) return setPhoneError("Please enter the verification code");
 
     setPhoneError("");
-    setIsVerifyingPhone(true);
     try {
       const fullPhone = `${countryCode}${formData.phone}`;
 
@@ -429,14 +435,26 @@ export default function ParticipationForm() {
       })) as CheckPhoneRes;
 
       if (r && r.ok && (r as any).verified) {
-        setPhoneAuthStep("input"); // success
+        // mark phone as verified in UI
+        setPhoneVerified(true);
+        // collapse OTP UI back to input or show verified state
+        setPhoneAuthStep("input");
+
+        // success toast
+        toast.success("Phone verified ✓");
+        // optionally persist to server or Clerk here
       } else {
-        setPhoneError((r && (r as any).message) || "Invalid verification code");
+        // helpful messages
+        const msg =
+          (r && (r as any).message) ||
+          (r && (r as any).status) ||
+          "Invalid verification code";
+        setPhoneError(msg);
+        // clear entered code so user types fresh
+        setPhoneOtp("");
       }
     } catch (e: any) {
       setPhoneError(e?.message || "Network error");
-    } finally {
-      setIsVerifyingPhone(false);
     }
   };
 
@@ -819,12 +837,30 @@ export default function ParticipationForm() {
                 Phone Number
               </label>
 
-              {phoneAuthStep === "input" && (
+              {phoneVerified ? (
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={`${countryCode}${formData.phone}`}
+                    readOnly
+                    className="w-full px-4 py-3 bg-green-50/50 border border-green-200 rounded-xl text-gray-700"
+                  />
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full font-medium">
+                      Verified ✓
+                    </span>
+                  </div>
+                </div>
+              ) : phoneAuthStep === "input" ? (
                 <div className="space-y-3">
                   <div className="flex gap-3">
                     <select
                       value={countryCode}
-                      onChange={(e) => setCountryCode(e.target.value)}
+                      onChange={(e) => {
+                        setCountryCode(e.target.value);
+                        setPhoneVerified(false);
+                        setPhoneOtp("");
+                      }}
                       className="w-24 sm:w-28 px-1 sm:px-3 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-br1)] focus:border-transparent transition-all duration-200"
                     >
                       {countryOptions.map((c) => (
@@ -837,7 +873,11 @@ export default function ParticipationForm() {
                       type="tel"
                       name="phone"
                       value={formData.phone}
-                      onChange={handleChange}
+                      onChange={(e) => {
+                        handleChange(e);
+                        setPhoneVerified(false);
+                        setPhoneOtp("");
+                      }}
                       required
                       pattern="[0-9]{7,15}"
                       placeholder="Phone number"
@@ -847,10 +887,10 @@ export default function ParticipationForm() {
                   <button
                     type="button"
                     onClick={handlePhoneVerification}
-                    disabled={isVerifyingPhone || !formData.phone}
+                    disabled={sendingCode || !formData.phone}
                     className="w-full py-3 px-6 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50"
                   >
-                    {isVerifyingPhone ? (
+                    {sendingCode ? (
                       <div className="flex items-center justify-center">
                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
                         Sending Code...
@@ -860,9 +900,8 @@ export default function ParticipationForm() {
                     )}
                   </button>
                 </div>
-              )}
-
-              {phoneAuthStep === "otp" && (
+              ) : (
+                // OTP entry UI
                 <div className="space-y-3">
                   <div className="flex gap-2 overflow-hidden">
                     <input
@@ -870,6 +909,9 @@ export default function ParticipationForm() {
                       value={phoneOtp}
                       onChange={(e) => setPhoneOtp(e.target.value)}
                       required
+                      inputMode="numeric"
+                      pattern="\d{6}"
+                      autoComplete="one-time-code" // helpful for iOS SMS autofill; keep or remove depending on behaviour you want
                       className="flex-1 w-4 px-0 py-3 text-gray-700 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-400 text-center text-lg font-mono"
                       placeholder="6-digit code"
                       maxLength={6}
@@ -877,10 +919,10 @@ export default function ParticipationForm() {
                     <button
                       type="button"
                       onClick={handlePhoneOtpSubmit}
-                      disabled={isVerifyingPhone}
+                      disabled={verifyingCode}
                       className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50 whitespace-nowrap"
                     >
-                      {isVerifyingPhone ? (
+                      {verifyingCode ? (
                         <div className="flex items-center justify-center">
                           <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-1" />
                         </div>
@@ -897,7 +939,10 @@ export default function ParticipationForm() {
                     </strong>
                     <button
                       type="button"
-                      onClick={() => setPhoneAuthStep("input")}
+                      onClick={() => {
+                        setPhoneAuthStep("input");
+                        setPhoneOtp("");
+                      }}
                       className="ml-2 text-blue-600 font-semibold hover:underline"
                     >
                       Change number
@@ -980,27 +1025,20 @@ export default function ParticipationForm() {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={
-                !acceptedTerms || !isSignedIn || phoneAuthStep !== "input"
-              }
+              disabled={!acceptedTerms || !isSignedIn || !phoneVerified}
               className={`w-full py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 transform ${
                 acceptedTerms && isSignedIn && phoneAuthStep === "input"
                   ? "bg-gradient-to-r from-[var(--brand-br1)] to-[var(--brand-br2)] text-white shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
               }`}
             >
-              {!isSignedIn ? (
-                "Complete Email Verification First"
-              ) : phoneAuthStep === "otp" ? (
-                "Verify Phone Number First"
-              ) : participateMutation.isPending ? (
-                <div className="flex items-center justify-center">
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                  Submitting...
-                </div>
-              ) : (
-                "Participate Now 🎉"
-              )}
+              {!isSignedIn
+                ? "Complete Email Verification First"
+                : !phoneVerified
+                ? "Verify Phone Number First"
+                : participateMutation.isPending
+                ? "..."
+                : "Participate Now 🎉"}
             </button>
           </form>
         </div>
