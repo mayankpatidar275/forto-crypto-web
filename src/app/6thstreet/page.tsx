@@ -50,7 +50,16 @@ function ParticipatePage() {
       <section className="cp-x cp-y mt-10">
         <FortoXBrand />
       </section>
-      <AboutBrandSection />
+      <AboutBrandSection
+        brandName="6thStreet.com"
+        tagline="🎉"
+        features={[
+          { text: "2000+ international brands" },
+          { text: "Fashion, beauty, home & more" },
+          { text: "Valid across UAE, KSA & Oman" },
+          { text: "Direct credits to your account" },
+        ]}
+      />
       <section className="cp-x cp-y flex justify-center">
         <div className="max-w-6xl">
           {/* Right Content */}

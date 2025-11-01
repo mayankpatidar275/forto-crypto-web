@@ -8,3 +8,8 @@ export { default as BrandTurnsGiveaways } from "./ChatGPT Image Sep 21, 2025, 04
 export { default as Rocket } from "./rocket.png";
 export { default as Street } from "./6thStreet.svg";
 export { default as Brand1 } from "./Brand1.png";
+export { default as StyliLogo } from "./StyliLogo.png";
+export { default as Fashion } from "./styli/Fashion.png";
+export { default as Home } from "./styli/Home.png";
+export { default as Kids } from "./styli/Kids.png";
+export { default as Mens } from "./styli/Mens.png";
