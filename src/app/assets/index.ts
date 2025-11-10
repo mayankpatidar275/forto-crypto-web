@@ -2,14 +2,17 @@ export { default as OrangeLogo } from "./logo/LOGO 1_Orange.png";
 export { default as OrangeLogo2 } from "./logo/LOGO 2_Orange.png";
 export { default as WhiteLogo } from "./logo/LOGO 1_White.png";
 export { default as BlackLogo } from "./logo/LOGO 1_Black.png";
-export { default as CurrentGiveaways } from "./forto_giveaway_1920x1080_extended.png";
-export { default as CustomersWinMore } from "./ChatGPT Image Sep 21, 2025, 03_53_41 PM.png";
-export { default as BrandTurnsGiveaways } from "./ChatGPT Image Sep 21, 2025, 04_08_04 PM.png";
 export { default as Rocket } from "./rocket.png";
-export { default as Street } from "./6thStreet.svg";
-export { default as Brand1 } from "./Brand1.png";
-export { default as StyliLogo } from "./StyliLogo.png";
-export { default as Fashion } from "./styli/Fashion.png";
-export { default as Home } from "./styli/Home.png";
-export { default as Kids } from "./styli/Kids.png";
-export { default as Mens } from "./styli/Mens.png";
+
+// 6thStreet assets
+export { default as SixthStreetLogo } from "./6thStreet/logo/6thStreet.svg";
+export { default as SixthStreetHero } from "./6thStreet/6thStreetHero.png";
+export { default as SixthStreetSS1 } from "./6thStreet/6thStreetHero.png";
+
+// STYLI assets
+export { default as StyliHero } from "./styli/StyliHero.png";
+export { default as StyliLogo } from "./styli/logo/StyliLogo.png";
+export { default as StyliSS1 } from "./styli/screenshots/Fashion.png";
+export { default as StyliSS2 } from "./styli/screenshots/Home.png";
+export { default as StyliSS3 } from "./styli/screenshots/Kids.png";
+export { default as StyliSS4 } from "./styli/screenshots/Mens.png";

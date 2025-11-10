@@ -198,7 +198,13 @@ function SuccessModal({
   );
 }
 
-export default function ParticipationForm() {
+type Props = {
+  drawId: string;
+  brandId: string;
+  eventId: string;
+};
+
+export default function ParticipationForm({ drawId, brandId, eventId }: Props) {
   const { isSignedIn, user } = useUser();
   const { getToken } = useAuth();
   const participateMutation = useParticipate();
@@ -233,8 +239,8 @@ export default function ParticipationForm() {
   const [phoneError, setPhoneError] = useState("");
   const [phoneVerified, setPhoneVerified] = useState(false);
 
-  const eventId = "386e4d08-0b04-45d5-9c1c-a4b675826f4e";
-  const drawId = "e2bcdcfd-5c05-4007-b38f-44a9b9cf5cb9";
+  // const eventId = "386e4d08-0b04-45d5-9c1c-a4b675826f4e";
+  // const drawId = "e2bcdcfd-5c05-4007-b38f-44a9b9cf5cb9";
 
   const {
     data: event,
@@ -471,9 +477,9 @@ export default function ParticipationForm() {
 
     toast.promise(
       participateMutation.mutateAsync({
-        brandId: "88a1603d-67ec-4f95-adc5-072dcefc63fa",
-        eventId: "386e4d08-0b04-45d5-9c1c-a4b675826f4e",
-        drawId: "e2bcdcfd-5c05-4007-b38f-44a9b9cf5cb9",
+        brandId: brandId,
+        eventId: eventId,
+        drawId: drawId,
         email: user?.primaryEmailAddress?.emailAddress ?? formData.email,
         firstName: formData.firstName,
         lastName: formData.lastName,

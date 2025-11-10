@@ -734,3 +734,18 @@ body {
 .animate-spinloader {
   animation: spin 1s linear infinite;
 }
+
+/* Prevent horizontal scroll on the entire site */
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* Better carousel scrolling for mobile */
+@media (max-width: 640px) {
+  #draws-carousel {
+    -webkit-overflow-scrolling: touch;
+    scroll-padding: 0 1rem;
+  }
+}

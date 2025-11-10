@@ -6,12 +6,17 @@ import CustomerWinMoreSection from "./components-website-3.0/CustomerWinMoreSect
 import FortoVsTraditional from "./components-website-3.0/FortoVsTraditional";
 import HeroSection from "./components-website-3.0/HeroSection";
 import HowItWorks from "./components-website-3.0/HowItWorks";
+import BrandShowcaseSection from "./components-website-3.0/ui/BrandShowcaseSection";
+import DrawsCarousel from "./components-website-3.0/ui/DrawsCarousel";
 import ProblemSection from "./components/ProblemSection";
 
 export default function Home() {
   return (
     <div className="scroll-smooth">
       <HeroSection />
+      {/* <EventsCarousel /> */}
+      <DrawsCarousel />
+      <BrandShowcaseSection />
       {/* <NewsTicker imageSrc={Rocket} text="REVOLUTIONARY REWARDS PLATFORM" /> */}
       <HowItWorks />
       <CurrentGiveawaysSection />

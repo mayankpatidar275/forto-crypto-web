@@ -10,6 +10,8 @@ import {
 } from "@/services/api/nftApi";
 import { useAuth } from "@clerk/nextjs";
 import { get } from "@/services/apiMethods";
+import { DrawItem } from "@/app/components-website-3.0/ui/DrawsCarousel";
+import { DrawPayload } from "@/app/brands/[brandSlug]/events/[eventSlug]/draw/[drawId]/page";
 
 // Reusable query function
 function useCustomQuery<TQueryFnData, TQueryParams = void>(
@@ -74,6 +76,47 @@ export const useUserTickets = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+    },
+  });
+};
+
+export const useDraws = () => {
+  const { getToken } = useAuth();
+
+  return useQuery({
+    queryKey: ["draws"],
+    queryFn: async (): Promise<DrawItem[]> => {
+      const token = await getToken();
+      if (!token) throw new Error("No token available");
+      const drawsData = await get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/draws`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return drawsData.data;
+    },
+  });
+};
+export const useDraw = (drawId: string) => {
+  const { getToken } = useAuth();
+
+  return useQuery({
+    queryKey: ["draw", drawId],
+    queryFn: async (): Promise<DrawPayload> => {
+      const token = await getToken();
+      if (!token) throw new Error("No token available");
+      const drawsData = await get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/draws/${drawId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return drawsData.data;
     },
   });
 };

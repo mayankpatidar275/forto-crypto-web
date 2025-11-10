@@ -1,8 +1,7 @@
 "use client";
 
-import Heading2 from "./ui/Heading2";
 import { useRouter } from "next/navigation";
-import FortoXBrand from "./FortoXBrand";
+import Heading2 from "./ui/Heading2";
 
 function CurrentGiveawaysSection() {
   const router = useRouter();
@@ -11,13 +10,13 @@ function CurrentGiveawaysSection() {
       <div className="flex flex-col justify-center items-center">
         <Heading2>Current Giveaways</Heading2>
         <div className="flex flex-col justify-center items-center gap-4">
-          <FortoXBrand />
+          {/* <FortoXBrand /> */}
           <div className="flex flex-col justify-center items-center">
             <div className="flex justify-center justify-items gap-4">
               <h1 className="title">
                 50,0000
                 <div className="aurora">
-                  <div className="aurora__item"></div>
+                  <div className="aurora__item"></div>̦
                   <div className="aurora__item"></div>
                   <div className="aurora__item"></div>
                   <div className="aurora__item"></div>
