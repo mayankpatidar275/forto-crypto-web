@@ -1,13 +1,13 @@
 "use client";
 
-import Image from "next/image";
+// import Image from "next/image";
 import React from "react";
-import { Brand1 } from "../assets";
+// import { Brand1 } from "../assets";
 import TermsSection from "../components-website-3.0/TermsSection";
 import CountDown from "../components-website-3.0/ui/CountDown";
 import Heading2 from "../components-website-3.0/ui/Heading2";
 import { useEventById } from "@/custom-hooks/queries";
-import ParticipationForm from "../components-website-3.0/ParticipationForm";
+// import ParticipationForm from "../components-website-3.0/ParticipationForm";
 import Loader from "../components-website-3.0/ui/Loader";
 import FortoXBrand from "../components-website-3.0/FortoXBrand";
 import AboutBrandSection from "../components-website-3.0/AboutBrandSection";
@@ -70,9 +70,9 @@ function ParticipatePage() {
           </div>
         </div>
       </section>
-      <ParticipationForm></ParticipationForm>
+      {/* <ParticipationForm></ParticipationForm> */}
       <TermsSection />
-      <figure className="flex justify-center items-center w-full mb-10 relative overflow-hidden">
+      {/* <figure className="flex justify-center items-center w-full mb-10 relative overflow-hidden">
         <Image
           src={Brand1}
           alt=""
@@ -85,7 +85,7 @@ function ParticipatePage() {
           height={4000}
           style={{ height: "100%", width: "auto" }}
         />
-      </figure>
+      </figure> */}
     </div>
   );
 }

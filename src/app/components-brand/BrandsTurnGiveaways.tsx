@@ -3,9 +3,10 @@ import React from "react";
 import Heading2 from "./ui/Heading2";
 // import Para1 from "./ui/Para1";
 import Image from "next/image";
-import { BrandTurnsGiveaways } from "../assets";
+// import { BrandTurnsGiveaways } from "../assets";
 import SolutionCard from "./ui/SolutionCard";
 import { Coins, Handshake, ShoppingBag, Sparkle } from "lucide-react";
+import { OrangeLogo } from "../assets";
 
 const BrandsTurnGiveaways = () => {
   return (
@@ -15,7 +16,7 @@ const BrandsTurnGiveaways = () => {
         <div className="lg:flex flex-col items-center gap-6 hidden">
           <figure className="flex flex-col justify-center items-center -z-1 w-full mb-10 relative overflow-hidden">
             <Image
-              src={BrandTurnsGiveaways}
+              src={OrangeLogo}
               alt="Decorative shape"
               width={800} // pick an appropriate width (can adjust)
               height={600} // pick an appropriate height (can adjust)

@@ -3,7 +3,7 @@ import ContactSection from "../components/ContactSection";
 import GetNowSection from "../components/GetNowSection";
 import HeroSection from "../components/HeroSection";
 import HowSection from "../components/HowSection";
-import NextDrawCounterSection from "../components/CurrentGiveawaysSection";
+// import NextDrawCounterSection from "../components/CurrentGiveawaysSection";
 import VisionSection from "../components/VisionSection";
 import WinnersSection from "../components/WinnersSection";
 
@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <div className="scroll-smooth">
       <HeroSection />
-      <NextDrawCounterSection />
+      {/* <NextDrawCounterSection /> */}
       <GetNowSection
         // category="Italian Brainrot"
         eventName="Italian-Brainrot"

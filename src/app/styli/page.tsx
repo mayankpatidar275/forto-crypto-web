@@ -3,14 +3,15 @@
 import { useEventById } from "@/custom-hooks/queries";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
-import { Fashion, Home, Kids, Mens } from "../assets";
+// import { Fashion, Home, Kids, Mens } from "../assets";
 import AboutBrandSection from "../components-website-3.0/AboutBrandSection";
 import FortoXStyli from "../components-website-3.0/FortoXStyli";
-import ParticipationForm from "../components-website-3.0/ParticipationForm";
+// import ParticipationForm from "../components-website-3.0/ParticipationForm";
 import TermsSection from "../components-website-3.0/TermsSection";
 import CountDown from "../components-website-3.0/ui/CountDown";
 import Heading2 from "../components-website-3.0/ui/Heading2";
 import Loader from "../components-website-3.0/ui/Loader";
+import { OrangeLogo } from "../assets";
 
 function ParticipatePage() {
   const { isLoaded } = useUser();
@@ -79,7 +80,7 @@ function ParticipatePage() {
         </div>
       </section>
 
-      <ParticipationForm />
+      {/* <ParticipationForm /> */}
 
       <TermsSection />
       {/* Horizontal Scrolling Carousel */}
@@ -91,25 +92,25 @@ function ParticipatePage() {
           <div className="flex overflow-x-auto gap-6 pb-4 scrollbar-hide snap-x">
             {[
               {
-                src: Fashion,
+                src: OrangeLogo,
                 alt: "Latest Fashion Trends",
                 label: "Women's Fashion",
                 desc: "Stay trendy",
               },
               {
-                src: Kids,
+                src: OrangeLogo,
                 alt: "Kids Fashion & Toys",
                 label: "Kids World",
                 desc: "Fun & playful",
               },
               {
-                src: Home,
+                src: OrangeLogo,
                 alt: "Home Decor & Essentials",
                 label: "Home Living",
                 desc: "Create your space",
               },
               {
-                src: Mens,
+                src: OrangeLogo,
                 alt: "Men's Style Collection",
                 label: "Men's Fashion",
                 desc: "Modern looks",
@@ -143,7 +144,7 @@ function ParticipatePage() {
           <div className="grid md:grid-cols-2 gap-0">
             <div className="relative aspect-square md:aspect-auto">
               <Image
-                src={Fashion} // Use your best image here
+                src={OrangeLogo} // Use your best image here
                 alt="StyliShop - Your Ultimate Shopping Destination"
                 className="w-full h-full object-cover"
                 width={600}

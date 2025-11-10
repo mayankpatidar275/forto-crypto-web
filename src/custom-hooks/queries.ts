@@ -10,8 +10,9 @@ import {
 } from "@/services/api/nftApi";
 import { useAuth } from "@clerk/nextjs";
 import { get } from "@/services/apiMethods";
-import { DrawItem } from "@/app/components-website-3.0/ui/DrawsCarousel";
+// import { DrawItem } from "@/app/components-website-3.0/ui/DrawsCarousel";
 import { DrawPayload } from "@/app/brands/[brandSlug]/events/[eventSlug]/draw/[drawId]/page";
+import { DrawItem } from "@/app/components-website-3.0/ui/DrawCard";
 
 // Reusable query function
 function useCustomQuery<TQueryFnData, TQueryParams = void>(

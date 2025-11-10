@@ -1,9 +1,10 @@
 import React from "react";
 import Heading2 from "./ui/Heading2";
 import Image from "next/image";
-import { CustomersWinMore } from "../assets";
+// import { CustomersWinMore } from "../assets";
 import SolutionCard from "./ui/SolutionCard";
 import { Gift, Handshake, Percent, ShoppingBag } from "lucide-react";
+import { OrangeLogo } from "../assets";
 
 const CustomerWinMoreSection = () => {
   return (
@@ -49,7 +50,7 @@ const CustomerWinMoreSection = () => {
         <div className="lg:flex flex-col items-center gap-6 hidden">
           <figure className="flex flex-col justify-center items-center -z-1 w-full mb-10 relative overflow-hidden">
             <Image
-              src={CustomersWinMore}
+              src={OrangeLogo}
               alt="Decorative shape"
               width={800} // pick an appropriate width (can adjust)
               height={600} // pick an appropriate height (can adjust)
