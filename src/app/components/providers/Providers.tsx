@@ -1,10 +1,10 @@
 "use client";
 
-import { PrivyProvider } from "@privy-io/react-auth";
 import React from "react";
 import { ContextProvider } from "./ContextProvider";
 import { ReactQueryClientProvider } from "./ReactQueryClientProvider";
 import { SolanaProvider } from "./SolanaProvider";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const Providers = ({
   children,
@@ -14,24 +14,9 @@ const Providers = ({
   return (
     <ReactQueryClientProvider>
       <ContextProvider>
-        <PrivyProvider
-          appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ""}
-          clientId={process.env.NEXT_PUBLIC_PRIVY_CLIENT_ID || ""}
-          config={{
-            // Display email and wallet as login methods
-            loginMethods: ["email"],
-            // Customize Privy's appearance in your app
-            appearance: {
-              theme: "light",
-              accentColor: "#facc15",
-              walletList: ["metamask", "coinbase_wallet"],
-              // walletChainType: "ethereum-only",
-              // logo: "",
-            },
-          }}
-        >
+        <ClerkProvider>
           <SolanaProvider>{children}</SolanaProvider>
-        </PrivyProvider>
+        </ClerkProvider>
       </ContextProvider>
     </ReactQueryClientProvider>
   );
