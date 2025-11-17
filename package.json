@@ -10,6 +10,7 @@
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {
+    "qrcode.react": "^4.0.0",
     "@clerk/nextjs": "^6.32.0",
     "@coral-xyz/anchor": "^0.31.1",
     "@metaplex-foundation/js": "^0.20.1",
