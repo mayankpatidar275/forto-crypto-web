@@ -10,7 +10,6 @@
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {
-    "qrcode.react": "^4.0.0",
     "@clerk/nextjs": "^6.32.0",
     "@coral-xyz/anchor": "^0.31.1",
     "@metaplex-foundation/js": "^0.20.1",
@@ -40,6 +39,7 @@
     "lucide-react": "^0.509.0",
     "next": "15.3.2",
     "next-themes": "^0.4.6",
+    "qrcode.react": "^4.2.0",
     "react": "^19.1.0",
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.5.2",
