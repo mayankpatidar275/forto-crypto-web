@@ -7,14 +7,14 @@ export interface ContextValue {
 }
 
 export interface ContextStateType {
-  userPrivyId: string;
+  userClerkId: string;
   selectedNft: SelectedNftType | null;
 }
 
 export type ReducerAction =
   | {
       actionType: typeof USER_UPLOADED;
-      value: string; // ✅ userPrivyId is always a string
+      value: string; // ✅ userClerkId is always a string
     }
   | {
       actionType: typeof SELECT_NFT;

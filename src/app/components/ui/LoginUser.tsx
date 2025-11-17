@@ -1,33 +1,38 @@
-import { useUserLogin } from "@/custom-hooks/useUserLogin";
-import { usePrivy } from "@privy-io/react-auth";
+"use client";
+
+// import { useUserLogin } from "@/custom-hooks/useUserLogin";
+import { SignedIn, SignedOut, SignUpButton } from "@clerk/nextjs";
 import { User } from "lucide-react";
 import Link from "next/link";
-import React from "react";
 
 const LoginUser = () => {
-  const { authenticated, ready } = usePrivy();
-  const { login } = useUserLogin();
-  const disableLogin = !ready || (ready && authenticated);
+  // const { isLoaded } = useUser();
+  // const { login } = useUserLogin();
+
+  // Remove the useEffect - the hook now handles authentication automatically
 
   return (
     <div className="flex items-center space-x-4">
-      {authenticated ? (
+      <SignedIn>
         <Link href="/my-profile" className="sm:btn-primary">
           <div className="flex h-5 w-5 sm:h-6 sm:w-6 items-center">
             <User />
           </div>
         </Link>
-      ) : (
-        <div className="flex items-center">
-          <button
-            disabled={disableLogin}
-            onClick={() => login()}
-            className="btn-primary"
-          >
-            Login
-          </button>
-        </div>
-      )}
+      </SignedIn>
+      <SignedOut>
+        <SignUpButton>
+          <div className="flex items-center">
+            <div
+              // onClick={() => login()}
+              className="btn-primary"
+              // disabled={!isLoaded}
+            >
+              Sign In
+            </div>
+          </div>
+        </SignUpButton>
+      </SignedOut>
     </div>
   );
 };

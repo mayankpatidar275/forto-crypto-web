@@ -15,7 +15,9 @@ const MyProfilePage = () => {
 
       <ProfileSection />
       <PurchaseHistory />
-      <Logout />
+      <div className="flex justify-center">
+        <Logout />
+      </div>
     </div>
   );
 };

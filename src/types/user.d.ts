@@ -1,4 +1,4 @@
-import { User as PrivyUser } from "@privy-io/react-auth";
+import { User as ClerkUser } from "@clerk/nextjs";
 
 export interface UserType {
   privyId: string;
@@ -9,5 +9,5 @@ export interface UserType {
 }
 
 export interface CreateUserPayload {
-  user: PrivyUser | UserType;
+  user: ClerkUser | UserType;
 }

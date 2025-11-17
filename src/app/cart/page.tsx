@@ -7,7 +7,7 @@ import { useUserLogin } from "@/custom-hooks/useUserLogin";
 import { CartItemType } from "@/types/cart";
 import { NFTWithType } from "@/types/nft";
 import { payNftFeeTx } from "@/utils/payNftFeeFrontend";
-import { usePrivy } from "@privy-io/react-auth";
+import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import toast from "react-hot-toast";
 import CartItemCard, { CartItemCardProps } from "../components/ui/CartItemCard";
 import { EmptyState } from "../components/ui/EmptyState";
@@ -20,9 +20,9 @@ import * as anchor from "@coral-xyz/anchor";
 import { useState } from "react";
 
 const CartPage = () => {
-  const { authenticated, ready } = usePrivy();
+  const { user, isLoaded } = useUser();
   const { state } = useAppContext();
-  const { data: myCart, isLoading, error } = useCart(state?.userPrivyId);
+  const { data: myCart, isLoading, error } = useCart(state?.userClerkId);
   const { data: nfts } = useNfts();
   const buyNftMutation = useBuyNft();
   const { login } = useUserLogin();
@@ -36,9 +36,9 @@ const CartPage = () => {
   const wallet = useWallet();
 
   const handleBuyClick = async () => {
-    // TODO: check if wallet is ready
-    if (!ready) return toast.error("Authenticator not ready! Please try again");
-    if (!authenticated) {
+    if (!isLoaded)
+      return toast.error("Authentication not ready! Please try again");
+    if (!user) {
       login();
       return;
     }
@@ -87,7 +87,7 @@ const CartPage = () => {
           await buyNftMutation.mutateAsync({
             userPublicAddress: String(wallet.publicKey),
             items: items,
-            privyId: state?.userPrivyId,
+            privyId: state?.userClerkId,
           });
         })(),
         {
@@ -106,8 +106,12 @@ const CartPage = () => {
   };
 
   // Handle states: not logged in / loading / error
-  if (!state?.userPrivyId) {
-    return <EmptyState message="Please log in to view your cart." />;
+  if (!user) {
+    return (
+      <SignedOut>
+        <EmptyState message="Please log in to view your cart." />
+      </SignedOut>
+    );
   }
 
   if (isLoading) {
@@ -124,22 +128,24 @@ const CartPage = () => {
   const totalCost = findTotalCost(items, nfts?.data);
 
   return (
-    <section className="relative cp-x cp-y justify-center">
-      <div className="flex flex-col gap-8">
-        {items.length === 0 ? (
-          <EmptyState message="Your cart is empty." />
-        ) : (
-          items.map((item: CartItemCardProps) => (
-            <CartItemCard key={item.id} {...item} />
-          ))
-        )}
-      </div>
-      <TotalCostCard
-        total={totalCost}
-        onBuy={handleBuyClick}
-        loading={loading}
-      />
-    </section>
+    <SignedIn>
+      <section className="relative cp-x cp-y justify-center">
+        <div className="flex flex-col gap-8">
+          {items.length === 0 ? (
+            <EmptyState message="Your cart is empty." />
+          ) : (
+            items.map((item: CartItemCardProps) => (
+              <CartItemCard key={item.id} {...item} />
+            ))
+          )}
+        </div>
+        <TotalCostCard
+          total={totalCost}
+          onBuy={handleBuyClick}
+          loading={loading}
+        />
+      </section>
+    </SignedIn>
   );
 };
 

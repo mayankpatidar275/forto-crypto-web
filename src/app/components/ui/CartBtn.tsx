@@ -6,7 +6,7 @@ import React from "react";
 
 const CartBtn = () => {
   const { state } = useAppContext();
-  const { data: myCart } = useCart(state.userPrivyId);
+  const { data: myCart } = useCart(state.userClerkId);
 
   const itemCount = myCart?.data?.items?.length || 0;
 

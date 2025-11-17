@@ -1,7 +1,8 @@
 "use client";
 
 import { WhiteLogo } from "@/app/assets/index";
-import { usePrivy } from "@privy-io/react-auth";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Menu, X } from "lucide-react";
@@ -9,9 +10,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import CartBtn from "../ui/CartBtn";
-// import ConnectBtn from "../ui/ConnectBtn";
 import dynamic from "next/dynamic";
 import LoginUser from "../ui/LoginUser";
+
 const WalletMultiButton = dynamic(
   () =>
     import("@solana/wallet-adapter-react-ui").then(
@@ -21,22 +22,15 @@ const WalletMultiButton = dynamic(
 );
 
 const navLinks = [
-  // { href: "/", label: "Home" },
-  // { href: "/about", label: "About" },
-  // { href: "/solution", label: "Solution" },
-  // { href: "/blog", label: "Blog" },
-  // { href: "/contact", label: "Contact" },
-  // { href: "/", label: "Home" },
   { href: "/docs", label: "Docs" },
   { href: "/docs/tokenomics", label: "Tokenomics" },
-  // { href: "/about", label: "About" },
   { href: "/faq", label: "FAQ" },
-  // { href: "/contact", label: "Contact" },
 ];
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const { authenticated } = usePrivy();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { user } = useUser();
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -46,8 +40,8 @@ export default function Header() {
       ease: "power2.out",
       scrollTrigger: {
         trigger: "body",
-        start: "top+=60", // starts after 60px scroll
-        toggleActions: "play none none reverse", // fade in on scroll down, fade out on scroll up
+        start: "top+=60",
+        toggleActions: "play none none reverse",
       },
       duration: "1ms",
     });
@@ -102,11 +96,11 @@ export default function Header() {
 
           <div className="flex gap-1 sm:gap-4">
             {/* Right buttons */}
-            {/* <ConnectBtn /> */}
             <WalletMultiButton className="btn-primary" />
-            {/* <button onClick={}>Button</button> */}
             <LoginUser />
-            {authenticated && <CartBtn />}
+            <SignedIn>
+              <CartBtn />
+            </SignedIn>
           </div>
         </div>
       </div>

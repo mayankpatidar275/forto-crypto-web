@@ -14,7 +14,9 @@ const Providers = ({
   return (
     <ReactQueryClientProvider>
       <ContextProvider>
-        <ClerkProvider>
+        <ClerkProvider
+          publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+        >
           <SolanaProvider>{children}</SolanaProvider>
         </ClerkProvider>
       </ContextProvider>

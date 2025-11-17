@@ -87,9 +87,8 @@
 // };
 
 // export default BuyNowBtn;
-
 import { useUserLogin } from "@/custom-hooks/useUserLogin";
-import { usePrivy } from "@privy-io/react-auth";
+import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import toast from "react-hot-toast";
 import Loader from "./Loader";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -106,7 +105,7 @@ const BuyNowBtn = ({
 }: {
   buyItems: { nftId: string; quantity: number };
 }) => {
-  const { ready, authenticated } = usePrivy();
+  const { user, isLoaded } = useUser();
   const { login } = useUserLogin();
   const { state } = useAppContext();
   const wallet = useWallet();
@@ -125,9 +124,8 @@ const BuyNowBtn = ({
   );
 
   const handleBuyClick = async () => {
-    // TODO: check if wallet is ready
-    if (!ready) return toast.error("Authenticator not ready");
-    if (!authenticated) return login();
+    if (!isLoaded) return toast.error("Authentication not ready");
+    if (!user) return login();
     if (!wallet.connected || !wallet.publicKey) {
       return toast.error("Please connect your wallet first");
     }
@@ -168,7 +166,7 @@ const BuyNowBtn = ({
                 quantity: buyItems.quantity,
               },
             ],
-            privyId: state?.userPrivyId,
+            privyId: state?.userClerkId,
           });
         })(),
         {
@@ -192,20 +190,30 @@ const BuyNowBtn = ({
 
   return (
     <div className="h-12 w-62">
-      {ready &&
-        (loading || isLoadingNft ? (
-          <div className="flex gap-2 items-center h-full">
-            <Loader className="text-white" />
-          </div>
-        ) : (
-          <button
-            onClick={handleBuyClick}
-            disabled={loading}
-            className="cursor-pointer inline-block border-2 border-brand-br2 text-white px-6 py-3 rounded-xl text-lg md:text-xl font-semibold hover:bg-brand-br2 hover:text-link transition-colors duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)]"
-          >
-            Buy Now
-          </button>
-        ))}
+      <SignedIn>
+        {isLoaded &&
+          (loading || isLoadingNft ? (
+            <div className="flex gap-2 items-center h-full">
+              <Loader className="text-white" />
+            </div>
+          ) : (
+            <button
+              onClick={handleBuyClick}
+              disabled={loading}
+              className="cursor-pointer inline-block border-2 border-brand-br2 text-white px-6 py-3 rounded-xl text-lg md:text-xl font-semibold hover:bg-brand-br2 hover:text-link transition-colors duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)]"
+            >
+              Buy Now
+            </button>
+          ))}
+      </SignedIn>
+      <SignedOut>
+        <button
+          onClick={() => login()}
+          className="cursor-pointer inline-block border-2 border-brand-br2 text-white px-6 py-3 rounded-xl text-lg md:text-xl font-semibold hover:bg-brand-br2 hover:text-link transition-colors duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)]"
+        >
+          Login to Buy Now
+        </button>
+      </SignedOut>
     </div>
   );
 };

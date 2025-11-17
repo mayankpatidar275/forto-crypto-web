@@ -1,35 +1,49 @@
+"use client";
+
 import React, { createContext, useReducer } from "react";
-import { ContextStateType, ReducerAction, ContextValue } from "@/types/context";
+import { ContextStateType, ContextValue, ReducerAction } from "@/types/context";
 import { SELECT_NFT, USER_UPLOADED } from "@/utils/constants";
 
 export const Context = createContext<ContextValue | null>(null);
 
 const initialState: ContextStateType = {
-  userPrivyId: "",
+  userClerkId: "", // Changed from userPrivyId
   selectedNft: null,
 };
 
-const contextReducer = (
+// Reducer function
+const appReducer = (
   state: ContextStateType,
   action: ReducerAction
 ): ContextStateType => {
   switch (action.actionType) {
     case USER_UPLOADED:
-      return { ...state, userPrivyId: action.value };
+      return {
+        ...state,
+        userClerkId: action.value, // Changed from userPrivyId
+      };
     case SELECT_NFT:
-      return { ...state, selectedNft: action.value };
+      return {
+        ...state,
+        selectedNft: action.value,
+      };
     default:
-      throw new Error(`Unhandled action type: ${action}`);
+      return state;
   }
 };
 
-export const ContextProvider = ({
-  children,
-}: {
+interface ContextProviderProps {
   children: React.ReactNode;
-}) => {
-  const [state, dispatch] = useReducer(contextReducer, initialState);
-  const contextValue: ContextValue = { state, dispatch };
+}
 
-  return <Context.Provider value={contextValue}>{children}</Context.Provider>;
+export const ContextProvider: React.FC<ContextProviderProps> = ({
+  children,
+}) => {
+  const [state, dispatch] = useReducer(appReducer, initialState);
+
+  return (
+    <Context.Provider value={{ state, dispatch }}>{children}</Context.Provider>
+  );
 };
+
+export default ContextProvider;
